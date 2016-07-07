@@ -16,6 +16,7 @@ public class RotateBASIC : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+		this.transform.position = GameObject.Find("User").transform.position;
 
 		Quaternion rotation = WatchRotation.rotation;
 

@@ -13,16 +13,19 @@ public class PlayerIO : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		currentPlayerIO = this;
+
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (GameObject.FindWithTag ("FPSController").transform.position.y < -20) {
-			Debug.Log("Test");
-			GameObject.FindWithTag("FPSController").transform.position = new Vector3(GameObject.FindWithTag("FPSController").transform.position.x, 60, GameObject.FindWithTag("FPSController").transform.position.z);
-		}
-		if (Input.GetMouseButtonDown(0) || Input.GetMouseButtonDown(1) || Input.GetMouseButtonDown(2)){
-			Ray ray = GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f,0.5f,0.5f));
+		float z = GameObject.Find ("Watch").transform.localRotation.eulerAngles.z;
+
+			//Ray ray = GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f,0.5f,0.5f));
+
+		Ray ray = new Ray( GameObject.Find("Cursor").transform.position, Vector3.forward);
+		Debug.DrawRay( GameObject.Find("Cursor").transform.position, Vector3.forward);
+
 			RaycastHit hit;
 			if (Physics.Raycast (ray,out hit, maxInteractDistance)) {
 				Chunk chunk = hit.transform.GetComponent<Chunk>();
@@ -31,7 +34,7 @@ public class PlayerIO : MonoBehaviour {
 				}
 				
 			
-				if (Input.GetMouseButtonDown(0)){
+				if ( z >= 220 && z <= 270){
 					Vector3 p = hit.point;
 					p -= hit.normal / 4;
 					chunk.SetBrick(0, p);
@@ -39,7 +42,7 @@ public class PlayerIO : MonoBehaviour {
 				} 
 
 
-		if (Input.GetMouseButtonDown (1)) {
+				if ( z >= 45 && z <= 60) {
 					Vector3 p = hit.point;
 				if (selectedInventory != 0){
 						p += hit.normal / 4;
@@ -49,33 +52,16 @@ public class PlayerIO : MonoBehaviour {
 				
 			} 
 
-			if (Input.GetMouseButtonDown(2)) {
-					Vector3 p = hit.point;
-					p -= hit.normal / 4;
-					selectedInventory = chunk.GetByte(p);
-
-				} 
+//			if (Input.GetMouseButtonDown(2)) {
+//					Vector3 p = hit.point;
+//					p -= hit.normal / 4;
+//					selectedInventory = chunk.GetByte(p);
+//
+//				} 
 
 			}
-		}
-		if (Input.GetKeyDown (KeyCode.F5)) {
-						if (resetCamera == false) {
-								transform.localPosition -= Vector3.forward * 2;
-								GameObject.FindWithTag("MinecraftPlayer").layer = 1;
-								resetCamera = true;
-						}
-			else{
-				transform.position = transform.parent.root.transform.localPosition + new Vector3(0f, 0.7f, 0.06f);
-				transform.rotation = transform.parent.root.transform.rotation;
-				GameObject.FindWithTag("MinecraftPlayer").layer = 8;
-				resetCamera = false;
-				}
-	}
+	
 
-
-		if (Input.GetKey (KeyCode.Escape) && Input.GetKey (KeyCode.F1)) {
-			Application.Quit();
-		}
 
 }
 }

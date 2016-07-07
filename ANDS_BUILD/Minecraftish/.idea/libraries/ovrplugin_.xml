@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="ovrplugin-">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/ovrplugin/jars/classes.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/ovrplugin/jars/libs/SystemUtils.jar!/" />
+      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/ovrplugin/res" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/ovrplugin/jars/libs/OculusUtilities.jar!/" />
+      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/ovrplugin/jars/libs/vrplatlib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

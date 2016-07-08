@@ -68,7 +68,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/libs/classes.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="c06ccec125513b9d5eb89644d5ec957e40c8a902">
+        sha1="9259fa2a4500030eb52f960c9add1f3b3a87abca">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/transforms/dex/debug/folders/1000/8/ovrplugin-unspecified-jars_eee5b83ebe9c7948bfb4b9251da07e5c0a322961/classes.dex" />
     </item>
     <item
@@ -96,7 +96,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/libs/SystemUtils.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="73bd95092beb8e7a2cbfe41d4eef12f1db3013ad">
+        sha1="5ebbbfd02a7f04d03cbbd7788cc7a9d8d2a89045">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/transforms/dex/debug/folders/1000/8/SystemUtils_3b4e39aa397a621a25a31d8bc1e9b67a89cf8164/classes.dex" />
     </item>
     <item
@@ -194,7 +194,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/libs/OculusUtilities.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="595d948f0be3738bf735828b936cb785272974ed">
+        sha1="843170be39953860d32e46ee0f2af711c9e158c9">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/transforms/dex/debug/folders/1000/8/OculusUtilities_6a6cbe054a389fc290b747e43bea8e3d94fcb29a/classes.dex" />
     </item>
     <item
@@ -215,7 +215,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/incremental-runtime-classes/debug/instant-run.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="a578c738430344dc7fd400c9883b794eb00ad5b6">
+        sha1="8f97c5c031d511d23a7c0493b184da723ad51d11">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run_8f37b7dd5447be23c01b06c183100e955ec7fc60/classes.dex" />
     </item>
     <item
@@ -250,7 +250,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/incremental-classes/debug/instant-run-bootstrap.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="16c588a7e64a76dc220fde0fa866fe2fbb73704c">
+        sha1="1098f0523998080487c5606a2e6f2737c06f6427">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/transforms/dex/debug/folders/1000/10/instant-run-bootstrap_859e5dff6f435393e7dd5dc57f9539d3b4ab1ab3/classes.dex" />
     </item>
     <item
@@ -362,7 +362,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/libs/vrplatlib.jar"
         jumboMode="true"
         revision="23.0.2"
-        sha1="d420521d10a47a2679d60795b52b8e708219aa85">
+        sha1="031f774528287ae61911e15908da615806b85c31">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/transforms/dex/debug/folders/1000/8/vrplatlib_1b26322bc2587e439290351ed4916c0156cd90c3/classes.dex" />
     </item>
     <item

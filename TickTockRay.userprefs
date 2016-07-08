@@ -1,10 +1,11 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/RotateBASIC.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/RotateInterface.cs">
     <Files>
-      <File FileName="Assets/Scripts/RotateBASIC.cs" Line="14" Column="3" />
-      <File FileName="Assets/Scripts/PlayerIO.cs" Line="38" Column="28" />
+      <File FileName="Assets/Scripts/RotateBASIC.cs" Line="23" Column="34" />
+      <File FileName="Assets/Scripts/PlayerIO.cs" Line="22" Column="77" />
       <File FileName="Assets/Scripts/KeepUpright.cs" Line="19" Column="1" />
+      <File FileName="Assets/Scripts/RotateInterface.cs" Line="45" Column="25" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

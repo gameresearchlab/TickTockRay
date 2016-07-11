@@ -1,40 +1,43 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class PlayerIO : MonoBehaviour {
+public class PlayerIO : MonoBehaviour
+{
 
 	public static PlayerIO currentPlayerIO;
 	public float maxInteractDistance = 8;
 	public byte selectedInventory = 0;
-	public bool resetCamera = false;
-	public Vector3 campos;
 
 
 	// Use this for initialization
-	void Start () {
+	void Start()
+	{
 		currentPlayerIO = this;
 
 
 	}
-	
+
 	// Update is called once per frame
-	void Update () {
-		float z = GameObject.Find ("Watch").transform.localRotation.eulerAngles.z;
+	void Update()
+	{
+		Debug.DrawRay(this.transform.position + new Vector3(0f, 0f, 0.1f), this.transform.forward);
 
-			//Ray ray = GetComponent<Camera>().ViewportPointToRay(new Vector3(0.5f,0.5f,0.5f));
+		int currentState = RotateInterface.getState();
+		if (currentState == RotateInterface.LEFT_CLICK || currentState == RotateInterface.RIGHT_CLICK) {
 
-		Ray ray = new Ray( GameObject.Find("Cursor").transform.position, Vector3.forward);
-		Debug.DrawRay( GameObject.Find("Cursor").transform.position, Vector3.forward);
-
+			Ray ray = new Ray(this.transform.position + new Vector3(0f, 0f, 0.1f), this.transform.forward);
 			RaycastHit hit;
-			if (Physics.Raycast (ray,out hit, maxInteractDistance)) {
+
+			if (Physics.Raycast(ray, out hit, maxInteractDistance)) {
+
 				Chunk chunk = hit.transform.GetComponent<Chunk>();
-				if (chunk == null){
+
+				if (chunk == null) {
 					return;
 				}
-				
-			
-				if ( z >= 220 && z <= 270){
+
+				if(currentState == RotateInterface.LEFT_CLICK) {
+
 					Vector3 p = hit.point;
 					p -= hit.normal / 4;
 					chunk.SetBrick(0, p);
@@ -42,16 +45,22 @@ public class PlayerIO : MonoBehaviour {
 				} 
 
 
-				if ( z >= 45 && z <= 60) {
+				if(currentState == RotateInterface.RIGHT_CLICK) {
+
 					Vector3 p = hit.point;
-				if (selectedInventory != 0){
+					if(selectedInventory != 0) {
 						p += hit.normal / 4;
 
-						chunk.SetBrick(selectedInventory,p);
-				}
-				
-			} 
+						chunk.SetBrick(selectedInventory, p);
 
+
+					}
+				
+				} 
+
+
+
+			}
 //			if (Input.GetMouseButtonDown(2)) {
 //					Vector3 p = hit.point;
 //					p -= hit.normal / 4;
@@ -59,9 +68,9 @@ public class PlayerIO : MonoBehaviour {
 //
 //				} 
 
-			}
+		}
 	
 
 
-}
+	}
 }

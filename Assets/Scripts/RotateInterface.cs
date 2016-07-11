@@ -10,7 +10,6 @@ public class RotateInterface : MonoBehaviour {
 	public const int LEFT_HALF = 3;
 	public const int LEFT_CLICK = 4;
 
-	private float zClicked;
 	private int framesToWait;
 	private int framesWaited;
 
@@ -22,7 +21,6 @@ public class RotateInterface : MonoBehaviour {
 		state = IDLE;
 		framesToWait = 60;
 		framesWaited = 0;
-		zClicked = 0;
 		click_count = 0;
 
 	}
@@ -39,18 +37,20 @@ public class RotateInterface : MonoBehaviour {
 		
 		if(state != IDLE){
 			framesWaited++;
-
-			if(state == RIGHT_HALF && z > zClicked + 30)
-			{
-				state = RIGHT_CLICK;
-				click_count++;
-				framesWaited = 0;
-			}else if(state == LEFT_HALF && z < zClicked - 30)
-			{
-				state = LEFT_CLICK;
-				click_count++;
-				framesWaited = 0;
+			if((330 < z && z <= 360) || (0 <= z && z < 30)){
+				if(state == RIGHT_HALF)
+				{
+					state = RIGHT_CLICK;
+					click_count++;
+					framesWaited = 0;
+				}else if(state == LEFT_HALF)
+				{
+					state = LEFT_CLICK;
+					click_count++;
+					framesWaited = 0;
+				}
 			}
+
 
 		}
 			
@@ -58,10 +58,8 @@ public class RotateInterface : MonoBehaviour {
 		{
 			if(50 < z && z < 90){
 				state = RIGHT_HALF;
-				zClicked = z;
 			}else if( 180 < z && z < 290){
 				state = LEFT_HALF;
-				zClicked = z;
 			}
 		}
 

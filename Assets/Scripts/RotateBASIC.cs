@@ -16,7 +16,7 @@ public class RotateBASIC : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		this.transform.position = GameObject.Find("User").transform.position;
+		//this.transform.position = GameObject.Find("User").transform.position;
 
 		Quaternion rotation = WatchRotation.rotation;
 
@@ -54,10 +54,7 @@ public class RotateBASIC : MonoBehaviour {
 				-transform.localRotation.z,
 				-transform.localRotation.w);
         //	}
-       TextMesh debug = GameObject.Find("Debug").GetComponent<TextMesh>();
-		debug.text = string.Format("Watch:\n{0}\n{1}\n{2}\n{3}\n{4}", rotation.eulerAngles.x, rotation.eulerAngles.y, rotation.eulerAngles.z, RotateInterface.getState(), RotateInterface.click_count);
-
-
+       
 	}
 		
 	public void draw_axis_giz()

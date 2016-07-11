@@ -55,7 +55,6 @@
      <Compile Include="Assets\Scripts\Rotate.cs" />
      <Compile Include="Assets\Scripts\RotateBASIC.cs" />
      <Compile Include="Assets\Scripts\RotateInterface.cs" />
-     <Compile Include="Assets\Scripts\Selector.cs" />
      <Compile Include="Assets\Scripts\WatchRotation.cs" />
      <Compile Include="Assets\Scripts\World.cs" />
  <Reference Include="UnityEngine.UI">

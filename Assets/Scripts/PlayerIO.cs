@@ -5,8 +5,8 @@ public class PlayerIO : MonoBehaviour
 {
 
 	public static PlayerIO currentPlayerIO;
-	public float maxInteractDistance = 8;
-	public byte selectedInventory = 0;
+	public float maxInteractDistance = 16;
+	public byte selectedInventory = 1;
 
 
 	// Use this for initialization
@@ -20,10 +20,14 @@ public class PlayerIO : MonoBehaviour
 	// Update is called once per frame
 	void Update()
 	{
-		Debug.DrawRay(this.transform.position + new Vector3(0f, 0f, 0.1f), this.transform.forward);
+		
+
+		Debug.DrawRay(this.transform.position, this.transform.forward);
 
 		int currentState = RotateInterface.getState();
 		if (currentState == RotateInterface.LEFT_CLICK || currentState == RotateInterface.RIGHT_CLICK) {
+
+
 
 			Ray ray = new Ray(this.transform.position + new Vector3(0f, 0f, 0.1f), this.transform.forward);
 			RaycastHit hit;

@@ -46,12 +46,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Scripts\Chunk.cs" />
-     <Compile Include="Assets\Scripts\Crosshair.cs" />
      <Compile Include="Assets\Scripts\KeepUpright.cs" />
+     <Compile Include="Assets\Scripts\Menu.cs" />
      <Compile Include="Assets\Scripts\Noise.cs" />
      <Compile Include="Assets\Scripts\PlayerIO.cs" />
      <Compile Include="Assets\Scripts\PlayerWalkScript.cs" />
      <Compile Include="Assets\Scripts\PlayerWalkScriptLeft.cs" />
+     <Compile Include="Assets\Scripts\Reticle.cs" />
      <Compile Include="Assets\Scripts\Rotate.cs" />
      <Compile Include="Assets\Scripts\RotateBASIC.cs" />
      <Compile Include="Assets\Scripts\RotateInterface.cs" />

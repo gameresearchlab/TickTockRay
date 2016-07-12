@@ -5,18 +5,21 @@ using System;
 public class RotateBASIC : MonoBehaviour {
 
 	Quaternion correction;
-	//private bool swap_inputs; 
+
 
 	// Use this for initialization
 	void Start () {
 		correction = Quaternion.identity;
-	//	swap_inputs = false;
 	}
 
 	// Update is called once per frame
 	void Update () {
 
-		//this.transform.position = GameObject.Find("User").transform.position;
+		if(RotateInterface.getState() != RotateInterface.IDLE)
+		{
+			return;
+		}
+			
 
 		Quaternion rotation = WatchRotation.rotation;
 
@@ -32,30 +35,23 @@ public class RotateBASIC : MonoBehaviour {
 		{
 			correction = WatchRotation.rotation;
 		}
-			
+
 
 		transform.localRotation = rotation * Quaternion.Inverse(correction);
 
-		
 
-	//	if(Input.GetButtonDown("Fire2") && !swap_inputs)
-	//	{
-	//		swap_inputs = true;
-	//	}
-	//	else if(Input.GetButtonDown("Fire2"))
-	//	{
-	//		swap_inputs = false;
-	//	}
 
-	//	if(swap_inputs)
-	//	{
-			transform.localRotation = new Quaternion(transform.localRotation.x,
-				-transform.localRotation.y,
-				-transform.localRotation.z,
-				-transform.localRotation.w);
-        //	}
-       
+
+		transform.localRotation = new Quaternion(transform.localRotation.x,
+			-transform.localRotation.y,
+			-transform.localRotation.z,
+			-transform.localRotation.w);
+
+
 	}
+
+
+
 		
 	public void draw_axis_giz()
 	{
@@ -64,6 +60,7 @@ public class RotateBASIC : MonoBehaviour {
 		Debug.DrawRay(this.transform.position, this.transform.forward, Color.blue);
 
 	}
+
 
 
 }

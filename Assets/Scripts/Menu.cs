@@ -47,7 +47,7 @@ public class Menu : MonoBehaviour {
 					PlayerIO.currentPlayerIO.selectedInventory = 3;
 				}else if(hit.collider.gameObject.name == "Item4")
 				{
-					PlayerIO.currentPlayerIO.selectedInventory = 4;
+					//TODO movement tool
 				}
 			}
 
@@ -64,6 +64,7 @@ public class Menu : MonoBehaviour {
 			item.GetComponent<Renderer>().enabled = false;
 
 		}
+		isHidden = true;
 
 	}
 
@@ -75,7 +76,7 @@ public class Menu : MonoBehaviour {
 			item.GetComponent<Renderer>().enabled = true;
 
 		}
-
+		isHidden = false;
 	}
 
 }

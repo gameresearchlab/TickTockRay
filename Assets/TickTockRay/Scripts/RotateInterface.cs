@@ -22,7 +22,7 @@ public class RotateInterface : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		state = IDLE;
-		framesToWait = 60;
+		framesToWait = 30;
 		framesWaited = 0;
 		click_count = 0;
 
@@ -33,11 +33,9 @@ public class RotateInterface : MonoBehaviour {
 	void Update () {
 
 
-		//TextMesh debug = GameObject.Find("DebugText").GetComponent<TextMesh>();
-		//TextMesh debug2 = GameObject.Find("DebugText2").GetComponent<TextMesh>();
+		TextMesh debug = GameObject.Find("Debug").GetComponent<TextMesh>();
 
 		float zO = GameObject.Find("Watch").transform.localRotation.eulerAngles.z;
-		//debug.text = string.Format("Watch:\n{0}\n{1}", zO, state);
 
 
 
@@ -75,6 +73,7 @@ public class RotateInterface : MonoBehaviour {
 
 		//debug2.text = string.Format("RIV:\n{0}", z);
 
+		debug.text = "" + z;
 
 
 		if(state == RIGHT_CLICK || state == LEFT_CLICK)
@@ -85,14 +84,14 @@ public class RotateInterface : MonoBehaviour {
 		if(state != IDLE){
 			framesWaited++;
 			if((330 < z && z <= 360) || (0 <= z && z < 30)){
-				if(state == RIGHT_HALF)
-				{
-					state = RIGHT_CLICK;
-					click_count++;
-					framesWaited = 0;
-				}else if(state == LEFT_HALF)
+				if(state == LEFT_HALF)
 				{
 					state = LEFT_CLICK;
+					click_count++;
+					framesWaited = 0;
+				}else if(state == RIGHT_HALF)
+				{
+					state = RIGHT_CLICK;
 					click_count++;
 					framesWaited = 0;
 				}
@@ -104,9 +103,9 @@ public class RotateInterface : MonoBehaviour {
 		if(state == IDLE)
 		{
 			if(40 < z && z < 90){
-				state = RIGHT_HALF;
-			}else if( 180 < z && z < 290){
 				state = LEFT_HALF;
+			}else if( 180 < z && z < 280){
+				state = RIGHT_HALF;
 			}
 		}
 

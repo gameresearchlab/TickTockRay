@@ -83,7 +83,7 @@ public class RotateInterface : MonoBehaviour {
 		
 		if(state != IDLE){
 			framesWaited++;
-			if((330 < z && z <= 360) || (0 <= z && z < 30)){
+			if((350 < z && z <= 360) || (0 <= z && z < 10)){
 				if(state == LEFT_HALF)
 				{
 					state = LEFT_CLICK;
@@ -102,9 +102,9 @@ public class RotateInterface : MonoBehaviour {
 			
 		if(state == IDLE)
 		{
-			if(40 < z && z < 90){
+			if(30 < z && z < 90){
 				state = LEFT_HALF;
-			}else if( 180 < z && z < 280){
+			}else if( 180 < z && z < 330){
 				state = RIGHT_HALF;
 			}
 		}

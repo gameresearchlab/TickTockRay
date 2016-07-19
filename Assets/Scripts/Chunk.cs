@@ -23,6 +23,8 @@ public class Chunk : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+
 		
 		chunks.Add(this);
 		

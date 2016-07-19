@@ -68,7 +68,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/libs/classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="22b9087bf709e56928866b64ef5634ee8fe225fa">
+        sha1="d99c940702776b657bd021c2a26be1a8655496a0">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/pre-dexed/debug/ovrplugin-unspecified-jars_eee5b83ebe9c7948bfb4b9251da07e5c0a322961.jar" />
     </item>
     <item
@@ -103,7 +103,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/libs/SystemUtils.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="514ffa26977ade7cccd8ebdf8ca0299be3fea152">
+        sha1="983813c164fef80ed7425b6512fc95d55b54e7c7">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/pre-dexed/debug/SystemUtils_3b4e39aa397a621a25a31d8bc1e9b67a89cf8164.jar" />
     </item>
     <item
@@ -187,7 +187,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/libs/OculusUtilities.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="05a13ff038d74b3fb51d13e1f16d804e0f87f677">
+        sha1="5a8e257e528ce9992739b2f154903dc5fafa1521">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/pre-dexed/debug/OculusUtilities_6a6cbe054a389fc290b747e43bea8e3d94fcb29a.jar" />
     </item>
     <item
@@ -327,7 +327,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/classes.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="99483533eb010badd5af60ea0324a07ac1be6d41">
+        sha1="b56a201e390c7bf5548442bb2213587bf4c0606a">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/pre-dexed/debug/Minecraftish-ovrplugin-unspecified_31505d90714ce6176b14648dc9f6e464bc9a4041.jar" />
     </item>
     <item
@@ -355,7 +355,7 @@
         jar="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/Minecraftish/ovrplugin/unspecified/jars/libs/vrplatlib.jar"
         jumboMode="false"
         revision="23.0.2"
-        sha1="33fe7633a3540114e9a7b5f1f5f72657e5981605">
+        sha1="dadc83e5546662c4b96af0d9da628ee13abf4cc4">
         <dex dex="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/pre-dexed/debug/vrplatlib_1b26322bc2587e439290351ed4916c0156cd90c3.jar" />
     </item>
     <item

@@ -128,12 +128,12 @@
         "source": "/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.0.0/res/drawable-xhdpi/abc_ic_menu_moreoverflow_mtrl_alpha.png"
     },
     {
-        "merged": "/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/res/merged/debug/drawable-xhdpi-v4/ic_pause_light.png",
-        "source": "/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/drawable-xhdpi/ic_pause_light.png"
-    },
-    {
         "merged": "/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/res/merged/debug/drawable-xhdpi-v4/common_plus_signin_btn_text_dark_normal.9.png",
         "source": "/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/9.0.2/res/drawable-xhdpi-v4/common_plus_signin_btn_text_dark_normal.9.png"
+    },
+    {
+        "merged": "/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/res/merged/debug/drawable-xhdpi-v4/ic_pause_light.png",
+        "source": "/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/exploded-aar/com.android.support/mediarouter-v7/23.0.0/res/drawable-xhdpi/ic_pause_light.png"
     },
     {
         "merged": "/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/intermediates/res/merged/debug/drawable-xhdpi-v4/cast_ic_notification_2.png",

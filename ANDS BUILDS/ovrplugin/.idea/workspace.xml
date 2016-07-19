@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="ba9ec167-9b7f-4ea5-837c-73f3a03794c4" name="Default" comment="" />
+    <list default="true" id="0aaad0e7-c1f0-4ffa-9f1f-0b569338fa00" name="Default" comment="" />
     <ignored path="ovrplugin.iws" />
     <ignored path=".idea/workspace.xml" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -1316,7 +1316,7 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$" value="4406606769000" />
+        <entry key="$PROJECT_DIR$" value="4406848527000" />
       </map>
     </option>
     <option name="projectBuildClasspath">
@@ -1585,8 +1585,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="96" />
-    <option name="y" value="88" />
+    <option name="x" value="173" />
+    <option name="y" value="60" />
     <option name="width" value="2300" />
     <option name="height" value="1186" />
   </component>
@@ -1615,6 +1615,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="AndroidView">
         <subPane>
           <PATH>
@@ -1625,10 +1626,9 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="ProjectPane" />
-      <pane id="PackagesPane" />
       <pane id="Scratches" />
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
+      <pane id="ProjectPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -1727,15 +1727,15 @@
   <component name="ShelveChangesManager" show_recycled="false" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="ba9ec167-9b7f-4ea5-837c-73f3a03794c4" name="Default" comment="" />
-      <created>1468868923049</created>
+      <changelist id="0aaad0e7-c1f0-4ffa-9f1f-0b569338fa00" name="Default" comment="" />
+      <created>1468949509051</created>
       <option name="number" value="Default" />
-      <updated>1468868923049</updated>
+      <updated>1468949509051</updated>
     </task>
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="96" y="88" width="2300" height="1186" extended-state="0" />
+    <frame x="173" y="60" width="2300" height="1186" extended-state="0" />
     <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />

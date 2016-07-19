@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System;
+using UnityEngine.VR;
 
 public class WatchRotation : MonoBehaviour {
 	public static Quaternion rotation = Quaternion.identity;
@@ -13,6 +14,9 @@ public class WatchRotation : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		VRSettings.renderScale = 2.0f;
+
         AndroidJNI.AttachCurrentThread();
 
         using (AndroidJavaClass cls_UnityPlayer = new AndroidJavaClass ("com.unity3d.player.UnityPlayer")) {

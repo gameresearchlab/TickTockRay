@@ -83,7 +83,7 @@ public class RotateInterface : MonoBehaviour {
 		
 		if(state != IDLE){
 			framesWaited++;
-			if((350 < z && z <= 360) || (0 <= z && z < 10)){
+			if((300 < z && z <= 360) || (0 <= z && z < 30)){
 				if(state == LEFT_HALF)
 				{
 					state = LEFT_CLICK;
@@ -95,6 +95,7 @@ public class RotateInterface : MonoBehaviour {
 					click_count++;
 					framesWaited = 0;
 				}
+				GameObject.Find("Tock").GetComponent<AudioSource>().Play();
 			}
 
 
@@ -102,10 +103,12 @@ public class RotateInterface : MonoBehaviour {
 			
 		if(state == IDLE)
 		{
-			if(30 < z && z < 90){
+			if(40 < z && z < 90){
 				state = LEFT_HALF;
-			}else if( 180 < z && z < 330){
+				GameObject.Find("Tick").GetComponent<AudioSource>().Play();
+			}else if( 180 < z && z < 290){
 				state = RIGHT_HALF;
+				GameObject.Find("Tick").GetComponent<AudioSource>().Play();
 			}
 		}
 
@@ -113,6 +116,10 @@ public class RotateInterface : MonoBehaviour {
 			framesWaited = 0;
 			state = IDLE;
 		}
+
+
+
+
 
 	}
 

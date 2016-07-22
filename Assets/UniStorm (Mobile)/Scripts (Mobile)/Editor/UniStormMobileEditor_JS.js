@@ -1,4 +1,4 @@
-//UniStorm Weather System Editor JavaScript Version 1.8.5 @ Copyright
+//UniStorm Mobile Weather System Editor JavaScript Version 2.1.3 @ Copyright
 //Black Horizon Studios
 
 @CustomEditor (UniStormMobileWeatherSystem_JS)
@@ -142,6 +142,12 @@ class UniStormMobileEditor_JS extends Editor {
 	    	Custom = 2
 	   }
 	   
+	   enum GenerateDateAndTime
+	   {
+		Yes = 1,
+		No = 2
+	   }
+	   
 	   enum DayHourDropDown
 		{
 			_0 = 0,
@@ -250,30 +256,457 @@ class UniStormMobileEditor_JS extends Editor {
 	  var editorDayHour = DayHourDropDown._6;
 	  var editorNightHour = NightHourDropDown._18;
 	  var editorStartTimeNew = StartTimeNew._18;
+	  
+	  var editorGenerateDateAndTime = GenerateDateAndTime.Yes;
 	   
 	  var showAdvancedOptions : boolean = true;
-  
+  	  var confirmationToGenerate : boolean = false;
+  	  
+  	  var TabNumberProp : SerializedProperty;
+	var TabString : String[] = ["Climate Options", "Time Options", "Weather Options", "Wind Options", "Atmosphere Options", "Fog Options", "Lightning Options", "Temperature Options", "Sun Options", "Moon Options", "Precipitation Options", "GUI Options", "Sound Manager Options", "Color Options", "Object Options", "Show All Options"];
+
+	function OnEnable () 
+	{
+		//Int Serialized Properties
+		TabNumberProp = serializedObject.FindProperty ("TabNumber");
+	}
 
     function OnInspectorGUI () 
     {
+    	serializedObject.Update ();
+    
     	EditorGUILayout.LabelField("UniStorm Mobile Weather System", EditorStyles.boldLabel);
 		EditorGUILayout.LabelField("By: Black Horizon Studios", EditorStyles.label);
 		EditorGUILayout.Space();
-    	
 		EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+
+		EditorGUILayout.HelpBox("Current Time: " + target.hourCounter + ":" + target.minuteCounter.ToString("00"), MessageType.None, true);
+		EditorGUILayout.HelpBox("Date: " + target.monthCounter + "/" + target.dayCounter + "/" + target.yearCounter, MessageType.None, true);
+
+		if (target.calendarType == 1)
+		{
+			EditorGUILayout.HelpBox("Day of the Week: " + target.UniStormDate.DayOfWeek, MessageType.None, true);
+		}
+
+		EditorGUILayout.HelpBox("Current Weather: " + target.weatherString, MessageType.None, true);
+
+		if (target.temperatureType == 1)
+		{
+			EditorGUILayout.HelpBox("Current Temperature: " + target.temperature + " °F", MessageType.None, true);
+		}
+
+		if (target.temperatureType == 2)
+		{
+			EditorGUILayout.HelpBox("Current Temperature: " + target.temperature + " °C", MessageType.None, true);
+		}
+
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+
+
+		TabNumberProp.intValue = GUILayout.SelectionGrid (TabNumberProp.intValue, TabString, 2);
+
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+
+		if(TabNumberProp.intValue == 15 && GUILayout.Button("Generate Climate"))
+		{
+			confirmationToGenerate = !confirmationToGenerate;
+		}
+
+		
+
+		if (TabNumberProp.intValue == 0 || confirmationToGenerate && TabNumberProp.intValue == 15)
+		{
+			if (target.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Generate Climate will randomize several UniStorm settings to generate a climate for you. This includeds Weather Odds, Min and Max Temperautes (as well as calculating your seasonal averages), Starting Time, Date, Starting Weather, Moon Phases, and more. This can be useful for testing randomized settings or even generating a climate for your games. The Presets all use real world data (excluding the Random Preset) to give you a well rounded generated climate of that type.", MessageType.None, true);
+			}
+			
+			EditorGUILayout.HelpBox("Generating a new climate will change your current settings. This process cannot be undone. However, you can always reset to the default settings we used with our demos.", MessageType.Warning, true);
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			
+			editorGenerateDateAndTime = target.generateDateAndTime;
+			editorGenerateDateAndTime = EditorGUILayout.EnumPopup("Generate Additional Factors", editorGenerateDateAndTime);
+	    	target.generateDateAndTime = editorGenerateDateAndTime;
+	    	
+	    	if (target.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Generate Additional Factors will randomly generate your Starting Time, Date, Weather, and Moon Phase. This is useful to test out various factors with UniStorm without have to set everything manually.", MessageType.None, true);
+			}
+
+			if(GUILayout.Button("Random"))
+			{
+				if (target.generateDateAndTime == 1)
+				{
+					target.startTimeHour = Random.Range(0, 24);
+					target.startTimeMinute = Random.Range(0, 60);
+					target.dayCounter = Random.Range(1, 30);
+					target.monthCounter = Random.Range(1, 13);
+					target.yearCounter = Random.Range(1, 3000);
+					target.weatherForecaster = Random.Range(1, 14);
+					target.moonPhaseCalculator = Random.Range(0, 9);
+				}
+
+				if (target.temperatureType == 1)
+				{
+					target.minSpringTemp = Random.Range(35, 45);
+					target.maxSpringTemp = Random.Range(46, 60);
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = Random.Range(70, 80);
+					target.maxSummerTemp = Random.Range(81, 115);
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = Random.Range(35, 45);
+					target.maxFallTemp = Random.Range(46, 60);
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = Random.Range(-25, 0);
+					target.maxWinterTemp = Random.Range(1, 40);
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+				
+				if (target.temperatureType == 2)
+				{
+					target.minSpringTemp = ((Random.Range(35, 45)) - 32) * 5/9;
+					target.maxSpringTemp = ((Random.Range(46, 60)) - 32) * 5/9;
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = ((Random.Range(70, 80)) - 32) * 5/9;
+					target.maxSummerTemp = ((Random.Range(81, 115)) - 32) * 5/9;
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = ((Random.Range(35, 45)) - 32) * 5/9;
+					target.maxFallTemp = ((Random.Range(46, 60)) - 32) * 5/9;
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = ((Random.Range(-25, 0)) - 32) * 5/9;
+					target.maxWinterTemp = ((Random.Range(1, 40)) - 32) * 5/9;
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+			}
+
+			EditorGUILayout.HelpBox("A Random Climate will generate a random climate with no real world data. Everything is completely randomized, while still being realistic. This can give you very unique results which you can then alter how you'd like.", MessageType.None, true);
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+
+			if(GUILayout.Button("Rainforest"))
+			{
+				if (target.generateDateAndTime == 1)
+				{
+					target.startTimeHour = Random.Range(0, 24);
+					target.startTimeMinute = Random.Range(0, 60);
+					target.dayCounter = Random.Range(1, 30);
+					target.monthCounter = Random.Range(1, 13);
+					target.yearCounter = Random.Range(1, 3000);
+					target.weatherForecaster = Random.Range(1, 14);
+					target.moonPhaseCalculator = Random.Range(0, 9);
+				}
+
+				target.weatherChanceSpring = 80;
+				target.weatherChanceSummer = 80;
+				target.weatherChanceFall = 80;
+				target.weatherChanceWinter = 80;
+
+				if (target.temperatureType == 1)
+				{
+					target.minSpringTemp = Random.Range(75, 80);
+					target.maxSpringTemp = Random.Range(80, 85);
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = Random.Range(80, 85);
+					target.maxSummerTemp = Random.Range(85, 93);
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = Random.Range(75, 80);
+					target.maxFallTemp = Random.Range(80, 85);
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = Random.Range(68, 70);
+					target.maxWinterTemp = Random.Range(70, 75);
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+				
+				if (target.temperatureType == 2)
+				{
+					target.minSpringTemp = ((Random.Range(75, 80)) - 32) * 5/9;
+					target.maxSpringTemp = ((Random.Range(80, 85)) - 32) * 5/9;
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = ((Random.Range(80, 85)) - 32) * 5/9;
+					target.maxSummerTemp = ((Random.Range(85, 93)) - 32) * 5/9;
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = ((Random.Range(75, 80)) - 32) * 5/9;
+					target.maxFallTemp = ((Random.Range(80, 85)) - 32) * 5/9;
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = ((Random.Range(68, 70)) - 32) * 5/9;
+					target.maxWinterTemp = ((Random.Range(70, 75)) - 32) * 5/9;
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+			}
+
+			EditorGUILayout.HelpBox("The Rainforest Preset will generate a random Rainforest like Climate according to real world data.\n\nThe Rainforest climate consists of high odds of precipitation evenly distributed throughout the year. The yearly average temperature is relatively warm. It ralely exceeds 90° during the summer months and rarely falls below 68° during the winter.\n\nAfter your climate has been generated, you can tweak the settings to your liking.", MessageType.None, true);
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+
+			if(GUILayout.Button("Desert"))
+			{
+				if (target.generateDateAndTime == 1)
+				{
+					target.startTimeHour = Random.Range(0, 24);
+					target.startTimeMinute = Random.Range(0, 60);
+					target.dayCounter = Random.Range(1, 30);
+					target.monthCounter = Random.Range(1, 13);
+					target.yearCounter = Random.Range(1, 3000);
+					target.weatherForecaster = Random.Range(1, 14);
+					target.moonPhaseCalculator = Random.Range(0, 9);
+				}
+
+				target.weatherChanceSpring = 20;
+				target.weatherChanceSummer = 20;
+				target.weatherChanceFall = 20;
+				target.weatherChanceWinter = 20;
+
+				if (target.temperatureType == 1)
+				{
+					target.minSpringTemp = Random.Range(70, 85);
+					target.maxSpringTemp = Random.Range(85, 90);
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = Random.Range(90, 95);
+					target.maxSummerTemp = Random.Range(100, 120);
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = Random.Range(70, 85);
+					target.maxFallTemp = Random.Range(85, 90);
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = Random.Range(0, 50);
+					target.maxWinterTemp = Random.Range(50, 60);
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+				
+				if (target.temperatureType == 2)
+				{
+					target.minSpringTemp = ((Random.Range(70, 85)) - 32) * 5/9;
+					target.maxSpringTemp = ((Random.Range(85, 90)) - 32) * 5/9;
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = ((Random.Range(90, 95)) - 32) * 5/9;
+					target.maxSummerTemp = ((Random.Range(100, 120)) - 32) * 5/9;
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = ((Random.Range(70, 85)) - 32) * 5/9;
+					target.maxFallTemp = ((Random.Range(85, 90)) - 32) * 5/9;
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = ((Random.Range(0, 50)) - 32) * 5/9;
+					target.maxWinterTemp = ((Random.Range(50, 60)) - 32) * 5/9;
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+			}
+
+			EditorGUILayout.HelpBox("The Desert Preset will generate a random Desert like Climate according to real world data.\n\nThe Desert climate consists of very low odds of precipitation throughout the year. The average temperature is very hot duirng the Summer, but can be very cold during the Winter. Temperatures can often exceed 100° during the summer months and fall as cold as 0° during the winter.\n\nAfter your climate has been generated, you can tweak the settings to your liking.", MessageType.None, true);
+
+			EditorGUILayout.Space();
+
+			if(GUILayout.Button("Mountainous"))
+			{
+				if (target.generateDateAndTime == 1)
+				{
+					target.startTimeHour = Random.Range(0, 24);
+					target.startTimeMinute = Random.Range(0, 60);
+					target.dayCounter = Random.Range(1, 30);
+					target.monthCounter = Random.Range(1, 13);
+					target.yearCounter = Random.Range(1, 3000);
+					target.weatherForecaster = Random.Range(1, 14);
+					target.moonPhaseCalculator = Random.Range(0, 9);
+				}
+
+				target.weatherChanceSpring = 60;
+				target.weatherChanceSummer = 60;
+				target.weatherChanceFall = 60;
+				target.weatherChanceWinter = 60;
+
+				if (target.temperatureType == 1)
+				{
+					target.minSpringTemp = Random.Range(45, 55);
+					target.maxSpringTemp = Random.Range(55, 70);
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = Random.Range(70, 90);
+					target.maxSummerTemp = Random.Range(90, 96);
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = Random.Range(40, 50);
+					target.maxFallTemp = Random.Range(50, 65);
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = Random.Range(-30, 10);
+					target.maxWinterTemp = Random.Range(10, 30);
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+				
+				if (target.temperatureType == 2)
+				{
+					target.minSpringTemp = ((Random.Range(45, 55)) - 32) * 5/9;
+					target.maxSpringTemp = ((Random.Range(55, 70)) - 32) * 5/9;
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = ((Random.Range(70, 90)) - 32) * 5/9;
+					target.maxSummerTemp = ((Random.Range(90, 96)) - 32) * 5/9;
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = ((Random.Range(40, 50)) - 32) * 5/9;
+					target.maxFallTemp = ((Random.Range(50, 65)) - 32) * 5/9;
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = ((Random.Range(-30, 10)) - 32) * 5/9;
+					target.maxWinterTemp = ((Random.Range(10, 30)) - 32) * 5/9;
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+			}
+
+			EditorGUILayout.HelpBox("The Mountainous Preset will generate a random Mountainous like Climate according to real world data. \n\nThe Mountainous climate consists of medium to high odds of precipitation throughout the year. The average temperature is relatively mild during the Summer and very cold during the Winter. Temperatures can rarely exceed 86° during the summer months and fall as cold as -22° during the winter.\n\nAfter your climate has been generated, you can tweak the settings to your liking.", MessageType.None, true);
+
+			EditorGUILayout.Space();
+
+			if(GUILayout.Button("Grassland"))
+			{
+				if (target.generateDateAndTime == 1)
+				{
+					target.startTimeHour = Random.Range(0, 24);
+					target.startTimeMinute = Random.Range(0, 60);
+					target.dayCounter = Random.Range(1, 30);
+					target.monthCounter = Random.Range(1, 13);
+					target.yearCounter = Random.Range(1, 3000);
+					target.weatherForecaster = Random.Range(1, 14);
+					target.moonPhaseCalculator = Random.Range(0, 9);
+				}
+				
+				target.weatherChanceSpring = 60;
+				target.weatherChanceSummer = 60;
+				target.weatherChanceFall = 20;
+				target.weatherChanceWinter = 20;
+				
+				if (target.temperatureType == 1)
+				{
+					target.minSpringTemp = Random.Range(50, 85);
+					target.maxSpringTemp = Random.Range(85, 90);
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = Random.Range(90, 95);
+					target.maxSummerTemp = Random.Range(95, 115);
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = Random.Range(50, 85);
+					target.maxFallTemp = Random.Range(85, 90);
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = Random.Range(30, 40);
+					target.maxWinterTemp = Random.Range(40, 50);
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+				
+				if (target.temperatureType == 2)
+				{
+					target.minSpringTemp = ((Random.Range(50, 85)) - 32) * 5/9;
+					target.maxSpringTemp = ((Random.Range(85, 90)) - 32) * 5/9;
+					target.startingSpringTemp = (target.minSpringTemp + target.maxSpringTemp) / 2;
+					
+					target.minSummerTemp = ((Random.Range(90, 95)) - 32) * 5/9;
+					target.maxSummerTemp = ((Random.Range(95, 115)) - 32) * 5/9;
+					target.startingSummerTemp = (target.minSummerTemp + target.maxSummerTemp) / 2;
+					
+					target.minFallTemp = ((Random.Range(50, 85)) - 32) * 5/9;
+					target.maxFallTemp = ((Random.Range(85, 90)) - 32) * 5/9;
+					target.startingFallTemp = (target.minFallTemp + target.maxFallTemp) / 2;
+					
+					target.minWinterTemp = ((Random.Range(30, 40)) - 32) * 5/9;
+					target.maxWinterTemp = ((Random.Range(40, 50)) - 32) * 5/9;
+					target.startingWinterTemp = (target.minWinterTemp + target.maxWinterTemp) / 2;
+				}
+			}
+			
+			EditorGUILayout.HelpBox("The Grassland Preset will generate a random Grassland like Climate according to real world data. \n\nThe Grassland climate consists of medium odds of precipitation mainly in the Spring and Summer months. The average temperature is hot during the Summer and cold during the Winter. Temperatures can exceed 100° during the summer months and fall as cold as 30° during the winter.\n\nAfter your climate has been generated, you can tweak the settings to your liking.", MessageType.None, true);
+			
+			EditorGUILayout.Space();
+
+			if(GUILayout.Button("Reset to Default settings"))
+			{
+				target.startTimeHour = 11;
+				target.startTimeMinute = 0;
+				target.dayCounter = 15;
+				target.monthCounter = 6;
+				target.yearCounter = 2015;
+				target.weatherForecaster = 4;
+				target.moonPhaseCalculator = 3;
+				target.weatherChanceSpring = 60;
+				target.weatherChanceSummer = 20;
+				target.weatherChanceFall = 40;
+				target.weatherChanceWinter = 80;
+
+				if (target.temperatureType == 1)
+				{
+					target.minSpringTemp = 45;
+					target.maxSpringTemp = 65;
+					target.minSummerTemp = 70;;
+					target.maxSummerTemp = 100;
+					target.minFallTemp = 35;
+					target.maxFallTemp = 55;
+					target.minWinterTemp = 0;
+					target.maxWinterTemp = 40;
+					
+					target.startingSpringTemp = 55;
+					target.startingSummerTemp = 85;
+					target.startingFallTemp = 45;
+					target.startingWinterTemp = 30;
+				}
+				
+				if (target.temperatureType == 2)
+				{
+					target.minSpringTemp = ((45) - 32) * 5/9;
+					target.maxSpringTemp = ((65) - 32) * 5/9;
+					target.minSummerTemp = ((70) - 32) * 5/9;
+					target.maxSummerTemp = ((100) - 32) * 5/9;
+					target.minFallTemp = ((35) - 32) * 5/9;
+					target.maxFallTemp = ((55) - 32) * 5/9;
+					target.minWinterTemp = ((0) - 32) * 5/9;
+					target.maxWinterTemp = ((40) - 32) * 5/9;
+					
+					target.startingSpringTemp = ((55) - 32) * 5/9;
+					target.startingSummerTemp = ((85) - 32) * 5/9;
+					target.startingFallTemp = ((45) - 32) * 5/9;
+					target.startingWinterTemp = ((30) - 32) * 5/9;
+				}
+			}
+
+		}
+
+		if (target.weatherForecaster == 5 || target.weatherForecaster == 6 || target.weatherForecaster == 9)
+		{
+			target.weatherForecaster = Random.Range(1, 14);
+		}
+
+		
 			
 		var showOrHide_timeOptions : String = "Show";
 		if(target.timeOptions)
 			showOrHide_timeOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_timeOptions + " Time Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_timeOptions + " Time Options"))
 		{
 			target.timeOptions = !target.timeOptions;
 		}
         
-        if (target.timeOptions)
-        {
+        if (target.timeOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 1)
+		{
 			EditorGUILayout.LabelField("Time Options", EditorStyles.boldLabel);
 			
 			if (target.helpOptions == true)
@@ -281,21 +714,21 @@ class UniStormMobileEditor_JS extends Editor {
 				EditorGUILayout.HelpBox("The current UniStorm time is displayed with these variables. Setting the Starting Time will start UniStorm at that specific time of day according to the Hour and Minute. Time variables can be used to create events, quests, and effects at specific times.", MessageType.None, true);
 			}
 			
-			editorStartTimeNew = target.realStartTime;
+			editorStartTimeNew = target.startTimeHour;
 			editorStartTimeNew = EditorGUILayout.EnumPopup("Start Time Hour", editorStartTimeNew);
-	    	target.realStartTime = editorStartTimeNew;
+	    	target.startTimeHour = editorStartTimeNew;
 	    	
-	    	if (target.realStartTimeMinutes <= 9)
+	    	if (target.startTimeMinute <= 9)
 			{
-				EditorGUILayout.LabelField("Your day will start at " + target.realStartTime + ":0" + target.realStartTimeMinutes, EditorStyles.miniButton); //objectFieldThumb
+				EditorGUILayout.LabelField("Your day will start at " + target.startTimeHour + ":0" + target.startTimeMinute, EditorStyles.miniButton); //objectFieldThumb
 			}
 
-			if (target.realStartTimeMinutes >= 10)
+			if (target.startTimeMinute >= 10)
 			{
-				EditorGUILayout.LabelField("Your day will start at " + target.realStartTime + ":" + target.realStartTimeMinutes, EditorStyles.miniButton); //objectFieldThumb
+				EditorGUILayout.LabelField("Your day will start at " + target.startTimeHour + ":" + target.startTimeMinute, EditorStyles.miniButton); //objectFieldThumb
 			}
 
-			target.realStartTimeMinutes = EditorGUILayout.IntSlider ("Start Time Minute", target.realStartTimeMinutes, 0, 59);
+			target.startTimeMinute = EditorGUILayout.IntSlider ("Start Time Minute", target.startTimeMinute, 0, 59);
 
 	    	EditorGUILayout.Space();
 	    	
@@ -439,20 +872,18 @@ class UniStormMobileEditor_JS extends Editor {
     	}
     	
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_weatherOptions : String = "Show";
 		if(target.weathersOptions)
 			showOrHide_weatherOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_weatherOptions + " Weather Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_weatherOptions + " Weather Options"))
 		{
 			target.weatherOptions = !target.weatherOptions;
 		}
         
-        if (target.weatherOptions)
-        {
+        if (target.weatherOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 2)
+		{
 			EditorGUILayout.LabelField("Weather Options", EditorStyles.boldLabel);
 			
 			if (target.helpOptions == true)
@@ -464,28 +895,28 @@ class UniStormMobileEditor_JS extends Editor {
 	    	
 	    	if (target.cloudType == 1)
 	    	{ 	
-	    		//editorCloudDensity = target.cloudDensity;
-				//editorCloudDensity = EditorGUILayout.EnumPopup("Cloud Thickness", editorCloudDensity);
-	    		//target.cloudDensity = editorCloudDensity;    	
+	    		editorCloudDensity = target.cloudDensity;
+				editorCloudDensity = EditorGUILayout.EnumPopup("Cloud Thickness", editorCloudDensity);
+	    		target.cloudDensity = editorCloudDensity;    	
 	    	}
 	    	
 	    	EditorGUILayout.Space();
 			
 			if (target.cloudDensity == 1)
 			{
-				//EditorGUILayout.HelpBox("Low Cloud Thickness will render less dense clouds. This option is for people who like the look of lighter and more faint looking clouds.", MessageType.Info, true);
+				EditorGUILayout.HelpBox("Low Cloud Thickness will render less dense clouds. This option is for people who like the look of lighter and more faint looking clouds.", MessageType.Info, true);
 			}
 			
 			if (target.cloudDensity == 2)
 			{
-				//EditorGUILayout.HelpBox("High Cloud Thickness will render clouds more dense. This option is for people who like the look of thick noticable clouds.", MessageType.Info, true);
+				EditorGUILayout.HelpBox("High Cloud Thickness will render clouds more dense. This option is for people who like the look of thick noticable clouds.", MessageType.Info, true);
 			}
 	    	
 	    	EditorGUILayout.Space();
 			
-			//editorCloudType = target.cloudType;
-			//editorCloudType = EditorGUILayout.EnumPopup("Cloud Type", editorCloudType);
-	    	//target.cloudType = editorCloudType;
+			editorCloudType = target.cloudType;
+			editorCloudType = EditorGUILayout.EnumPopup("Cloud Type", editorCloudType);
+	    	target.cloudType = editorCloudType;
 	    	
 	    	
 			
@@ -561,71 +992,55 @@ class UniStormMobileEditor_JS extends Editor {
 	    	target.weatherChanceWinter = editorWeatherChance4;
     	}
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_windOptions : String = "Show";
 		if(target.windOptions)
 			showOrHide_windOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_windOptions + " Wind Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_windOptions + " Wind Options"))
 		{
 			target.windOptions = !target.windOptions;
 		}
         
-        if (target.windOptions)
-        {
+        if (target.WindOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 3)
+		{
 			EditorGUILayout.LabelField("Wind Options", EditorStyles.boldLabel);
 			
 			if (target.helpOptions == true)
 			{
-				EditorGUILayout.HelpBox("Use Terrain Wind will only affect terrains that can use Unity Terrain painted grass and trees. These use both the Unity terrain system and the Wind Zone system. If your game isn't using these, it doesn't need to be enabled.", MessageType.None, true);
+				EditorGUILayout.HelpBox("Here you can adjust the wind settings for the terrain's grass. UniStorm will use the normal wind settings during none precipitation weather types and will slowly transition into stormy wind during precipitation weather types.", MessageType.None, true);
 			}
-			
-			target.useWindZone = EditorGUILayout.Toggle ("Use Terrain Wind?",target.useWindZone);
-			
-			if (target.useWindZone)
-			{
-				
-				if (target.helpOptions == true)
-				{
-					EditorGUILayout.HelpBox("Here you can adjust the wind settings for the terrain's grass. UniStorm will use the normal wind settings during none precipitation weather types and will slowly transition into stormy wind during precipitation weather types.", MessageType.None, true);
-				}
-				
 
-				EditorGUILayout.Space();
+			EditorGUILayout.Space();
 
-				target.normalGrassWavingAmount = EditorGUILayout.Slider ("Normal Grass Wind Speed", target.normalGrassWavingAmount, 0.1f, 1.0f);
-				target.stormGrassWavingAmount = EditorGUILayout.Slider ("Stormy Grass Wind Speed", target.stormGrassWavingAmount, 0.1f, 1.0f);
+			target.normalGrassWavingAmount = EditorGUILayout.Slider ("Normal Grass Wind Speed", target.normalGrassWavingAmount, 0.1f, 1.0f);
+			target.stormGrassWavingAmount = EditorGUILayout.Slider ("Stormy Grass Wind Speed", target.stormGrassWavingAmount, 0.1f, 1.0f);
 
-				EditorGUILayout.Space();
+			EditorGUILayout.Space();
 
-				target.normalGrassWavingSpeed = EditorGUILayout.Slider ("Normal Grass Wind Size", target.normalGrassWavingSpeed, 0.1f, 1.0f);
-				target.stormGrassWavingSpeed = EditorGUILayout.Slider ("Stormy Grass Wind Size", target.stormGrassWavingSpeed, 0.1f, 1.0f);
+			target.normalGrassWavingSpeed = EditorGUILayout.Slider ("Normal Grass Wind Size", target.normalGrassWavingSpeed, 0.1f, 1.0f);
+			target.stormGrassWavingSpeed = EditorGUILayout.Slider ("Stormy Grass Wind Size", target.stormGrassWavingSpeed, 0.1f, 1.0f);
 
-				EditorGUILayout.Space();
+			EditorGUILayout.Space();
 
-				target.normalGrassWavingStrength = EditorGUILayout.Slider ("Normal Grass Wind Bending", target.normalGrassWavingStrength, 0.1f, 1.0f);
-				target.stormGrassWavingStrength = EditorGUILayout.Slider ("Stormy Grass Wind Bending", target.stormGrassWavingStrength, 0.1f, 1.0f);
-			}
+			target.normalGrassWavingStrength = EditorGUILayout.Slider ("Normal Grass Wind Bending", target.normalGrassWavingStrength, 0.1f, 1.0f);
+			target.stormGrassWavingStrength = EditorGUILayout.Slider ("Stormy Grass Wind Bending", target.stormGrassWavingStrength, 0.1f, 1.0f);
 		}
     	
     	
     		
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_atmosphereOptions : String = "Show";
 		if(target.atmosphereOptions)
 			showOrHide_atmosphereOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_atmosphereOptions + " Atmosphere Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_atmosphereOptions + " Atmosphere Options"))
 		{
 			target.atmosphereOptions = !target.atmosphereOptions;
 		}
         
-        if (target.atmosphereOptions)
-        {
+        if (target.atmosphereOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 4)
+		{
 			EditorGUILayout.LabelField("Atmosphere Options", EditorStyles.boldLabel);			
 			
 			if (target.helpOptions == true)
@@ -636,13 +1051,25 @@ class UniStormMobileEditor_JS extends Editor {
 			target.skyColorMorning = EditorGUILayout.ColorField("Sky Tint Color Morning", target.skyColorMorning);
 			target.skyColorDay = EditorGUILayout.ColorField("Sky Tint Color Day", target.skyColorDay);
 			target.skyColorEvening = EditorGUILayout.ColorField("Sky Tint Color Evening", target.skyColorEvening);
-			target.skyColorNight = EditorGUILayout.ColorField("Sky Tint Color Night", target.skyColorNight);
+			//target.skyColorNight = EditorGUILayout.ColorField("Sky Tint Color Night", target.skyColorNight);
+			
+			EditorGUILayout.Space();
+
+			target.nightTintColor = EditorGUILayout.ColorField("Sky Tint Color Night", target.nightTintColor);
+			
+			if (target.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Sky Tint Color Night allows you to adjust the color of the sky when it's night. Note: This color option also affects the overall tint of the Procedural Skybox. Darker colors tend to work best.", MessageType.None, true);
+			}
 
 			EditorGUILayout.Space();
 
 			target.groundColor = EditorGUILayout.ColorField("Ground Color", target.groundColor);
 
-			EditorGUILayout.HelpBox("Here you can adjust the Skybox Tint and Ground colors. The procedural skybox shader will accurately shade according to the time of day and angle of the sun.", MessageType.Info, true);
+			if (target.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Here you can adjust the Skybox Tint and Ground colors. The procedural skybox shader will accurately shade according to the time of day and angle of the sun.", MessageType.Info, true);
+			}
 			
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
@@ -653,23 +1080,34 @@ class UniStormMobileEditor_JS extends Editor {
 			
 			target.exposure = EditorGUILayout.Slider ("Exposure", target.exposure, 0.0f, 8.0);
 			
-			EditorGUILayout.HelpBox("Here you can adjust the Atmosphere Thickness and Exposure. These values allow you to control how thick the atosphere is and how much light is scattered.", MessageType.Info, true);	
+			if (target.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Here you can adjust the Atmosphere Thickness and Exposure. These values allow you to control how thick the atosphere is and how much light is scattered.", MessageType.Info, true);	
+			}
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+
+			target.starBrightness = EditorGUILayout.ColorField("Star Brightness", target.starBrightness);
+
+			if (target.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Star Brightness allows you to adjust how bright your stars will shine. Use the color from white to balck to adjust this. Note: UniStorm uses the alpha amount so adjusting it won't affect the star's brightness.", MessageType.None, true);
+			}
 		}
 								
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_fogOptions : String = "Show";
 		if(target.fogOptions)
 			showOrHide_fogOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_fogOptions + " Fog Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_fogOptions + " Fog Options"))
 		{
 			target.fogOptions = !target.fogOptions;
 		}
         
-        if (target.fogOptions)
-        {
+        if (target.fogOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 5)
+		{
 	    	EditorGUILayout.Space();
 			EditorGUILayout.LabelField("Fog Options", EditorStyles.boldLabel);
 			
@@ -706,20 +1144,18 @@ class UniStormMobileEditor_JS extends Editor {
     	
     	
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_lightningOptions : String = "Show";
 		if(target.lightningOptions)
 			showOrHide_lightningOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_lightningOptions + " Lightning Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_lightningOptions + " Lightning Options"))
 		{
 			target.lightningOptions = !target.lightningOptions;
 		}
         
-        if (target.lightningOptions)
-        {
+        if (target.lightningOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 6)
+		{
 			EditorGUILayout.LabelField("Lightning Options", EditorStyles.boldLabel);
 			EditorGUILayout.Space();
 			
@@ -728,48 +1164,38 @@ class UniStormMobileEditor_JS extends Editor {
 				EditorGUILayout.HelpBox("These settings allow you to adjust any lightning and thunder related options. These features will only happen during the Thunder Storm weather type.", MessageType.None, true);
 			}
 			
-			target.lightningEnabled = EditorGUILayout.Toggle ("Lightning Light Enabled?",target.lightningEnabled);
-
-			if (target.helpOptions == true)
+			EditorGUILayout.Space();
+			
+			target.shadowsLightning = EditorGUILayout.Toggle ("Shadows Enabled?",target.shadowsLightning);
+			
+			
+			if (target.shadowsLightning)
 			{
-				EditorGUILayout.HelpBox("Light can be intensive on mobile. So you have the option to only use sound if desired.", MessageType.None, true);
+				EditorGUILayout.Space();
+				
+				editorLightningShadowType = target.lightningShadowType;
+				editorLightningShadowType = EditorGUILayout.EnumPopup("Shadow Type", editorLightningShadowType);
+	    		target.lightningShadowType = editorLightningShadowType;
+	    		
+	    		EditorGUILayout.Space();
+	    		
+	    		target.lightningShadowIntensity = EditorGUILayout.Slider ("Shadow Intensity", target.lightningShadowIntensity, 0, 1.0);
+				
 			}
 			
-			if (target.lightningEnabled)
+			EditorGUILayout.Space();
+			
+			if (target.helpOptions == true)
 			{
-				EditorGUILayout.Space();
-				
-				target.shadowsLightning = EditorGUILayout.Toggle ("Shadows Enabled?",target.shadowsLightning);
-				
-				
-				if (target.shadowsLightning)
-				{
-					EditorGUILayout.Space();
-					
-					editorLightningShadowType = target.lightningShadowType;
-					editorLightningShadowType = EditorGUILayout.EnumPopup("Shadow Type", editorLightningShadowType);
-		    		target.lightningShadowType = editorLightningShadowType;
-		    		
-		    		EditorGUILayout.Space();
-		    		
-		    		target.lightningShadowIntensity = EditorGUILayout.Slider ("Shadow Intensity", target.lightningShadowIntensity, 0, 1.0);
-					
-				}
-				
-				EditorGUILayout.Space();
-				
-				if (target.helpOptions == true)
-				{
-					EditorGUILayout.HelpBox("The lighting intesity settings control the possible minimum and maximum light intensity of the lightning.", MessageType.None, true);
-				}
-				
-				target.lightningColor = EditorGUILayout.ColorField("Lightning Color", target.lightningColor);
-				
-				EditorGUILayout.Space();
-				
-				target.minIntensity = EditorGUILayout.Slider ("Min Lightning Intensity", target.minIntensity, 0.5f, 1.5);
-				target.maxIntensity = EditorGUILayout.Slider ("Max Lightning Intensity", target.maxIntensity, 0.5f, 1.5);
+				EditorGUILayout.HelpBox("The lighting intesity settings control the possible minimum and maximum light intensity of the lightning.", MessageType.None, true);
 			}
+			
+			target.lightningColor = EditorGUILayout.ColorField("Lightning Color", target.lightningColor);
+			
+			EditorGUILayout.Space();
+			
+			target.minIntensity = EditorGUILayout.Slider ("Min Lightning Intensity", target.minIntensity, 0.5f, 1.5);
+			target.maxIntensity = EditorGUILayout.Slider ("Max Lightning Intensity", target.maxIntensity, 0.5f, 1.5);
 			
 			EditorGUILayout.Space();
 			
@@ -783,16 +1209,12 @@ class UniStormMobileEditor_JS extends Editor {
 			
 			EditorGUILayout.Space();
 			
-			if (target.lightningEnabled)
+			if (target.helpOptions == true)
 			{
-				
-				if (target.helpOptions == true)
-				{
-					EditorGUILayout.HelpBox("The flash length controls how quickly the lightning flashes on and off.", MessageType.None, true);
-				}
-				
-				target.lightningFlashLength = EditorGUILayout.Slider ("Lightning Flash Length", target.lightningFlashLength, 0.4f, 1.2);
+				EditorGUILayout.HelpBox("The flash length controls how quickly the lightning flashes on and off.", MessageType.None, true);
 			}
+			
+			target.lightningFlashLength = EditorGUILayout.Slider ("Lightning Flash Length", target.lightningFlashLength, 0.4f, 1.2);
 			
 			EditorGUILayout.Space();
 			
@@ -834,20 +1256,18 @@ class UniStormMobileEditor_JS extends Editor {
         }
         
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_temperatureOptions : String = "Show";
 		if(target.temperatureOptions)
 			showOrHide_temperatureOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_temperatureOptions + " Temperature Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_temperatureOptions + " Temperature Options"))
 		{
 			target.temperatureOptions = !target.temperatureOptions;
 		}
         
-        if (target.temperatureOptions)
-        {
+        if (target.temperatureOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 7)
+	    {
 	    	//Temperature OPtions
 			EditorGUILayout.LabelField("Temperature Options", EditorStyles.boldLabel); 
 			
@@ -859,11 +1279,11 @@ class UniStormMobileEditor_JS extends Editor {
 			editorTemperature = target.temperatureType;
 			editorTemperature = EditorGUILayout.EnumPopup("Temperature Type", editorTemperature);
 	    	target.temperatureType = editorTemperature;
+	    	
+	    	target.temperature = EditorGUILayout.IntField ("Current Temperature", target.temperature);
 			
 			if (target.temperatureType == 1)
 			{
-				target.temperature = EditorGUILayout.IntField ("Current Temperature", target.temperature);
-
 				EditorGUILayout.HelpBox("While using the Fahrenheit temperature type, UniStorm will snow at a temperature of 32 degrees or below.", MessageType.Info, true);
 			}
 			
@@ -899,20 +1319,18 @@ class UniStormMobileEditor_JS extends Editor {
 		}
 		
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_sunOptions : String = "Show";
 		if(target.sunOptions)
 			showOrHide_sunOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_sunOptions + " Sun Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_sunOptions + " Sun Options"))
 		{
 			target.sunOptions = !target.sunOptions;
 		}
         
-        if (target.sunOptions)
-        {
+        if (target.sunOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 8)
+		{
 	    	//Sun Intensity
 			EditorGUILayout.LabelField("Sun Options", EditorStyles.boldLabel);
 			
@@ -924,11 +1342,11 @@ class UniStormMobileEditor_JS extends Editor {
 	    	EditorGUILayout.Space();
 	    	
 	    	//target.sunIntensity = EditorGUILayout.FloatField ("Sun Intensity", target.sunIntensity);
-	    	target.maxSunIntensity = EditorGUILayout.Slider ("Max Sun Intensity", target.maxSunIntensity, 0.5f, 4);
+	    	target.maxSunIntensity = EditorGUILayout.Slider ("Max Sun Intensity", target.maxSunIntensity, 0.5f, 8);
 	    	
 	    	EditorGUILayout.Space();
 	    	
-	    	target.sunSize = EditorGUILayout.Slider ("Sun Size", target.sunSize, 0, 0.05f);
+	    	target.sunSize = EditorGUILayout.Slider ("Sun Size", target.sunSize, 0, 0.1f);
 	    	
 	    	EditorGUILayout.Space();
 
@@ -958,24 +1376,22 @@ class UniStormMobileEditor_JS extends Editor {
 			
 			EditorGUILayout.Space();
 	    	
-	    	//target.sunAngle = EditorGUILayout.IntSlider ("Sun Rotation", target.sunAngle, -180, 180);
+	    	target.sunAngle = EditorGUILayout.IntSlider ("Sun Rotation", target.sunAngle, -180, 180);
     	}
     	
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_moonOptions : String = "Show";
 		if(target.moonOptions)
 			showOrHide_moonOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_moonOptions + " Moon Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_moonOptions + " Moon Options"))
 		{
 			target.moonOptions = !target.moonOptions;
 		}
         
-        if (target.moonOptions)
-        {
+        if (target.moonOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 9)
+		{
 	    	EditorGUILayout.Space();
 			EditorGUILayout.LabelField("Moon Options", EditorStyles.boldLabel);
 			
@@ -986,11 +1402,11 @@ class UniStormMobileEditor_JS extends Editor {
 			
 			EditorGUILayout.Space();
 			
-			target.moonLightIntensity = EditorGUILayout.Slider ("Moonlight Intensity", target.moonLightIntensity, 0, 0.5);
+			target.moonLightIntensity = EditorGUILayout.Slider ("Moonlight Intensity", target.moonLightIntensity, 0, 1.0f);
 			
 			EditorGUILayout.Space();
 
-			target.stormyMoonLightIntensity = EditorGUILayout.Slider ("Stormy Moon Intensity", target.stormyMoonLightIntensity, 0, 0.5f);
+			target.stormyMoonLightIntensity = EditorGUILayout.Slider ("Stormy Moon Intensity", target.stormyMoonLightIntensity, 0, 1.0f);
 			
 			EditorGUILayout.Space();
 			
@@ -1052,20 +1468,18 @@ class UniStormMobileEditor_JS extends Editor {
     	}
     	
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_precipitationOptions : String = "Show";
 		if(target.precipitationOptions)
 			showOrHide_precipitationOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_precipitationOptions + " Precipitation Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_precipitationOptions + " Precipitation Options"))
 		{
 			target.precipitationOptions = !target.precipitationOptions;
 		}
         
-        if (target.precipitationOptions)
-        {
+        if (target.precipitationOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 10)
+		{
 	    	//Weather Particle Slider Adjustments Rain
 			EditorGUILayout.LabelField("Precipitation Options", EditorStyles.boldLabel);
 			
@@ -1167,20 +1581,18 @@ class UniStormMobileEditor_JS extends Editor {
     	}
 
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
 			
 		var showOrHide_GUIOptions : String = "Show";
 		if(target.GUIOptions)
 			showOrHide_GUIOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_GUIOptions + " GUI Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_GUIOptions + " GUI Options"))
 		{
 			target.GUIOptions = !target.GUIOptions;
 		}
         
-        if (target.GUIOptions)
-        {
+        if (target.GUIOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 11)
+		{
 			EditorGUILayout.LabelField("GUI Options", EditorStyles.boldLabel);
 			
 			if (target.helpOptions == true)
@@ -1192,21 +1604,18 @@ class UniStormMobileEditor_JS extends Editor {
 	    	target.weatherCommandPromptUseable = EditorGUILayout.Toggle ("WCPS Enabled",target.weatherCommandPromptUseable);
     	}
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-		
+    	
 		
 		var showOrHide_soundManagerOptions : String = "Show";
 		if(target.soundManagerOptions)
 			showOrHide_soundManagerOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_soundManagerOptions + " Sound Manager Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_soundManagerOptions + " Sound Manager Options"))
 		{
 			target.soundManagerOptions = !target.soundManagerOptions;
 		}
         
-        if (target.soundManagerOptions)
-        {
+        if (target.soundManagerOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 12)
+		{
 	    	//Sound Manager Options
 			EditorGUILayout.LabelField("Sound Manager Options", EditorStyles.boldLabel);
 			
@@ -1381,21 +1790,19 @@ class UniStormMobileEditor_JS extends Editor {
         }
         
         
-        EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+        
 		
 		
 		var showOrHide_colorOptions : String = "Show";
 		if(target.colorOptions)
 			showOrHide_colorOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_colorOptions + " Color Options"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_colorOptions + " Color Options"))
 		{
 			target.colorOptions = !target.colorOptions;
 		}
         
-        if (target.colorOptions)
-        {
+        if (target.colorOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 13)
+		{
     	
 	    	//Ambient Light Colors
 			EditorGUILayout.LabelField("Color Options", EditorStyles.boldLabel);
@@ -1413,6 +1820,7 @@ class UniStormMobileEditor_JS extends Editor {
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
 	    	
+	    	target.TwilightAmbientLight = EditorGUILayout.ColorField("Ambient Twilight", target.TwilightAmbientLight);
 	    	target.MorningAmbientLight = EditorGUILayout.ColorField("Ambient Morning", target.MorningAmbientLight);
 	    	target.MiddayAmbientLight = EditorGUILayout.ColorField("Ambient Day", target.MiddayAmbientLight);
 	    	target.DuskAmbientLight = EditorGUILayout.ColorField("Ambient Evening", target.DuskAmbientLight);
@@ -1457,28 +1865,26 @@ class UniStormMobileEditor_JS extends Editor {
 			target.stormyFogColorNight_GF = EditorGUILayout.ColorField("Stormy Global Fog Night", target.stormyFogColorNight_GF);
 	    	
 	    	//Star Brightness
-	    	EditorGUILayout.Space();
-	    	EditorGUILayout.Space();
-	    	EditorGUILayout.LabelField("Fade Colors", EditorStyles.boldLabel);
-	    	target.starBrightness = EditorGUILayout.ColorField("Star Brightness", target.starBrightness);
-	    	target.moonFadeColor = EditorGUILayout.ColorField("Moon Fade", target.moonFadeColor);
-	    	target.moonColorFade = EditorGUILayout.ColorField("Dark Side Moon", target.moonColorFade);
+	    	//EditorGUILayout.Space();
+	    	//EditorGUILayout.Space();
+	    	//EditorGUILayout.LabelField("Fade Colors", EditorStyles.boldLabel);
+	    	//target.starBrightness = EditorGUILayout.ColorField("Star Brightness", target.starBrightness);
+	    	//target.moonFadeColor = EditorGUILayout.ColorField("Moon Fade", target.moonFadeColor);
+	    	//target.moonColorFade = EditorGUILayout.ColorField("Dark Side Moon", target.moonColorFade);
     	}
     	
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
-    	EditorGUILayout.Space();
+    	
         
         var showOrHide_objectOptions : String = "Show";
 		if(target.objectOptions)
 			showOrHide_objectOptions = "Hide";
-    	if(GUILayout.Button(showOrHide_objectOptions + " Object Fields"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_objectOptions + " Object Options"))
 		{
 			target.objectOptions = !target.objectOptions;
 		}
         
-        if (target.objectOptions)
-        {
+        if (target.objectOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 14)
+		{
 			EditorGUILayout.LabelField("Object Fields", EditorStyles.boldLabel);
 		
 			if (target.helpOptions == true)
@@ -1649,18 +2055,19 @@ class UniStormMobileEditor_JS extends Editor {
         
         }
         
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
-        EditorGUILayout.Space();
+        
         
         var showOrHide2 : String = "Show";
 		if(target.helpOptions)
 			showOrHide2 = "Hide";
-    	if(GUILayout.Button(showOrHide2 + " Help Boxes"))
+    	if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide2 + " Help Options"))
 		{
 			target.helpOptions = !target.helpOptions;
 		}
         
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
+        EditorGUILayout.Space();
        
         
         GUILayout.BeginHorizontal();
@@ -1670,11 +2077,12 @@ class UniStormMobileEditor_JS extends Editor {
         
         //Added 1.8.2
         //UniStorm will no longer revert to prefab settings
-        if (GUI.changed) 
+        if (GUI.changed && !EditorApplication.isPlaying) 
 		{ 
-			EditorUtility.SetDirty(target); 
+			EditorApplication.MarkSceneDirty();
 		}
         
+        serializedObject.ApplyModifiedProperties ();
     }
 
 }

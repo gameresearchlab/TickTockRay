@@ -17,6 +17,7 @@
 			PlayerPrefs.SetInt("Current Minute", UniStorm.GetComponent(UniStormMobileWeatherSystem_JS).minuteCounter);
 
 			currentHour = UniStorm.GetComponent(UniStormMobileWeatherSystem_JS).Hour;
+			currentHour = Mathf.Round(currentHour * 10) / 10;
 
 			PlayerPrefs.SetFloat("Current Hour", currentHour);
 
@@ -42,8 +43,8 @@
 
 		if(Input.GetKeyDown(KeyCode.L))
 		{
-			UniStorm.GetComponent(UniStormMobileWeatherSystem_JS).realStartTimeMinutes = PlayerPrefs.GetInt("Current Minute");
-			UniStorm.GetComponent(UniStormMobileWeatherSystem_JS).realStartTime = PlayerPrefs.GetFloat("Current Hour");
+			UniStorm.GetComponent(UniStormMobileWeatherSystem_JS).startTimeMinute = PlayerPrefs.GetInt("Current Minute");
+			UniStorm.GetComponent(UniStormMobileWeatherSystem_JS).startTimeHour = PlayerPrefs.GetFloat("Current Hour");
 
 
 			UniStorm.GetComponent(UniStormMobileWeatherSystem_JS).LoadTime();

@@ -4,29 +4,29 @@
     api-level="23"
     density="xxxhdpi"
     format="7"
-    timestamp="1469056206307465000"
-    token="-5466283408725156869" >
+    timestamp="793985027007094"
+    token="5838982216646980663" >
 
     <task
         name="javac"
-        duration="333" />
+        duration="388" />
     <task
         name="instant-run-dex"
         duration="0" />
     <task
         name="instant-run-transform"
-        duration="181" />
+        duration="190" />
     <task
         name="verifier"
-        duration="23" />
+        duration="42" />
 
     <artifact
-        location="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/outputs/apk/minecraftish-debug.apk"
+        location="/Users/danielkharlamov/Desktop/watch_int/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/outputs/apk/minecraftish-debug.apk"
         type="MAIN" />
 
-    <build timestamp="1469056206307465000" >
+    <build timestamp="793985027007094" >
         <artifact
-            location="/Users/student/Desktop/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/outputs/apk/minecraftish-debug.apk"
+            location="/Users/danielkharlamov/Desktop/watch_int/TickTockRay/ANDS BUILDS/Minecraftish/minecraftish/build/outputs/apk/minecraftish-debug.apk"
             type="MAIN" />
     </build>
 

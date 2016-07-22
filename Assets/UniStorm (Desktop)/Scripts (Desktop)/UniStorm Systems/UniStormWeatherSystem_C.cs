@@ -1,4 +1,4 @@
-//UniStorm Weather System C# Version 2.0.6 @ Copyright
+//UniStorm Weather System C# Version 2.1.4 @ Copyright
 //Black Horizon Studios
 
 using UnityEngine;
@@ -6,13 +6,20 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityStandardAssets.ImageEffects;
 using UnityEngine.UI;
+using System;
 
 public class UniStormWeatherSystem_C : MonoBehaviour {
+
+	public Color nightTintColor;
+	public int generateDateAndTime = 1;
+
+	public Color stormCloudColor1;
+	public Color stormCloudColor2;
 
 	//Gets all our components on start and stores them here
 	Renderer starSphereComponent;
 	Renderer heavyCloudsComponent;
-	Renderer moonObjectComponent;
+	public Renderer moonObjectComponent;
 
 	//Dyanmic Clouds
 	Renderer lightClouds1Component;
@@ -38,13 +45,13 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	Light lightSourceComponent;
 
 	AudioSource soundComponent;
-	AudioSource rainSoundComponent;
-	AudioSource windSoundComponent;
-	AudioSource windSnowSoundComponent;
+	public AudioSource rainSoundComponent;
+	public AudioSource windSoundComponent;
+	public AudioSource windSnowSoundComponent;
 
 	ParticleEmitter mistFogComponent;
 
-	Camera cameraObjectComponent;
+	public Camera cameraObjectComponent;
 
 	public bool useInstantStartingWeather;
 
@@ -52,9 +59,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 
 	public int environmentType;
 
-	public float realStartTime;
-	public int realStartTimeMinutes;
-	public float realStartTimeMinutesFloat;
+	public float startTimeHour;
+	public int startTimeMinute;
+	//public float startTimeMinuteFloat;
 
 	public float sunHeight = 0.95f;
 	public float mostlyCloudyFader;
@@ -73,7 +80,6 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 
 	public GameObject menuObject;
 
-	//Added 1.8.4
 	public float stormyMoonLightIntensity;
 
 	public bool timeOptions = true;
@@ -196,10 +202,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public int lastWeatherType;
 	public bool randomizedPrecipitation = false;
 	public int moonShadowQuality = 2;
-	
-	public bool useSunFlare = false;
+
 	public bool useRainStreaks = true;
-	public Color sunFlareColor;
 	
 	public int timeToWaitMin;
 	public int timeToWaitMax;
@@ -228,7 +232,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public List<bool> foldOutList = new List<bool>();
 	
 	public bool shadowsDuringDay = true;
-	public float dayShadowIntensity;
+	public float dayShadowIntensity = 1;
 	public int dayShadowType = 1;
 	
 	public bool shadowsDuringNight;
@@ -293,8 +297,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public int hourCounter = 0; 
 	public int hourCounter2 = 0;
 	public int dayCounter = 0; 
-	public float monthCounter = 0; 
-	public float yearCounter = 0; 
+	public int monthCounter = 0; 
+	public int yearCounter = 0; 
 	public int temperature = 0; 
 	public float dayLength;
 	public int cloudSpeed;
@@ -310,7 +314,6 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public bool weatherCommandPromptUseable = false;
 	public bool timeScrollBarUseable = false;
 	public float startTime;
-	public int startTimeNumber;
 	public float moonPhaseChangeTime;
 	public int weatherForecaster = 0;
 	private string stringToEdit = "0";
@@ -328,6 +331,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public Color MorningAmbientLight;
 	public Color MiddayAmbientLight;
 	public Color DuskAmbientLight;
+	public Color TwilightAmbientLight;
 	public Color NightAmbientLight;
 	
 	//Sun colors
@@ -586,13 +590,18 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	public bool hour23 = false;
 	public bool hour0 = false;
 	
-	public float sunSize = 0.02f;
+	public float sunSize = 0.01f;
 	public Color skyTintColor;
 	public Color groundColor;
 	public float atmosphereThickness;
 	public float exposure;
 
 	public string variableAsString;
+	public int TabNumber = 1;
+	public DateTime UniStormDate;
+	public GameObject sunShaftsPositionObject;
+
+	public float cloudHeight = 750; 
 	
 	void Awake () 
 	{
@@ -611,6 +620,15 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 	
 	void Start ()
 	{
+		CloudA = "_MainTex1";
+		CloudB = "_MainTex2";
+		CloudC = "_MainTex3";
+
+		if (yearCounter <= 0)
+		{
+			yearCounter = 1;
+		}
+
 		if (useCustomPrecipitationSounds)
 		{
 			rainSound.GetComponent<AudioSource>().enabled = true;
@@ -626,13 +644,12 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		SkyBoxMaterial.SetColor("_GroundColor", groundColor);
 		SkyBoxMaterial.SetFloat("_AtmosphereThickness", atmosphereThickness);
 		SkyBoxMaterial.SetFloat("_Exposure", exposure);
-		SkyBoxMaterial.SetFloat("_SunSize", 0);
-		useSunFlare = true;
-
-		realStartTimeMinutesFloat = (int)realStartTimeMinutes;
+		SkyBoxMaterial.SetColor("_NightSkyTint", nightTintColor);
+		SkyBoxMaterial.SetFloat("_SunSize", sunSize);
 
 		//Calculates our start time based off the user's input
-		startTime = realStartTime / 24 + realStartTimeMinutesFloat / 1440;
+		float startTimeMinuteFloat = (int)startTimeMinute;
+		startTime = startTimeHour / 24 + startTimeMinuteFloat / 1440;
 
 		if (Terrain.activeTerrain == null)
 		{	
@@ -806,12 +823,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		uvAnimationRateHeavyB = new Vector2(0.004f, 0.0035f);
 		uvAnimationRateHeavyC = new Vector2(0.0001f, 0.0f);
 
-		if (useSunFlare)
-		{	
-			sunObject = GameObject.Find("SunGlow");
-			sunObject.transform.localScale = new Vector3(sunSize, sunSize, sunSize);
-			sunObject.SetActive(true);
-		}
+		CreateSun();
 		
 		if (useRainStreaks)
 		{
@@ -832,11 +844,43 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		moonLight = moon.GetComponent<Light>();
 		moonLight.intensity = moonLightIntensity;
 
+		MoonPhaseCalculator();
+
 		if (useInstantStartingWeather)
 		{
+			TemperatureGeneration();
 			InstantWeather();
 		}
 
+		CalculateMonths();
+
+		if (calendarType == 1)
+		{
+			UniStormDate = new DateTime(yearCounter, monthCounter, dayCounter);
+		}
+
+		//CloudA = "_MainTex1h";
+		//CloudB = "_MainTex2h";
+		//CloudC = "_MainTex3h";
+
+	}
+
+	public void CreateSun ()
+	{
+		//UniStorm now uses our procedural Skybox sun.
+		//Below, we create a gameobject as a reference point for our sun's position
+		//Once it's created, we assign it to the Sun Shafts Sun Transform
+		sunShaftsPositionObject = new GameObject();
+		sunShaftsPositionObject.name = "Sun Transform";
+		sunShaftsPositionObject.transform.parent = sun.transform; 
+		sunShaftsPositionObject.transform.localPosition = new Vector3 (0,0,-999999);
+		sunShaftsPositionObject.transform.localRotation = Quaternion.Euler (0,0,0);
+		sunShaftsPositionObject.transform.localScale = new Vector3 (1,1,1);
+		
+		if (cameraObjectComponent.GetComponent<SunShafts>() != null)
+		{
+			cameraObjectComponent.GetComponent<SunShafts>().sunTransform = sunShaftsPositionObject.transform;
+		}
 	}
 
 	//Gets all our needed components on Start
@@ -951,25 +995,25 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//80% chance for percipitation			
 				if (weatherChanceSpring == 80)
 				{
-					weatherOdds = Random.Range (80,100);
+					weatherOdds = UnityEngine.Random.Range (80,100);
 				}
 				
 				//60% chance for percipitation			
 				if (weatherChanceSpring == 60)
 				{
-					weatherOdds = Random.Range (60,100);
+					weatherOdds = UnityEngine.Random.Range (60,100);
 				}
 				
 				//40% chance for percipitation			
 				if (weatherChanceSpring == 40)
 				{
-					weatherOdds = Random.Range (40,100);
+					weatherOdds = UnityEngine.Random.Range (40,100);
 				}	
 				
 				//20% chance for percipitation			
 				if (weatherChanceSpring == 20)
 				{
-					weatherOdds = Random.Range (20,100);
+					weatherOdds = UnityEngine.Random.Range (20,100);
 				}
 			}
 			
@@ -980,25 +1024,25 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//80% chance for percipitation			
 				if (weatherChanceSummer == 80)
 				{
-					weatherOdds = Random.Range (80,100);
+					weatherOdds = UnityEngine.Random.Range (80,100);
 				}
 				
 				//60% chance for percipitation			
 				if (weatherChanceSummer == 60)
 				{
-					weatherOdds = Random.Range (60,100);
+					weatherOdds = UnityEngine.Random.Range (60,100);
 				}
 				
 				//40% chance for percipitation			
 				if (weatherChanceSummer == 40)
 				{
-					weatherOdds = Random.Range (40,100);
+					weatherOdds = UnityEngine.Random.Range (40,100);
 				}	
 				
 				//20% chance for percipitation			
 				if (weatherChanceSummer == 20)
 				{
-					weatherOdds = Random.Range (20,100);
+					weatherOdds = UnityEngine.Random.Range (20,100);
 				}
 			}
 			
@@ -1009,25 +1053,25 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//80% chance for percipitation			
 				if (weatherChanceFall == 80)
 				{
-					weatherOdds = Random.Range (80,100);
+					weatherOdds = UnityEngine.Random.Range (80,100);
 				}
 				
 				//60% chance for percipitation			
 				if (weatherChanceFall == 60)
 				{
-					weatherOdds = Random.Range (60,100);
+					weatherOdds = UnityEngine.Random.Range (60,100);
 				}
 				
 				//40% chance for percipitation			
 				if (weatherChanceFall == 40)
 				{
-					weatherOdds = Random.Range (40,100);
+					weatherOdds = UnityEngine.Random.Range (40,100);
 				}	
 				
 				//20% chance for percipitation			
 				if (weatherChanceFall == 20)
 				{
-					weatherOdds = Random.Range (20,100);
+					weatherOdds = UnityEngine.Random.Range (20,100);
 				}
 			}
 			
@@ -1038,25 +1082,25 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//80% chance for percipitation			
 				if (weatherChanceWinter == 80)
 				{
-					weatherOdds = Random.Range (80,100);
+					weatherOdds = UnityEngine.Random.Range (80,100);
 				}
 				
 				//60% chance for percipitation			
 				if (weatherChanceWinter == 60)
 				{
-					weatherOdds = Random.Range (60,100);
+					weatherOdds = UnityEngine.Random.Range (60,100);
 				}
 				
 				//40% chance for percipitation			
 				if (weatherChanceWinter == 40)
 				{
-					weatherOdds = Random.Range (40,100);
+					weatherOdds = UnityEngine.Random.Range (40,100);
 				}	
 				
 				//20% chance for percipitation			
 				if (weatherChanceWinter == 20)
 				{
-					weatherOdds = Random.Range (20,100);
+					weatherOdds = UnityEngine.Random.Range (20,100);
 				}
 			}
 		}
@@ -1209,7 +1253,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		//Controls wether the weather command prompt is enabled or disabled	
 		if (weatherCommandPromptUseable == true)
 		{
-			if(Input.GetKeyDown(KeyCode.F12))
+			if(Input.GetKeyDown(KeyCode.U))
 			{
 				commandPromptActive = !commandPromptActive;
 			}
@@ -1217,7 +1261,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		
 		if (timeScrollBarUseable == true)
 		{
-			if(Input.GetKeyDown(KeyCode.F12))
+			if(Input.GetKeyDown(KeyCode.U))
 			{
 				timeScrollBar = !timeScrollBar;
 			}
@@ -1228,134 +1272,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			commandPromptActive = false;
 		}
 
-		if (monthCounter >= 2 && monthCounter <= 4)
-		{
-			summerTemp = 0;
-			winterTemp = 0;
-			fallTemp = 0;
-			
-			if (springTemp == 0)
-			{
-				springTemp = 1;
-			}
-		}
-		
-		if (monthCounter >= 5 && monthCounter <= 7)
-		{
-			winterTemp = 0;
-			fallTemp = 0;
-			springTemp = 0;
-			
-			if (summerTemp == 0)
-			{
-				summerTemp = 1;
-			}
-		}
-		
-		if (monthCounter >= 8 && monthCounter <= 10)
-		{
-			summerTemp = 0;
-			winterTemp = 0;
-			springTemp = 0;
-			
-			if (fallTemp == 0)
-			{
-				fallTemp = 1;
-			}
-		}
-		
-		if (monthCounter == 11 || monthCounter == 12 || monthCounter == 1)
-		{
-			summerTemp = 0;
-			fallTemp = 0;
-			springTemp = 0;
-			
-			if (winterTemp == 0)
-			{
-				winterTemp = 1;
-			}
-		}
-		
-		if (monthCounter >= 2 && monthCounter <= 4)
-		{
-			if (springTemp == 1)
-			{
-				temperature = startingSpringTemp;
-				springTemp = 2;	
-			}
-			
-			if (temperature <= minSpringTemp && springTemp == 2)
-			{
-				temperature = minSpringTemp;
-			}
-			
-			if (temperature >= maxSpringTemp && springTemp == 2)
-			{
-				temperature = maxSpringTemp;
-			}
-		}
-		
-		//Generates the temperature for Summer
-		if (monthCounter >= 5 && monthCounter <= 7)
-		{
-			
-			if (summerTemp == 1)
-			{
-				temperature = startingSummerTemp;
-				summerTemp = 2;	
-			}
-			
-			if (temperature <= minSummerTemp && summerTemp == 2)
-			{
-				temperature = minSummerTemp;
-			}
-			
-			if (temperature >= maxSummerTemp && summerTemp == 2)
-			{
-				temperature = maxSummerTemp;
-			}
-		}
-		
-		//Generates the temperature for Fall
-		if (monthCounter >= 8 && monthCounter <= 10)
-		{
-			
-			if (fallTemp == 1)
-			{
-				temperature = startingFallTemp;
-				fallTemp = 2;
-			}
-			
-			if (temperature <= minFallTemp && fallTemp == 2)
-			{
-				temperature = minFallTemp;
-			}
-			
-			if (temperature >= maxFallTemp && fallTemp == 2)
-			{
-				temperature = maxFallTemp;
-			}
-		}
-		
-		//Generates the temperature for Winter
-		if (monthCounter >= 11 || monthCounter >= 12 || monthCounter <= 1)
-		{
-			if (winterTemp == 1)
-			{
-				temperature = startingWinterTemp;
-				winterTemp = 2;
-			}
-			
-			if (temperature <= minWinterTemp && winterTemp == 2)
-			{
-				temperature = minWinterTemp;
-			}
-			
-			if (temperature >= maxWinterTemp && winterTemp == 2)
-			{
-				temperature = maxWinterTemp;
-			}
-		}	
+		TemperatureGeneration();	
 		
 		if (monthCounter == -1)
 		{
@@ -1377,197 +1294,154 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			moonComponent.enabled = false;
 		}
 		
-		//Calculates our moon phases
-		if (moonPhaseCalculator == 1)
-		{
-			moonObjectComponent.sharedMaterial = moonPhase1;	
-		}
-		
-		if (moonPhaseCalculator == 2)
-		{
-			moonObjectComponent.sharedMaterial = moonPhase2;	
-		}
-		
-		if (moonPhaseCalculator == 3)
-		{
-			moonObjectComponent.sharedMaterial = moonPhase3;	
-		}
-		
-		if (moonPhaseCalculator == 4)
-		{
-			moonObjectComponent.sharedMaterial = moonPhase4;	
-		}
-		
-		if (moonPhaseCalculator == 5)
-		{
-			moonObjectComponent.sharedMaterial = moonPhase5;	
-		}
-		
-		if (moonPhaseCalculator == 6)
-		{
-			moonObjectComponent.sharedMaterial = moonPhase6;	
-		}
-		
-		if (moonPhaseCalculator == 7)
-		{
-			moonObjectComponent.sharedMaterial = moonPhase7;	
-		}
-		
-		if (moonPhaseCalculator == 8)
-		{
-			moonObjectComponent.sharedMaterial = moonPhase8;	
-		}
-		
-		if (moonPhaseCalculator == 9)
-		{
-			moonPhaseCalculator = 1;	
-		}
+		MoonPhaseCalculator();
 
 		//Rotates our sun using quaternion rotations so the angles don't coincide (sunAngle angles the sun based off the user's input)	
 		sun.transform.eulerAngles = new Vector3(startTime * 360 - 90, sunAngle, 180);
 
+
 		//Fluctuates realistic temperatures
 		if (hourCounter == 1 && hour1 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour1 = true;
 		}
 		
 		if (hourCounter == 2 && hour2 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour2 = true;
 		}
 		
 		if (hourCounter == 3 && hour3 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour3 = true;
 		}
 		
 		if (hourCounter == 4 && hour4 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour4 = true;
 		}
 		
 		if (hourCounter == 5 && hour5 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour5 = true;
 		}
 		
 		if (hourCounter == 6 && hour6 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour6 = true;
 		}
 		
 		if (hourCounter == 7 && hour7 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour7 = true;
 		}
 		
 		if (hourCounter == 8 && hour8 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour8 = true;
 		}
 		
 		if (hourCounter == 9 && hour9 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour9 = true;
 		}
 		
 		if (hourCounter == 10 && hour10 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour10 = true;
 		}
 		
 		if (hourCounter == 11 && hour11 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour11 = true;
 		}
 		
 		if (hourCounter == 12 && hour12 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour12 = true;
 		}
 		
 		if (hourCounter == 13 && hour13 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour13 = true;
 		}
 		
 		if (hourCounter == 14 && hour14 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour14 = true;
 		}
 		
 		if (hourCounter == 15 && hour15 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour15 = true;
 		}
 		
 		if (hourCounter == 16 && hour16 == false)
 		{
-			temperature += Random.Range (1,3);
+			temperature += UnityEngine.Random.Range (1,3);
 			hour16 = true;
 		}
 		
 		if (hourCounter == 17 && hour17 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour17 = true;
 		}
 		
 		if (hourCounter == 18 && hour18 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour18 = true;
 		}
 		
 		if (hourCounter == 19 && hour19 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour19 = true;
 		}
 		
 		if (hourCounter == 20 && hour20 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour20 = true;
 		}
 		
 		if (hourCounter == 21 && hour21 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour21 = true;
 		}
 		
 		if (hourCounter == 22 && hour22 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour22 = true;
 		}
 		
 		if (hourCounter == 23 && hour23 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour23 = true;
 		}
 		
 		if (hourCounter == 24 && hour0 == false)
 		{
-			temperature -= Random.Range (1,3);
+			temperature -= UnityEngine.Random.Range (1,3);
 			hour0 = true;
 		}	
 
@@ -1598,65 +1472,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			weatherUpdate = 0;
 		}
 
-		if (calendarType == 1)
-		{				
-			//Calculates our days into months
-			if(dayCounter >= 32 && monthCounter == 1 || dayCounter >= 32 && monthCounter == 3 || dayCounter >= 32 && monthCounter == 5 || dayCounter >= 32 && monthCounter == 7 || dayCounter >= 32 && monthCounter == 8 || dayCounter >= 32 && monthCounter == 10 || dayCounter >= 32 && monthCounter == 12)
-			{
-				dayCounter = dayCounter % 32;
-				dayCounter += 1;
-				monthCounter += 1;
-			}
-			
-			if(dayCounter == 31 && monthCounter == 4 || dayCounter == 31 && monthCounter == 6 || dayCounter == 31 && monthCounter == 9 || dayCounter == 31 && monthCounter == 11)
-			{
-				dayCounter = dayCounter % 31;
-				dayCounter += 1;
-				monthCounter += 1;
-			}
-			
-			//Calculates Leap Year
-			if(dayCounter >= 30 && monthCounter == 2 && (yearCounter % 4 == 0 && yearCounter % 100 != 0) || (yearCounter % 400 == 0))
-			{
-				dayCounter = dayCounter % 30;
-				dayCounter += 1;
-				monthCounter += 1;
-			}
-			
-			else if (dayCounter >= 29 && monthCounter == 2 && yearCounter % 4 != 0)
-			{
-				dayCounter = dayCounter % 29;
-				dayCounter += 1;
-				monthCounter += 1;
-			}
-			
-			//Calculates our months into years
-			if (monthCounter > 12)
-			{
-				monthCounter = monthCounter % 13;
-				yearCounter += 1;
-				monthCounter += 1;
-			}
-		}
-		
-		if (calendarType == 2)
-		{
-			//Calculates our custom days into months
-			if(dayCounter > numberOfDaysInMonth)
-			{
-				dayCounter = dayCounter % numberOfDaysInMonth - 1;
-				dayCounter += 1;
-				monthCounter += 1;
-			}
-			
-			//Calculates our custom months into years
-			if (monthCounter > numberOfMonthsInYear)
-			{
-				monthCounter = monthCounter % numberOfMonthsInYear - 1;
-				yearCounter += 1;
-				monthCounter += 1;
-			}
-		}
+		CalculateMonths();
 		
 		//If staticWeather is true, the weather will never change
 		if (staticWeather == false)
@@ -1667,9 +1483,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//Controls our storms from switching too often
 				if (stormCounter >= 13)
 				{
-					weatherForecaster = Random.Range(1,13);
+					weatherForecaster = UnityEngine.Random.Range(1,13);
 					weatherOdds = 1;
-					stormCounter = Random.Range (0,7);
+					stormCounter = UnityEngine.Random.Range (0,7);
 				}
 			}
 			
@@ -1679,9 +1495,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//Controls our storms from switching too often
 				if (stormCounter >= 13)
 				{
-					weatherForecaster = Random.Range(1,13);
+					weatherForecaster = UnityEngine.Random.Range(1,13);
 					weatherOdds = 1;
-					stormCounter = Random.Range (0,7);
+					stormCounter = UnityEngine.Random.Range (0,7);
 				}
 			}
 			
@@ -1691,9 +1507,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//Controls our storms from switching too often
 				if (stormCounter >= 13)
 				{
-					weatherForecaster = Random.Range(1,13);
+					weatherForecaster = UnityEngine.Random.Range(1,13);
 					weatherOdds = 1;
-					stormCounter = Random.Range (0,7);
+					stormCounter = UnityEngine.Random.Range (0,7);
 				}
 			}
 			
@@ -1703,9 +1519,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//Controls our storms from switching too often
 				if (stormCounter >= 13)
 				{
-					weatherForecaster = Random.Range(1,13);
+					weatherForecaster = UnityEngine.Random.Range(1,13);
 					weatherOdds = 1;
-					stormCounter = Random.Range (0,7);
+					stormCounter = UnityEngine.Random.Range (0,7);
 				}
 			}		
 		}
@@ -1729,6 +1545,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		}
 
 		sun.intensity = (calculate2-0.1f) * sunIntensity;
+
+		//sun.intensity = 0.5f * sunIntensity;
 		
 		if (sunIntensity <= 0)
 		{
@@ -1770,7 +1588,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		{
 			if (staticWeather == false)
 			{	
-				weatherForecaster = Random.Range(2,3);
+				weatherForecaster = UnityEngine.Random.Range(2,3);
 				forceStorm = 0;
 			}
 		}
@@ -1780,7 +1598,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		{
 			if (staticWeather == false)
 			{	
-				weatherForecaster = Random.Range(4,11);
+				weatherForecaster = UnityEngine.Random.Range(4,11);
 				changeWeather = 0;
 			}
 		}
@@ -1807,7 +1625,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			fogNightColor = Color.Lerp (originalFogColorNight, stormyFogColorNight, fader);
 		}
 	
-		if (weatherForecaster == 4 || weatherForecaster == 5 || weatherForecaster == 6 || weatherForecaster == 7 || weatherForecaster == 8)
+		if (weatherForecaster == 4 || weatherForecaster == 5 || weatherForecaster == 6 || weatherForecaster == 7 || weatherForecaster == 8 || weatherForecaster == 11 || weatherForecaster == 10 || weatherForecaster == 13)
 		{
 			fader2 += 0.0005f; 
 			fader -= 0.0025f; 
@@ -1840,12 +1658,14 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		if(Hour > 2 && Hour < 4)
 		{
 			moon.color = Color.Lerp (moonColor, moonFadeColor, (Hour/2)-1);
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", 0.5f);
+			RenderSettings.ambientLight = Color.Lerp (NightAmbientLight, TwilightAmbientLight, (Hour/2)-1);
 		}
 		
 		//Calculates morning fading in from night
 		if(Hour > 4 && Hour < 6)
 		{
-			RenderSettings.ambientLight = Color.Lerp (NightAmbientLight, MorningAmbientLight, (Hour/2)-2);
+			RenderSettings.ambientLight = Color.Lerp (TwilightAmbientLight, MorningAmbientLight, (Hour/2)-2);
 			sun.color = Color.Lerp (SunNight, SunMorning, (Hour/2)-2);
 			
 			RenderSettings.fogColor = Color.Lerp (fogNightColor, fogMorningColor, (Hour/2)-2);
@@ -1855,20 +1675,16 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			
 			lightClouds1Component.material.SetColor("_Color", Color.Lerp (cloudColorNight, cloudColorMorning, (Hour/2)-2) );
 			lightClouds1aComponent.material.SetColor("_Color", Color.Lerp (cloudColorNight, cloudColorMorning, (Hour/2)-2) );
-			
-			moonObjectComponent.sharedMaterial.SetFloat("_FloatMin", (Hour/2)-2);
-			moonFade2 = moonObjectComponent.sharedMaterial.GetFloat("_FloatMin") * -50000.0f;
-			moonObjectComponent.sharedMaterial.SetFloat("_FogAmountMin", (moonFade2));
-			
-			//Added 1.8.5
-			moonObjectComponent.sharedMaterial.SetColor ("_MoonColor", Color.Lerp (moonColorFade, moonFadeColor, (Hour/2)-2) );
+
+			float lerp = Mathf.Lerp(0.5f, 0, (Hour/2)-2);
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", lerp);
 
 			if (sunShaftScript != null)
 			{
 				sunShaftScript.sunColor = Color.Lerp (DuskAtmosphericLight, MorningAtmosphericLight, (Hour/2)-2);
 			}
 			
-			moon.color = moonFadeColor;
+			//moon.color = moonFadeColor;
 			
 			starSphereComponent.sharedMaterial.SetColor ("_TintColor", Color.Lerp (starBrightness, moonFadeColor, (Hour/2)-2) );
 		}
@@ -1893,6 +1709,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			}
 			
 			starSphereComponent.sharedMaterial.SetColor ("_TintColor",  Color.black * fadeStars);
+
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", 0);
 			
 			fadeStars = 0;
 		}
@@ -1917,6 +1735,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			}
 			
 			starSphereComponent.sharedMaterial.SetColor ("_TintColor",  Color.black * fadeStars);
+
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", 0);
 			
 			fadeStars = 0;
 			
@@ -1934,9 +1754,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			
 			lightClouds1Component.material.SetColor("_Color", Color.Lerp (cloudColorDay, cloudColorEvening, (Hour/2)-8) );
 			lightClouds1aComponent.material.SetColor("_Color", Color.Lerp (cloudColorDay, cloudColorEvening, (Hour/2)-8) );
-			
-			//Added 1.8.5
-			moonObjectComponent.sharedMaterial.SetColor ("_MoonColor", Color.Lerp (moonFadeColor, moonFadeColor, (Hour/2)-8) );
+
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", 0);
 
 			if (sunShaftScript != null)
 			{
@@ -1954,7 +1773,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		//Calculates night fading in from dusk
 		if(Hour > 18 && Hour < 20)
 		{
-			RenderSettings.ambientLight = Color.Lerp (DuskAmbientLight, NightAmbientLight, (Hour/2)-9);
+			RenderSettings.ambientLight = Color.Lerp (DuskAmbientLight, TwilightAmbientLight, (Hour/2)-9);
 			sun.color = Color.Lerp (SunDusk, SunNight, (Hour/2)-9);
 			RenderSettings.fogColor = Color.Lerp (fogDuskColor, fogNightColor, (Hour/2)-9);
 			
@@ -1965,7 +1784,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			lightClouds1aComponent.material.SetColor("_Color", Color.Lerp (cloudColorEvening, cloudColorNight, (Hour/2)-9) );
 			
 			//Added 1.8.5
-			moonObjectComponent.sharedMaterial.SetColor ("_MoonColor", Color.Lerp (moonFadeColor, starBrightness, (Hour/2)-9) );
+			//moonObjectComponent.sharedMaterial.SetColor ("_MoonColor", Color.Lerp (moonFadeColor, starBrightness, (Hour/2)-9) );
 			
 			moonObjectComponent.sharedMaterial.SetFloat("_FloatMax", (Hour/2)-9);
 
@@ -1975,6 +1794,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			}
 			
 			starSphereComponent.sharedMaterial.SetColor ("_TintColor", Color.Lerp (Color.black, starBrightness, (Hour/2)-9) );
+
+			float lerp = Mathf.Lerp(0f, 0.5f, (Hour/2)-9);
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", lerp);
 			
 			if (fadeStars >= 1)
 			{
@@ -1982,11 +1804,20 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			}
 			
 		}
+
+		if(Hour > 20 && Hour < 22)
+		{
+			RenderSettings.ambientLight = Color.Lerp (TwilightAmbientLight, NightAmbientLight, (Hour/2)-10f);
+		}
+
+		if (Hour > 22)
+		{
+			RenderSettings.ambientLight = NightAmbientLight;
+		}
 		
 		//Calculates Night
 		if(Hour > 20)
 		{
-			RenderSettings.ambientLight = NightAmbientLight;
 			sun.color = Color.Lerp (SunNight, SunNight, (Hour/2)-10);	
 			starSphereComponent.sharedMaterial.SetColor ("_TintColor",  starBrightness * fadeStars);
 			
@@ -1995,17 +1826,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			lightClouds1aComponent.material.SetColor("_Color", cloudColorNight);
 			
 			//Added 1.8.5
-			moonObjectComponent.sharedMaterial.SetColor ("_MoonColor", Color.Lerp (starBrightness, starBrightness, (Hour/2)-10) );
-			
-			//Added 1.8.5
 			SkyBoxMaterial.SetColor("_SkyTint", Color.Lerp (skyColorNight, skyColorNight, (Hour/2)-10));
-			
-			moonObjectComponent.sharedMaterial.SetFloat("_FogAmountMin", (0));
-			
-			moonObjectComponent.sharedMaterial.SetFloat("_FloatMax", (Hour/2)-10);
-			moonFade = moonObjectComponent.sharedMaterial.GetFloat("_FloatMax") * 50000.0f;
-			moonObjectComponent.sharedMaterial.SetFloat("_FogAmountMax", (moonFade));
-			
+
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", 0.5f);
 			
 			RenderSettings.fogColor = Color.Lerp (fogNightColor, fogNightColor, (Hour/2)-10);
 
@@ -2020,17 +1843,19 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		{
 			lightClouds1Component.material.SetColor("_Color", cloudColorNight);
 			lightClouds1aComponent.material.SetColor("_Color", cloudColorNight);
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", 0.5f);
 		}
 		
 		if (Hour >= 0 && Hour <= 2)
 		{
 			moonLight.color = moonColor;
+			moonObjectComponent.sharedMaterial.SetFloat("_MoonFade", 0.5f);
+			RenderSettings.ambientLight = NightAmbientLight;
 		}
 		
 
 		if(Hour < 4)
 		{
-			RenderSettings.ambientLight = NightAmbientLight;
 			sun.color = Color.Lerp (SunNight, SunNight, (Hour/2)-2);	
 			starSphereComponent.sharedMaterial.SetColor ("_TintColor",  starBrightness * fadeStars);
 			
@@ -2044,7 +1869,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			SkyBoxMaterial.SetColor("_SkyTint", Color.Lerp (skyColorNight, skyColorNight, (Hour/2)-10));
 			
 			//Added 1.8.5
-			moonObjectComponent.sharedMaterial.SetColor ("_MoonColor", Color.Lerp (starBrightness, starBrightness, (Hour/2)-10) );
+			//moonObjectComponent.sharedMaterial.SetColor ("_MoonColor", Color.Lerp (starBrightness, starBrightness, (Hour/2)-10) );
 			
 			moonObjectComponent.sharedMaterial.SetFloat("_FogAmountMin", (0));
 			moonObjectComponent.sharedMaterial.SetFloat("_FogAmountMax", (50000));
@@ -2284,7 +2109,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				lightingGenerated = true;
 				lightSourceComponent.enabled = true;
 				
-				lightningNumber = Random.Range(1,5);
+				lightningNumber = UnityEngine.Random.Range(1,6);
 				
 				if (lightningNumber == 1)
 				{
@@ -2352,10 +2177,10 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 					timer = 0;
 					onTimer = 0;
 					lightSourceComponent.enabled = false;
-					lightSourceComponent.transform.rotation = Quaternion.Euler (50, Random.Range(0,360), 0);
+					lightSourceComponent.transform.rotation = Quaternion.Euler (50, UnityEngine.Random.Range(0,360), 0);
 					
-					lightningOdds = Random.Range(lightningMinChance, lightningMaxChance);
-					lightningIntensity = Random.Range(minIntensity, maxIntensity);
+					lightningOdds = UnityEngine.Random.Range(lightningMinChance, lightningMaxChance);
+					lightningIntensity = UnityEngine.Random.Range(minIntensity, maxIntensity);
 				}
 			}
 	}
@@ -2538,37 +2363,37 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 
 		if (TODSoundsTimer >= timeToWaitCurrent && Hour > 4 && Hour < 8 && playedSound == false && useMorningSounds)
 		{
-			soundComponent.PlayOneShot(ambientSoundsMorning[Random.Range(0,ambientSoundsMorning.Count)]);
+			soundComponent.PlayOneShot(ambientSoundsMorning[UnityEngine.Random.Range(0,ambientSoundsMorning.Count)]);
 			playedSound = true;
 		}
 		
 		if (TODSoundsTimer > timeToWaitCurrent && Hour > 8 && Hour < 16 && playedSound == false && useDaySounds)
 		{
-			soundComponent.PlayOneShot(ambientSoundsDay[Random.Range(0,ambientSoundsDay.Count)]);
+			soundComponent.PlayOneShot(ambientSoundsDay[UnityEngine.Random.Range(0,ambientSoundsDay.Count)]);
 			playedSound = true;
 		}
 		
 		if (TODSoundsTimer > timeToWaitCurrent && Hour > 16 && Hour < 20 && playedSound == false && useEveningSounds)
 		{
-			soundComponent.PlayOneShot(ambientSoundsEvening[Random.Range(0,ambientSoundsEvening.Count)]);
+			soundComponent.PlayOneShot(ambientSoundsEvening[UnityEngine.Random.Range(0,ambientSoundsEvening.Count)]);
 			playedSound = true;
 		}
 		
 		if (TODSoundsTimer > timeToWaitCurrent && Hour > 20 && Hour < 25 && playedSound == false && useNightSounds)
 		{	
-			soundComponent.PlayOneShot(ambientSoundsNight[Random.Range(0,ambientSoundsNight.Count)]);
+			soundComponent.PlayOneShot(ambientSoundsNight[UnityEngine.Random.Range(0,ambientSoundsNight.Count)]);
 			playedSound = true;
 		}
 		
 		if (TODSoundsTimer > timeToWaitCurrent && Hour > 0 && Hour < 4 && playedSound == false && useNightSounds)
 		{	
-			soundComponent.PlayOneShot(ambientSoundsNight[Random.Range(0,ambientSoundsNight.Count)]);
+			soundComponent.PlayOneShot(ambientSoundsNight[UnityEngine.Random.Range(0,ambientSoundsNight.Count)]);
 			playedSound = true;
 		}
 
 		if (TODSoundsTimer >= timeToWaitCurrent+2)
 		{
-			timeToWaitCurrent = Random.Range(timeToWaitMin,timeToWaitMax);
+			timeToWaitCurrent = UnityEngine.Random.Range(timeToWaitMin,timeToWaitMax);
 			TODSoundsTimer = 0;
 			playedSound = false;
 		}
@@ -2584,7 +2409,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			windControl -= Time.deltaTime;
 			time -= Time.deltaTime * .14f;
 			sunShaftFade += Time.deltaTime * .14f;
-			minRainIntensity -= 1;
+			minRainIntensity -= 3f;
 			minFogIntensity -= .04f;
 			minHeavyRainMistIntensity -= .08f;
 			minSnowFogIntensity -= .024f;	
@@ -2595,9 +2420,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			dynamicSnowFade -= Time.deltaTime * .0095f; 
 			overrideFog = false;
 			
-			heavyCloudsComponent.material.color = new Color(.35f,.35f,.35f,topStormCloudFade);
+			heavyCloudsComponent.material.color = new Color(stormCloudColor1.r,stormCloudColor1.g,stormCloudColor1.b,topStormCloudFade);
 			heavyCloudsLayer1Component.material.color = new Color(0,0,0,fade2);	
-			heavyCloudsLayerLightComponent.material.color = new Color(.5f,.5f,.5f,fade2);
+			heavyCloudsLayerLightComponent.material.color = new Color(stormCloudColor2.r,stormCloudColor2.g,stormCloudColor2.b,fade2);
 
 			moonLight.intensity += 0.001f;
 			
@@ -3089,7 +2914,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			//Fix 1.8.5
 			if (weatherForecaster == 1)
 			{
-				minRainIntensity -= .2f;
+				minRainIntensity -= 3f;
 				minFogIntensity -= .008f;
 				minHeavyRainMistIntensity -= .008f;
 				minSnowFogIntensity -= .024f;	
@@ -3120,6 +2945,12 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				if (minSnowFogIntensity <= 0)
 				{
 					minSnowFogIntensity = 0;
+				}
+
+				//Keep rain fog from going below 0
+				if (minRainIntensity <= 0)
+				{
+					minRainIntensity = 0;
 				}
 			}
 		
@@ -3166,7 +2997,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//Light Rain
 				if (lastWeatherType != weatherForecaster && randomizedPrecipitation)
 				{
-					randomizedRainIntensity = Random.Range(100,maxLightRainIntensity);
+					randomizedRainIntensity = UnityEngine.Random.Range(100,maxLightRainIntensity);
 					currentGeneratedIntensity = randomizedRainIntensity;
 					lastWeatherType = weatherForecaster;
 				}
@@ -3197,6 +3028,10 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 					minFogIntensity += .008f;
 					minHeavyRainMistIntensity += .008f;
 				}
+
+		
+			
+
 
 				minSnowFogIntensity -= .024f;	
 				minSnowIntensity -= .9f;
@@ -3230,7 +3065,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				//Heavy Rain
 				if (lastWeatherType != weatherForecaster && randomizedPrecipitation)
 				{
-					randomizedRainIntensity = Random.Range(400,maxStormRainIntensity);
+					randomizedRainIntensity = UnityEngine.Random.Range(400,maxStormRainIntensity);
 					currentGeneratedIntensity = randomizedRainIntensity;
 					lastWeatherType = weatherForecaster;
 				}
@@ -3265,8 +3100,13 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			}
 
 		//Snow Storm
-		if (temperature <= 32 && temperatureType == 1  && weatherForecaster == 3 || temperatureType == 2 && temperature <= 0  && weatherForecaster == 3)
+		if (temperature <= 32 && temperatureType == 1  && weatherForecaster == 3 || temperatureType == 2 && temperature <= 0  && weatherForecaster == 3 || temperature <= 32 && temperatureType == 1  && weatherForecaster == 12)
 		{
+			lightSourceComponent.enabled = false;
+
+		
+	
+
 			if (fade2 >= 0.3f)
 			{
 				minSnowIntensity += .2f;
@@ -3277,14 +3117,16 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			minFogIntensity -= .04f;
 			minHeavyRainMistIntensity -= .08f;
 
+			rainSoundComponent.volume -= Time.deltaTime * .04f;
 			windSnowSoundComponent.volume += Time.deltaTime * .01f;
 			windSoundComponent.volume -= Time.deltaTime * .04f;
+
 
 			//If generated precipitation is eqaul to last roll, regenerate intensity (If randomized rain is true)
 			//Light Snow
 			if (lastWeatherType != weatherForecaster && randomizedPrecipitation)
 			{
-				randomizedRainIntensity = Random.Range(100,maxSnowStormIntensity);
+				randomizedRainIntensity = UnityEngine.Random.Range(100,maxSnowStormIntensity);
 				currentGeneratedIntensity = randomizedRainIntensity;
 				lastWeatherType = weatherForecaster;
 			}
@@ -3338,6 +3180,8 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		//Light Snow
 		if (temperature <= 32 && temperatureType == 1  && weatherForecaster == 2 || temperatureType == 2 && temperature <= 0  && weatherForecaster == 2)
 		{
+			lightSourceComponent.enabled = false;
+
 			if (fade2 >= 0.3f)
 			{
 				minSnowIntensity += .2f;
@@ -3349,12 +3193,14 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			minHeavyRainMistIntensity -= .08f;
 
 			windSnowSoundComponent.volume += Time.deltaTime * .01f;
+			windSoundComponent.volume -= Time.deltaTime * .04f;
+			rainSoundComponent.volume -= Time.deltaTime * .04f;
 
 			//If generated precipitation is eqaul to last roll, regenerate intensity (If randomized rain is true)
 			//Light Snow
 			if (lastWeatherType != weatherForecaster && randomizedPrecipitation)
 			{
-				randomizedRainIntensity = Random.Range(100,maxLightSnowIntensity);
+				randomizedRainIntensity = UnityEngine.Random.Range(100,maxLightSnowIntensity);
 				currentGeneratedIntensity = randomizedRainIntensity;
 				lastWeatherType = weatherForecaster;
 			}
@@ -3508,9 +3354,9 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			}
 
 			//Fades in storm clouds
-			heavyCloudsComponent.material.color = new Color(.35f,.35f,.35f,topStormCloudFade);
+			heavyCloudsComponent.material.color = new Color(stormCloudColor1.r,stormCloudColor1.g,stormCloudColor1.b,topStormCloudFade);
 			heavyCloudsLayer1Component.material.color = new Color(0,0,0,fade2);	
-			heavyCloudsLayerLightComponent.material.color = new Color(.5f,.5f,.5f,fade2);
+			heavyCloudsLayerLightComponent.material.color = new Color(stormCloudColor2.r,stormCloudColor2.g,stormCloudColor2.b,fade2);
 			
 			if (fade2 >= .75)
 			{
@@ -3625,6 +3471,71 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			*/
 	}
 
+
+	public void CalculateMonths ()
+	{
+		if (calendarType == 1)
+		{				
+			//Calculates our days into months
+			if(dayCounter >= 32 && monthCounter == 1 || dayCounter >= 32 && monthCounter == 3 || dayCounter >= 32 && monthCounter == 5 || dayCounter >= 32 && monthCounter == 7 || dayCounter >= 32 && monthCounter == 8 || dayCounter >= 32 && monthCounter == 10 || dayCounter >= 32 && monthCounter == 12)
+			{
+				dayCounter = dayCounter % 32;
+				dayCounter += 1;
+				monthCounter += 1;
+			}
+			
+			if(dayCounter >= 31 && monthCounter == 4 || dayCounter >= 31 && monthCounter == 6 || dayCounter >= 31 && monthCounter == 9 || dayCounter >= 31 && monthCounter == 11)
+			{
+				dayCounter = dayCounter % 31;
+				dayCounter += 1;
+				monthCounter += 1;
+			}
+			
+			//Calculates Leap Year
+			if(dayCounter >= 30 && monthCounter == 2 && (yearCounter % 4 == 0 && yearCounter % 100 != 0) || (yearCounter % 400 == 0))
+			{
+				dayCounter = dayCounter % 30;
+				dayCounter += 1;
+				monthCounter += 1;
+			}
+			
+			else if (dayCounter >= 29 && monthCounter == 2 && yearCounter % 4 != 0)
+			{
+				dayCounter = dayCounter % 29;
+				dayCounter += 1;
+				monthCounter += 1;
+			}
+			
+			//Calculates our months into years
+			if (monthCounter > 12)
+			{
+				monthCounter = monthCounter % 13;
+				yearCounter += 1;
+				monthCounter += 1;
+			}
+		}
+		
+		if (calendarType == 2)
+		{
+			//Calculates our custom days into months
+			if(dayCounter > numberOfDaysInMonth)
+			{
+				dayCounter = dayCounter % numberOfDaysInMonth - 1;
+				dayCounter += 1;
+				monthCounter += 1;
+			}
+			
+			//Calculates our custom months into years
+			if (monthCounter > numberOfMonthsInYear)
+			{
+				monthCounter = monthCounter % numberOfMonthsInYear - 1;
+				yearCounter += 1;
+				monthCounter += 1;
+			}
+		}
+	}
+
+
 	public void CalculateDays()
 	{	
 		sunCalculator = 0;
@@ -3633,6 +3544,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 
 		dayCounter += 1;
 		forceStorm += 1;
+
 		
 		hour1 = false;
 		hour2 = false;
@@ -3664,15 +3576,22 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 		{
 			changeWeather += 1; 
 		}
+
+		CalculateMonths();
+		
+		if (calendarType == 1)
+		{
+			UniStormDate = new DateTime(yearCounter, monthCounter, dayCounter);
+		}
 	}
 
 	//Can be called to load user's saved time or to change the time from an external script
 	public void LoadTime ()
 	{
-		realStartTimeMinutesFloat = (int)realStartTimeMinutes;
+		float startTimeMinuteFloat = (int)startTimeMinute;
 		
 		//Aded 1.8.5
-		startTime = realStartTime / 24 + realStartTimeMinutesFloat / 1440;
+		startTime = startTimeHour / 24 + startTimeMinuteFloat / 1440;
 	}
 
 	//Instant Weather can be called if you want the weather to change instantly. This can be done for quests, loading a player's game, events, etc. 
@@ -3723,7 +3642,7 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 			minRainIntensity = maxLightRainIntensity;
 			minSnowIntensity = 0;
 			minSnowFogIntensity = 0;
-			rainSoundComponent.volume = 0f;
+			rainSoundComponent.volume = 0.3f;
 			windSoundComponent.volume = 0.3f;
 			windSnowSoundComponent.volume = 0;
 			sunShaftFade = 0;
@@ -3818,16 +3737,17 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				Terrain.activeTerrain.terrainData.wavingGrassStrength = stormGrassWavingAmount;
 			}
 		}
-		
-		if(weatherForecaster == 3 && temperature <= 32)
+
+		//Instant Snow
+		if(weatherForecaster == 3 && temperature <= 32 || weatherForecaster == 12 && temperature <= 32)
 		{
 			topStormCloudFade = 1;
 			fade2 = 0.75f;
 			minRainIntensity = 0;
 			minFogIntensity = 0;
 			currentGeneratedIntensity = 1000;
-			minSnowIntensity = maxSnowStormIntensity;
-			minSnowFogIntensity = maxHeavySnowDustIntensity;
+			minSnowIntensity = 1000;
+			minSnowFogIntensity = 1000;
 			rainSoundComponent.volume = 0.0f;
 			windSoundComponent.volume = 0.0f;
 			windSnowSoundComponent.volume = 1.0f;
@@ -4053,6 +3973,187 @@ public class UniStormWeatherSystem_C : MonoBehaviour {
 				Terrain.activeTerrain.terrainData.wavingGrassAmount = normalGrassWavingStrength;
 				Terrain.activeTerrain.terrainData.wavingGrassStrength = normalGrassWavingAmount;
 			}
+		}
+	}
+
+	void TemperatureGeneration ()
+	{
+		if (monthCounter >= 2 && monthCounter <= 4)
+		{
+			summerTemp = 0;
+			winterTemp = 0;
+			fallTemp = 0;
+			
+			if (springTemp == 0)
+			{
+				springTemp = 1;
+			}
+		}
+		
+		if (monthCounter >= 5 && monthCounter <= 7)
+		{
+			winterTemp = 0;
+			fallTemp = 0;
+			springTemp = 0;
+			
+			if (summerTemp == 0)
+			{
+				summerTemp = 1;
+			}
+		}
+		
+		if (monthCounter >= 8 && monthCounter <= 10)
+		{
+			summerTemp = 0;
+			winterTemp = 0;
+			springTemp = 0;
+			
+			if (fallTemp == 0)
+			{
+				fallTemp = 1;
+			}
+		}
+		
+		if (monthCounter == 11 || monthCounter == 12 || monthCounter == 1)
+		{
+			summerTemp = 0;
+			fallTemp = 0;
+			springTemp = 0;
+			
+			if (winterTemp == 0)
+			{
+				winterTemp = 1;
+			}
+		}
+		
+		if (monthCounter >= 2 && monthCounter <= 4)
+		{
+			if (springTemp == 1)
+			{
+				temperature = startingSpringTemp;
+				springTemp = 2;	
+			}
+			
+			if (temperature <= minSpringTemp && springTemp == 2)
+			{
+				temperature = minSpringTemp;
+			}
+			
+			if (temperature >= maxSpringTemp && springTemp == 2)
+			{
+				temperature = maxSpringTemp;
+			}
+		}
+		
+		//Generates the temperature for Summer
+		if (monthCounter >= 5 && monthCounter <= 7)
+		{
+			
+			if (summerTemp == 1)
+			{
+				temperature = startingSummerTemp;
+				summerTemp = 2;	
+			}
+			
+			if (temperature <= minSummerTemp && summerTemp == 2)
+			{
+				temperature = minSummerTemp;
+			}
+			
+			if (temperature >= maxSummerTemp && summerTemp == 2)
+			{
+				temperature = maxSummerTemp;
+			}
+		}
+		
+		//Generates the temperature for Fall
+		if (monthCounter >= 8 && monthCounter <= 10)
+		{
+			
+			if (fallTemp == 1)
+			{
+				temperature = startingFallTemp;
+				fallTemp = 2;
+			}
+			
+			if (temperature <= minFallTemp && fallTemp == 2)
+			{
+				temperature = minFallTemp;
+			}
+			
+			if (temperature >= maxFallTemp && fallTemp == 2)
+			{
+				temperature = maxFallTemp;
+			}
+		}
+		
+		//Generates the temperature for Winter
+		if (monthCounter >= 11 || monthCounter >= 12 || monthCounter <= 1)
+		{
+			if (winterTemp == 1)
+			{
+				temperature = startingWinterTemp;
+				winterTemp = 2;
+			}
+			
+			if (temperature <= minWinterTemp && winterTemp == 2)
+			{
+				temperature = minWinterTemp;
+			}
+			
+			if (temperature >= maxWinterTemp && winterTemp == 2)
+			{
+				temperature = maxWinterTemp;
+			}
+		}
+	}
+
+	void MoonPhaseCalculator ()
+	{
+		//Calculates our moon phases
+		if (moonPhaseCalculator == 1)
+		{
+			moonObjectComponent.sharedMaterial = moonPhase1;	
+		}
+		
+		if (moonPhaseCalculator == 2)
+		{
+			moonObjectComponent.sharedMaterial = moonPhase2;	
+		}
+		
+		if (moonPhaseCalculator == 3)
+		{
+			moonObjectComponent.sharedMaterial = moonPhase3;	
+		}
+		
+		if (moonPhaseCalculator == 4)
+		{
+			moonObjectComponent.sharedMaterial = moonPhase4;	
+		}
+		
+		if (moonPhaseCalculator == 5)
+		{
+			moonObjectComponent.sharedMaterial = moonPhase5;	
+		}
+		
+		if (moonPhaseCalculator == 6)
+		{
+			moonObjectComponent.sharedMaterial = moonPhase6;	
+		}
+		
+		if (moonPhaseCalculator == 7)
+		{
+			moonObjectComponent.sharedMaterial = moonPhase7;	
+		}
+		
+		if (moonPhaseCalculator == 8)
+		{
+			moonObjectComponent.sharedMaterial = moonPhase8;	
+		}
+		
+		if (moonPhaseCalculator == 9)
+		{
+			moonPhaseCalculator = 1;	
 		}
 	}
 }

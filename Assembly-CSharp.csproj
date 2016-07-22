@@ -61,7 +61,10 @@
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Character\MouseLook.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Disable Effect Under Water\DisableEffectUnderWater.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Dynamic Snow\DynamicSnow_C.cs" />
+     <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Dynamic Snow\DynamicSnow_Height_C.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\EventSystem\UniStormEventSystem.cs" />
+     <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Other\RandomWeather.cs" />
+     <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Plant Growth\HarvestCheck.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Plant Growth\PlantGrowthSystem.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Player Vitals\PlayerVitalsExample.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Save and Load UniStorm Data\SavePlayerData_C.cs" />
@@ -69,7 +72,12 @@
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Spawn Player OnStart\SpawnPlayer.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Spawn Player OnStart\SunShaftPosition.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Timed Event\UniStormTimeEventExample.cs" />
+     <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\UniStorm Clock\UniStorm_Clock_C.cs" />
+     <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\UniStorm Demo UI\UniStormDemoUI.cs" />
+     <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Weather Forecaster\UniStormWeatherForecast.cs" />
+     <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Weather Zone\Climate_Zone_C.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Examples\Weather Zone\WeatherZoneExample_C.cs" />
+     <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Helpers\DrawSolidCube.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Helpers\UniStormGUIMenu.cs" />
      <Compile Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\UniStorm Systems\UniStormWeatherSystem_C.cs" />
      <Compile Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Character\MouseLookMobile.cs" />
@@ -81,56 +89,64 @@
      <Compile Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\UniStorm Mobile Examples\Timed Event\UniStormTimeEventExample_Mobile.cs" />
      <Compile Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\UniStorm Mobile Examples\Weather Zone\WeatherZoneExample_C_Mobile.cs" />
      <Compile Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\UniStorm Systems\UniStormMobileWeatherSystem_C.cs" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Rain Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\GlassRefraction\Shaders\GlassStainedBumpDistort.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendOneOne.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderRGB.shader" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasic.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Non-Dynamic Light Clouds Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\SeparableWeightedBlurDof34.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Unity 5\UniStorm Dynamic Light Clouds (Unity 5).shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Dynamic Light Clouds (No Fog).shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ShowAlphaChannel.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Dynamic Light Clouds Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\SunShaftsComposite.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ColorCorrectionCurves.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\UniStorm Moon 1.8.5 (New).shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ScreenSpaceAmbientObscurance.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Mist (Unity 5).shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\NFAA.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\TiltShiftHdrLensBlur.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\VignetteShader.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\DepthOfFieldScatter.shader" />
      <None Include="Assets\Standard Assets\Effects\TessellationShaders\Shaders\BumpedSpecularSmooth.shader" />
      <None Include="Assets\Standard Assets\Effects\Projectors\Guidelines.txt" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Snow Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\MotionBlur.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\UniStorm Procedural Skbox.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Procedural Skbox.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\MobileBloom.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\Contrast Stretch\MinMaxReduction.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\SSAA.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\RadialBlur.shader" />
-     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Gradient Sky.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\DepthOfFieldDX11.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ContrastComposite.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\FXAAPreset3.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\FisheyeShader.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\Contrast Stretch\Apply.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\frag_ao.cginc" />
-     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Previous\Regular Cloud Shader.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Unity 5\UniStorm Non-Dynamic Clouds (Unity 5).shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Shader for Unity 5.3.3 (Desktop)\UniStorm Dynamic Light Clouds (Unity 5.3.3).shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Stars.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Non-Dynamic Clouds (Unity 5).shader" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonBasicOutline.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\DepthOfField34.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\UniStorm Snow.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Snow.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Moon.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Mist Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\MobileBlur.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\SSAOShader.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ConvertDepth.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ColorCorrectionCurvesSimple.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseEffectShaderYUV.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\UniStorm Stars.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Dynamic Light Clouds Desktop.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Lightning.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\CreaseApply.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ChromaticAberrationShader.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Non-Dynamic Clouds Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\GlobalFog.shader" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLitOutline.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\Contrast Stretch\Luminance.shader" />
      <None Include="Assets\Standard Assets\Effects\ToonShading\Shaders\ToonLit.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Moon Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ColorCorrectionSelective.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\Bokeh34.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\UniStorm Mist.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\CameraMotionBlurDX11.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\SeparableBlurPlus.shader" />
      <None Include="Assets\Standard Assets\Effects\Projectors\Shaders\ProjectorLight.shader" />
@@ -138,10 +154,12 @@
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlurEffectConeTaps.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\CameraMotionBlur.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\DLAA.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Mobile Stars.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseAndGrainDX11.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Unity 5\UniStorm Dynamic Storm Clouds (Untity 5).shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Dynamic Storm Clouds (Untity 5).shader" />
+     <None Include="Assets\UniStorm (Desktop)\Additional Credit\Credit.txt" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BrightPassFilter2.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\UniStorm Sun.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Sun.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_DepthOfField\SeparableBlur.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\MotionBlurClear.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ColorCorrectionEffect.shader" />
@@ -149,8 +167,9 @@
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\SepiaToneEffect.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\TwirlEffect.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\VortexEffect.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Shader for Unity 5.3.3 (Mobile)\UniStorm Dynamic Light Clouds (Unity 5.3.3).shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\Contrast Stretch\Adaptation.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\UniStorm Rain.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Rain.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\NoiseAndGrain.shader" />
      <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Dynamic Snow.shader" />
      <None Include="Assets\Standard Assets\Effects\Projectors\Shaders\ProjectorMultiply.shader" />
@@ -158,21 +177,26 @@
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\Tonemapper.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BrightPassFilter.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\FXAA2.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\UniStorm Non-Dynamic Light Clouds.shader" />
+     <None Include="Assets\UniStorm (Desktop)\Scripts (Desktop)\Shaders\Current\UniStorm Non-Dynamic Light Clouds.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\ColorCorrection3DLut.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\LensFlareCreate.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\EdgeDetectNormals.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\PrepareSunShaftsBlur.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Sun Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\Blend.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\BlendModesOverlay.shader" />
      <None Include="Assets\Wispy Sky\ReadMe.txt" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\SimpleClear.shader" />
      <None Include="Assets\Standard Assets\Effects\TessellationShaders\Shaders\BumpedSpecularDisplacement.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Dynamic Storm Clouds Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\FXAA3Console.shader" />
-     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Previous\Regular Distant Cloud Shader.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_Antialiasing\FXAAPreset2.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlurAndFlares.shader" />
+     <None Include="Assets\UniStorm (Mobile)\Scripts (Mobile)\Shaders\Current\Mobile\UniStorm Procedural Skbox Mobile.shader" />
      <None Include="Assets\Standard Assets\Effects\ImageEffects\Shaders\_BloomAndFlares\BlendForBloom.shader" />
+ <Reference Include="Assembly-UnityScript-firstpass">
+ <HintPath>/Users/danielkharlamov/Desktop/watch_int/TickTockRay/Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll</HintPath>
+ </Reference>
  <Reference Include="UnityEngine.UI">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll</HintPath>
  </Reference>
@@ -183,8 +207,6 @@
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
       <Project>{DD15066C-E6ED-C94D-F520-93D6BB1100CD}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
-    <ProjectReference Include="Assembly-UnityScript-firstpass.unityproj">
-      <Project>{D717A8A2-29DD-3B15-B92A-D321A122004A}</Project>      <Name>Assembly-UnityScript-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

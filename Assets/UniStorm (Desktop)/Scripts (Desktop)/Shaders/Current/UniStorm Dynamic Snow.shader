@@ -28,7 +28,7 @@ Shader "UniStorm/Dynamic Snow"
         LOD 400
        
         CGPROGRAM
-        #pragma target 3.0
+        #pragma target 4.0
         #pragma surface surf BlinnPhong vertex:vert
  
         sampler2D _MainTex;

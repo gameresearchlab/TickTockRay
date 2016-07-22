@@ -1,7 +1,7 @@
 ﻿	var playerPosition : Vector3;
 	var playerRotation : Vector3;
 	var UniStorm : GameObject;
-	var currentHour : int;
+	var currentHour : float;
 	var rotationToSet : Vector3;
 	var dataLoaded : boolean = false;
 
@@ -17,13 +17,14 @@
 			PlayerPrefs.SetInt("Current Minute", UniStorm.GetComponent(UniStormWeatherSystem_JS).minuteCounter);
 
 			currentHour = UniStorm.GetComponent(UniStormWeatherSystem_JS).Hour;
+			currentHour = Mathf.Round(currentHour * 10) / 10;
 
 			PlayerPrefs.SetFloat("Current Hour", currentHour);
 
 			PlayerPrefs.SetInt("Current Weather", UniStorm.GetComponent(UniStormWeatherSystem_JS).weatherForecaster);
 			PlayerPrefs.SetInt("Current Day", UniStorm.GetComponent(UniStormWeatherSystem_JS).dayCounter);
-			PlayerPrefs.SetFloat("Current Month", UniStorm.GetComponent(UniStormWeatherSystem_JS).monthCounter);
-			PlayerPrefs.SetFloat("Current Year", UniStorm.GetComponent(UniStormWeatherSystem_JS).yearCounter);
+			PlayerPrefs.SetInt("Current Month", UniStorm.GetComponent(UniStormWeatherSystem_JS).monthCounter);
+			PlayerPrefs.SetInt("Current Year", UniStorm.GetComponent(UniStormWeatherSystem_JS).yearCounter);
 			PlayerPrefs.SetInt("Current Temperature", UniStorm.GetComponent(UniStormWeatherSystem_JS).temperature);
 
 			playerPosition = transform.position;
@@ -42,16 +43,16 @@
 
 		if(Input.GetKeyDown(KeyCode.L))
 		{
-			UniStorm.GetComponent(UniStormWeatherSystem_JS).realStartTimeMinutes = PlayerPrefs.GetInt("Current Minute");
-			UniStorm.GetComponent(UniStormWeatherSystem_JS).realStartTime = PlayerPrefs.GetFloat("Current Hour");
+			UniStorm.GetComponent(UniStormWeatherSystem_JS).startTimeMinute = PlayerPrefs.GetInt("Current Minute");
+			UniStorm.GetComponent(UniStormWeatherSystem_JS).startTimeHour = PlayerPrefs.GetFloat("Current Hour");
 
 
 			UniStorm.GetComponent(UniStormWeatherSystem_JS).LoadTime();
 
 			UniStorm.GetComponent(UniStormWeatherSystem_JS).weatherForecaster = PlayerPrefs.GetInt("Current Weather");
 			UniStorm.GetComponent(UniStormWeatherSystem_JS).dayCounter = PlayerPrefs.GetInt("Current Day");
-			UniStorm.GetComponent(UniStormWeatherSystem_JS).monthCounter = PlayerPrefs.GetFloat("Current Month");
-			UniStorm.GetComponent(UniStormWeatherSystem_JS).yearCounter = PlayerPrefs.GetFloat("Current Year");
+			UniStorm.GetComponent(UniStormWeatherSystem_JS).monthCounter = PlayerPrefs.GetInt("Current Month");
+			UniStorm.GetComponent(UniStormWeatherSystem_JS).yearCounter = PlayerPrefs.GetInt("Current Year");
 			UniStorm.GetComponent(UniStormWeatherSystem_JS).temperature = PlayerPrefs.GetInt("Current Temperature");
 
 

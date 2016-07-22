@@ -31,8 +31,8 @@ public class SavePlayerData_C : MonoBehaviour {
 
 			PlayerPrefs.SetInt("Current Weather", UniStorm.GetComponent<UniStormWeatherSystem_C>().weatherForecaster);
 			PlayerPrefs.SetInt("Current Day", UniStorm.GetComponent<UniStormWeatherSystem_C>().dayCounter);
-			PlayerPrefs.SetFloat("Current Month", UniStorm.GetComponent<UniStormWeatherSystem_C>().monthCounter);
-			PlayerPrefs.SetFloat("Current Year", UniStorm.GetComponent<UniStormWeatherSystem_C>().yearCounter);
+			PlayerPrefs.SetInt("Current Month", UniStorm.GetComponent<UniStormWeatherSystem_C>().monthCounter);
+			PlayerPrefs.SetInt("Current Year", UniStorm.GetComponent<UniStormWeatherSystem_C>().yearCounter);
 			PlayerPrefs.SetInt("Current Temperature", UniStorm.GetComponent<UniStormWeatherSystem_C>().temperature);
 
 			playerPosition = transform.position;
@@ -51,16 +51,16 @@ public class SavePlayerData_C : MonoBehaviour {
 
 		if(Input.GetKeyDown(KeyCode.L))
 		{
-			UniStorm.GetComponent<UniStormWeatherSystem_C>().realStartTimeMinutes = PlayerPrefs.GetInt("Current Minute");
-			UniStorm.GetComponent<UniStormWeatherSystem_C>().realStartTime = PlayerPrefs.GetFloat("Current Hour");
+			UniStorm.GetComponent<UniStormWeatherSystem_C>().startTimeMinute = PlayerPrefs.GetInt("Current Minute");
+			UniStorm.GetComponent<UniStormWeatherSystem_C>().startTimeHour = PlayerPrefs.GetFloat("Current Hour");
 
 
 			UniStorm.GetComponent<UniStormWeatherSystem_C>().LoadTime();
 
 			UniStorm.GetComponent<UniStormWeatherSystem_C>().weatherForecaster = PlayerPrefs.GetInt("Current Weather");
 			UniStorm.GetComponent<UniStormWeatherSystem_C>().dayCounter = PlayerPrefs.GetInt("Current Day");
-			UniStorm.GetComponent<UniStormWeatherSystem_C>().monthCounter = PlayerPrefs.GetFloat("Current Month");
-			UniStorm.GetComponent<UniStormWeatherSystem_C>().yearCounter = PlayerPrefs.GetFloat("Current Year");
+			UniStorm.GetComponent<UniStormWeatherSystem_C>().monthCounter = PlayerPrefs.GetInt("Current Month");
+			UniStorm.GetComponent<UniStormWeatherSystem_C>().yearCounter = PlayerPrefs.GetInt("Current Year");
 			UniStorm.GetComponent<UniStormWeatherSystem_C>().temperature = PlayerPrefs.GetInt("Current Temperature");
 
 

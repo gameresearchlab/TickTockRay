@@ -44,11 +44,16 @@ var weatherType : String = "";
 		editorWeatherType = EditorGUILayout.EnumPopup("Zone Weather Type", editorWeatherType);
     	target.zoneWeather = editorWeatherType;
     	
-    	//var mostlyCloudy : boolean = !EditorUtility.IsPersistent (target);
-        //target.uniStormSystem = EditorGUILayout.ObjectField ("UniStorm System", target.uniStormSystem, GameObject, mostlyCloudy);
+    	target.transform.localScale = EditorGUILayout.Vector3Field("Weather Zone Size", target.transform.localScale);
+    	
+		if (GUI.changed) 
+		{ 
+			EditorUtility.SetDirty(target); 
+		}
     
     }
     
+    /*
     
     function OnSceneGUI () {
     
@@ -129,6 +134,7 @@ var weatherType : String = "";
 			}
 	 		
 	    }
+	    */
 	    
     
  }

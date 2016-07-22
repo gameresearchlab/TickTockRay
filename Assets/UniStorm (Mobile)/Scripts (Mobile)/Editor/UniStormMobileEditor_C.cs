@@ -1,4 +1,4 @@
-//UniStorm Weather System Editor C# Version 1.8.5 @ Copyright
+//UniStorm Mobile Weather System Editor C# Version 2.1.3 @ Copyright
 //Black Horizon Studios
 
 using UnityEngine;
@@ -135,13 +135,19 @@ public class UniStormMobileEditor_C : Editor
 		Fahrenheit = 1,
 		Celsius = 2
 	}
-
+	
 	enum CalendarDropDown
 	{
 		Standard = 1,
 		Custom = 2
 	}
-
+	
+	enum GenerateDateAndTime
+	{
+		Yes = 1,
+		No = 2
+	}
+	
 	enum DayHourDropDown
 	{
 		_0 = 0,
@@ -169,7 +175,7 @@ public class UniStormMobileEditor_C : Editor
 		_22,
 		_23
 	}
-
+	
 	enum NightHourDropDown
 	{
 		_0 = 0,
@@ -197,7 +203,7 @@ public class UniStormMobileEditor_C : Editor
 		_22,
 		_23
 	}
-
+	
 	enum NightMDropDown
 	{
 		_0 = 0,
@@ -225,7 +231,7 @@ public class UniStormMobileEditor_C : Editor
 		_22,
 		_23
 	}
-
+	
 	enum DayMDropDown
 	{
 		_0 = 0,
@@ -253,7 +259,7 @@ public class UniStormMobileEditor_C : Editor
 		_22,
 		_23
 	}
-
+	
 	enum StartTimeNew
 	{
 		_0 = 0,
@@ -283,7 +289,8 @@ public class UniStormMobileEditor_C : Editor
 	}
 	
 	bool showAdvancedOptions = true;
-
+	bool confirmationToGenerate = false;
+	
 	WeatherTypeDropDown editorWeatherType = WeatherTypeDropDown.PartlyCloudy;
 	MonthDropDown editorMonth = MonthDropDown.January;
 	MoonPhaseDropDown editorMoonPhase = MoonPhaseDropDown.FullMoon;
@@ -293,43 +300,478 @@ public class UniStormMobileEditor_C : Editor
 	WeatherChanceDropDown4 editorWeatherChance4 = WeatherChanceDropDown4._40;
 	
 	FogModeDropDown editorFogMode = FogModeDropDown.linear;
-	//CloudDensityDropDown editorCloudDensity = CloudDensityDropDown.high;
+	CloudDensityDropDown editorCloudDensity = CloudDensityDropDown.high;
 	DayShadowTypeDropDown editorDayShadowType = DayShadowTypeDropDown.Hard;
 	NightShadowTypeDropDown editorNightShadowType = NightShadowTypeDropDown.Hard;
 	LightningShadowTypeDropDown editorLightningShadowType = LightningShadowTypeDropDown.Hard;
-	//CloudTypeDropDown editorCloudType = CloudTypeDropDown.Dynamic;
+	CloudTypeDropDown editorCloudType = CloudTypeDropDown.Dynamic;
 	TemperatureDropDown editorTemperature = TemperatureDropDown.Fahrenheit;
 	CalendarDropDown editorCalendarType = CalendarDropDown.Standard;
-
+	
 	DayHourDropDown editorDayHour = DayHourDropDown._6;
 	NightHourDropDown editorNightHour = NightHourDropDown._18;
-
+	
 	StartTimeNew editorStartTimeNew = StartTimeNew._12;
+	
+	GenerateDateAndTime editorGenerateDateAndTime = GenerateDateAndTime.Yes;
 
+	SerializedProperty TabNumberProp;
+	public string[] TabString = new string[] {"Climate Options", "Time Options", "Weather Options", "Wind Options", "Atmosphere Options", "Fog Options", "Lightning Options", "Temperature Options", "Sun Options", "Moon Options", "Precipitation Options", "GUI Options", "Sound Manager Options", "Color Options", "Object Options", "Show All Options"};
+	
+	void OnEnable () 
+	{
+		//Int Serialized Properties
+		TabNumberProp = serializedObject.FindProperty ("TabNumber");
+	}
+	
 	public override void OnInspectorGUI () 
 	{
-		//serializedObject.Update ();
-
+		
 		UniStormMobileWeatherSystem_C self = (UniStormMobileWeatherSystem_C)target;
 
+		serializedObject.Update ();
+		
 		//Time Number Variables
 		EditorGUILayout.LabelField("UniStorm Mobile Weather System", EditorStyles.boldLabel);
 		EditorGUILayout.LabelField("By: Black Horizon Studios", EditorStyles.label);
 		EditorGUILayout.Space();
-
 		EditorGUILayout.Space();
+		
+		EditorGUILayout.HelpBox("Current Time: " + self.hourCounter + ":" + self.minuteCounter.ToString("00"), MessageType.None, true);
+		EditorGUILayout.HelpBox("Date: " + self.monthCounter + "/" + self.dayCounter + "/" + self.yearCounter, MessageType.None, true);
+		
+		if (self.calendarType == 1)
+		{
+			EditorGUILayout.HelpBox("Day of the Week: " + self.UniStormDate.DayOfWeek, MessageType.None, true);
+		}
+		
+		EditorGUILayout.HelpBox("Current Weather: " + self.weatherString, MessageType.None, true);
+		
+		if (self.temperatureType == 1)
+		{
+			EditorGUILayout.HelpBox("Current Temperature: " + self.temperature + " °F", MessageType.None, true);
+		}
+		
+		if (self.temperatureType == 2)
+		{
+			EditorGUILayout.HelpBox("Current Temperature: " + self.temperature + " °C", MessageType.None, true);
+		}
+		
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		
+		
+		TabNumberProp.intValue = GUILayout.SelectionGrid (TabNumberProp.intValue, TabString, 2);
+		
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+		
+		if(TabNumberProp.intValue == 15 && GUILayout.Button("Generate Climate"))
+		{
+			confirmationToGenerate = !confirmationToGenerate;
+		}
 
+		
+		if (TabNumberProp.intValue == 0 || confirmationToGenerate && TabNumberProp.intValue == 15)
+		{
+
+			if (self.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Generate Climate will randomize several UniStorm settings to generate a climate for you. This includeds Weather Odds, Min and Max Temperautes (as well as calculating your seasonal averages), Starting Time, Date, Starting Weather, Moon Phases, and more. This can be useful for testing randomized settings or even generating a climate for your games. The Presets all use real world data (excluding the Random Preset) to give you a well rounded generated climate of that type.", MessageType.None, true);
+			}
+
+			EditorGUILayout.HelpBox("Generating a new climate will change your current settings. This process cannot be undone. However, you can always reset to the default settings we used with our demos.", MessageType.Warning, true);
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			
+			editorGenerateDateAndTime = (GenerateDateAndTime)self.generateDateAndTime;
+			editorGenerateDateAndTime = (GenerateDateAndTime)EditorGUILayout.EnumPopup("Generate Additional Factors?", editorGenerateDateAndTime);
+			self.generateDateAndTime = (int)editorGenerateDateAndTime;
+			
+			if (self.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Generate Additional Factors will randomly generate your Starting Time, Date, Weather, and Moon Phase. This is useful to test out various factors with UniStorm without have to set everything manually.", MessageType.None, true);
+			}
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Random"))
+			{
+				if (self.generateDateAndTime == 1)
+				{
+					self.startTimeHour = Random.Range(0, 24);
+					self.startTimeMinute = Random.Range(0, 60);
+					self.dayCounter = Random.Range(1, 30);
+					self.monthCounter = Random.Range(1, 13);
+					self.yearCounter = Random.Range(1, 3000);
+					self.weatherForecaster = Random.Range(1, 14);
+					self.moonPhaseCalculator = Random.Range(0, 9);
+				}
+				
+				if (self.temperatureType == 1)
+				{
+					self.minSpringTemp = Random.Range(35, 45);
+					self.maxSpringTemp = Random.Range(46, 60);
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = Random.Range(70, 80);
+					self.maxSummerTemp = Random.Range(81, 115);
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = Random.Range(35, 45);
+					self.maxFallTemp = Random.Range(46, 60);
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = Random.Range(-25, 0);
+					self.maxWinterTemp = Random.Range(1, 40);
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+				
+				if (self.temperatureType == 2)
+				{
+					self.minSpringTemp = ((Random.Range(35, 45)) - 32) * 5/9;
+					self.maxSpringTemp = ((Random.Range(46, 60)) - 32) * 5/9;
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = ((Random.Range(70, 80)) - 32) * 5/9;
+					self.maxSummerTemp = ((Random.Range(81, 115)) - 32) * 5/9;
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = ((Random.Range(35, 45)) - 32) * 5/9;
+					self.maxFallTemp = ((Random.Range(46, 60)) - 32) * 5/9;
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = ((Random.Range(-25, 0)) - 32) * 5/9;
+					self.maxWinterTemp = ((Random.Range(1, 40)) - 32) * 5/9;
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+			}
+			
+			EditorGUILayout.HelpBox("A Random Climate will generate a random climate with no real world data. Everything is completely randomized, while still being realistic. This can give you very unique results which you can then alter how you'd like.", MessageType.None, true);
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Rainforest"))
+			{
+				if (self.generateDateAndTime == 1)
+				{
+					self.startTimeHour = Random.Range(0, 24);
+					self.startTimeMinute = Random.Range(0, 60);
+					self.dayCounter = Random.Range(1, 30);
+					self.monthCounter = Random.Range(1, 13);
+					self.yearCounter = Random.Range(1, 3000);
+					self.weatherForecaster = Random.Range(1, 14);
+					self.moonPhaseCalculator = Random.Range(0, 9);
+				}
+				
+				self.weatherChanceSpring = 80;
+				self.weatherChanceSummer = 80;
+				self.weatherChanceFall = 80;
+				self.weatherChanceWinter = 80;
+				
+				if (self.temperatureType == 1)
+				{
+					self.minSpringTemp = Random.Range(75, 80);
+					self.maxSpringTemp = Random.Range(80, 85);
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = Random.Range(80, 85);
+					self.maxSummerTemp = Random.Range(85, 93);
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = Random.Range(75, 80);
+					self.maxFallTemp = Random.Range(80, 85);
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = Random.Range(68, 70);
+					self.maxWinterTemp = Random.Range(70, 75);
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+				
+				if (self.temperatureType == 2)
+				{
+					self.minSpringTemp = ((Random.Range(75, 80)) - 32) * 5/9;
+					self.maxSpringTemp = ((Random.Range(80, 85)) - 32) * 5/9;
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = ((Random.Range(80, 85)) - 32) * 5/9;
+					self.maxSummerTemp = ((Random.Range(85, 93)) - 32) * 5/9;
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = ((Random.Range(75, 80)) - 32) * 5/9;
+					self.maxFallTemp = ((Random.Range(80, 85)) - 32) * 5/9;
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = ((Random.Range(68, 70)) - 32) * 5/9;
+					self.maxWinterTemp = ((Random.Range(70, 75)) - 32) * 5/9;
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+			}
+			
+			EditorGUILayout.HelpBox("The Rainforest Preset will generate a random Rainforest like Climate according to real world data.\n\nThe Rainforest climate consists of high odds of precipitation evenly distributed throughout the year. The yearly average temperature is relatively warm. It ralely exceeds 90° during the summer months and rarely falls below 68° during the winter.\n\nAfter your climate has been generated, you can tweak the settings to your liking.", MessageType.None, true);
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Desert"))
+			{
+				if (self.generateDateAndTime == 1)
+				{
+					self.startTimeHour = Random.Range(0, 24);
+					self.startTimeMinute = Random.Range(0, 60);
+					self.dayCounter = Random.Range(1, 30);
+					self.monthCounter = Random.Range(1, 13);
+					self.yearCounter = Random.Range(1, 3000);
+					self.weatherForecaster = 7;
+					self.moonPhaseCalculator = Random.Range(0, 9);
+				}
+				
+				self.weatherChanceSpring = 20;
+				self.weatherChanceSummer = 20;
+				self.weatherChanceFall = 20;
+				self.weatherChanceWinter = 20;
+				
+				if (self.temperatureType == 1)
+				{
+					self.minSpringTemp = Random.Range(70, 85);
+					self.maxSpringTemp = Random.Range(85, 90);
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = Random.Range(90, 95);
+					self.maxSummerTemp = Random.Range(100, 120);
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = Random.Range(70, 85);
+					self.maxFallTemp = Random.Range(85, 90);
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = Random.Range(0, 50);
+					self.maxWinterTemp = Random.Range(50, 60);
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+				
+				if (self.temperatureType == 2)
+				{
+					self.minSpringTemp = ((Random.Range(70, 85)) - 32) * 5/9;
+					self.maxSpringTemp = ((Random.Range(85, 90)) - 32) * 5/9;
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = ((Random.Range(90, 95)) - 32) * 5/9;
+					self.maxSummerTemp = ((Random.Range(100, 120)) - 32) * 5/9;
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = ((Random.Range(70, 85)) - 32) * 5/9;
+					self.maxFallTemp = ((Random.Range(85, 90)) - 32) * 5/9;
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = ((Random.Range(0, 50)) - 32) * 5/9;
+					self.maxWinterTemp = ((Random.Range(50, 60)) - 32) * 5/9;
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+			}
+			
+			EditorGUILayout.HelpBox("The Desert Preset will generate a random Desert like Climate according to real world data.\n\nThe Desert climate consists of very low odds of precipitation throughout the year. The average temperature is very hot duirng the Summer, but can be very cold during the Winter. Temperatures can often exceed 100° during the summer months and fall as cold as 0° during the winter.\n\nAfter your climate has been generated, you can tweak the settings to your liking.", MessageType.None, true);
+			
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Mountainous"))
+			{
+				if (self.generateDateAndTime == 1)
+				{
+					self.startTimeHour = Random.Range(0, 24);
+					self.startTimeMinute = Random.Range(0, 60);
+					self.dayCounter = Random.Range(1, 30);
+					self.monthCounter = Random.Range(1, 13);
+					self.yearCounter = Random.Range(1, 3000);
+					self.weatherForecaster = Random.Range(1, 14);
+					self.moonPhaseCalculator = Random.Range(0, 9);
+				}
+				
+				self.weatherChanceSpring = 60;
+				self.weatherChanceSummer = 60;
+				self.weatherChanceFall = 60;
+				self.weatherChanceWinter = 60;
+				
+				if (self.temperatureType == 1)
+				{
+					self.minSpringTemp = Random.Range(45, 55);
+					self.maxSpringTemp = Random.Range(55, 70);
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = Random.Range(70, 90);
+					self.maxSummerTemp = Random.Range(90, 96);
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = Random.Range(40, 50);
+					self.maxFallTemp = Random.Range(50, 65);
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = Random.Range(-30, 10);
+					self.maxWinterTemp = Random.Range(10, 30);
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+				
+				if (self.temperatureType == 2)
+				{
+					self.minSpringTemp = ((Random.Range(45, 55)) - 32) * 5/9;
+					self.maxSpringTemp = ((Random.Range(55, 70)) - 32) * 5/9;
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = ((Random.Range(70, 90)) - 32) * 5/9;
+					self.maxSummerTemp = ((Random.Range(90, 96)) - 32) * 5/9;
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = ((Random.Range(40, 50)) - 32) * 5/9;
+					self.maxFallTemp = ((Random.Range(50, 65)) - 32) * 5/9;
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = ((Random.Range(-30, 10)) - 32) * 5/9;
+					self.maxWinterTemp = ((Random.Range(10, 30)) - 32) * 5/9;
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+			}
+			
+			EditorGUILayout.HelpBox("The Mountainous Preset will generate a random Mountainous like Climate according to real world data. \n\nThe Mountainous climate consists of medium to high odds of precipitation throughout the year. The average temperature is relatively mild during the Summer and very cold during the Winter. Temperatures can rarely exceed 86° during the summer months and fall as cold as -22° during the winter.\n\nAfter your climate has been generated, you can tweak the settings to your liking.", MessageType.None, true);
+			
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Grassland"))
+			{
+				if (self.generateDateAndTime == 1)
+				{
+					self.startTimeHour = Random.Range(0, 24);
+					self.startTimeMinute = Random.Range(0, 60);
+					self.dayCounter = Random.Range(1, 30);
+					self.monthCounter = Random.Range(1, 13);
+					self.yearCounter = Random.Range(1, 3000);
+					self.weatherForecaster = Random.Range(1, 14);
+					self.moonPhaseCalculator = Random.Range(0, 9);
+				}
+				
+				self.weatherChanceSpring = 60;
+				self.weatherChanceSummer = 60;
+				self.weatherChanceFall = 20;
+				self.weatherChanceWinter = 20;
+				
+				if (self.temperatureType == 1)
+				{
+					self.minSpringTemp = Random.Range(50, 85);
+					self.maxSpringTemp = Random.Range(85, 90);
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = Random.Range(90, 95);
+					self.maxSummerTemp = Random.Range(95, 115);
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = Random.Range(50, 85);
+					self.maxFallTemp = Random.Range(85, 90);
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = Random.Range(30, 40);
+					self.maxWinterTemp = Random.Range(40, 50);
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+				
+				if (self.temperatureType == 2)
+				{
+					self.minSpringTemp = ((Random.Range(50, 85)) - 32) * 5/9;
+					self.maxSpringTemp = ((Random.Range(85, 90)) - 32) * 5/9;
+					self.startingSpringTemp = (self.minSpringTemp + self.maxSpringTemp) / 2;
+					
+					self.minSummerTemp = ((Random.Range(90, 95)) - 32) * 5/9;
+					self.maxSummerTemp = ((Random.Range(95, 115)) - 32) * 5/9;
+					self.startingSummerTemp = (self.minSummerTemp + self.maxSummerTemp) / 2;
+					
+					self.minFallTemp = ((Random.Range(50, 85)) - 32) * 5/9;
+					self.maxFallTemp = ((Random.Range(85, 90)) - 32) * 5/9;
+					self.startingFallTemp = (self.minFallTemp + self.maxFallTemp) / 2;
+					
+					self.minWinterTemp = ((Random.Range(30, 40)) - 32) * 5/9;
+					self.maxWinterTemp = ((Random.Range(40, 50)) - 32) * 5/9;
+					self.startingWinterTemp = (self.minWinterTemp + self.maxWinterTemp) / 2;
+				}
+			}
+			
+			EditorGUILayout.HelpBox("The Grassland Preset will generate a random Grassland like Climate according to real world data. \n\nThe Grassland climate consists of medium odds of precipitation mainly in the Spring and Summer months. The average temperature is hot during the Summer and cold during the Winter. Temperatures can exceed 100° during the summer months and fall as cold as 30° during the winter.\n\nAfter your climate has been generated, you can tweak the settings to your liking.", MessageType.None, true);
+			
+			EditorGUILayout.Space();
+			
+			if(GUILayout.Button("Reset to Default settings"))
+			{
+				self.startTimeHour = 11;
+				self.startTimeMinute = 0;
+				self.dayCounter = 15;
+				self.monthCounter = 6;
+				self.yearCounter = 2015;
+				self.weatherForecaster = 4;
+				self.moonPhaseCalculator = 3;
+				self.weatherChanceSpring = 60;
+				self.weatherChanceSummer = 20;
+				self.weatherChanceFall = 40;
+				self.weatherChanceWinter = 80;
+				
+				if (self.temperatureType == 1)
+				{
+					self.minSpringTemp = 45;
+					self.maxSpringTemp = 65;
+					self.minSummerTemp = 70;;
+					self.maxSummerTemp = 100;
+					self.minFallTemp = 35;
+					self.maxFallTemp = 55;
+					self.minWinterTemp = 0;
+					self.maxWinterTemp = 40;
+					
+					self.startingSpringTemp = 55;
+					self.startingSummerTemp = 85;
+					self.startingFallTemp = 45;
+					self.startingWinterTemp = 30;
+				}
+				
+				if (self.temperatureType == 2)
+				{
+					self.minSpringTemp = ((45) - 32) * 5/9;
+					self.maxSpringTemp = ((65) - 32) * 5/9;
+					self.minSummerTemp = ((70) - 32) * 5/9;
+					self.maxSummerTemp = ((100) - 32) * 5/9;
+					self.minFallTemp = ((35) - 32) * 5/9;
+					self.maxFallTemp = ((55) - 32) * 5/9;
+					self.minWinterTemp = ((0) - 32) * 5/9;
+					self.maxWinterTemp = ((40) - 32) * 5/9;
+					
+					self.startingSpringTemp = ((55) - 32) * 5/9;
+					self.startingSummerTemp = ((85) - 32) * 5/9;
+					self.startingFallTemp = ((45) - 32) * 5/9;
+					self.startingWinterTemp = ((30) - 32) * 5/9;
+				}
+			}
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			
+
+		}
+		
+		if (self.weatherForecaster == 5 || self.weatherForecaster == 6 || self.weatherForecaster == 9)
+		{
+			self.weatherForecaster = Random.Range(1, 14);
+		}
+		
+
+		
 		string showOrHide_TimeOptions = "Show";
 		if(self.timeOptions)
 			showOrHide_TimeOptions = "Hide";
-
-		if(GUILayout.Button(showOrHide_TimeOptions + " Time Options"))
+		
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_TimeOptions + " Time Options"))
 		{
 			self.timeOptions = !self.timeOptions;
 		}
-
-
-		if (self.timeOptions)
+		
+		if (self.timeOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 1)
 		{
 			EditorGUILayout.LabelField("Time Options", EditorStyles.boldLabel);
 			
@@ -338,25 +780,25 @@ public class UniStormMobileEditor_C : Editor
 				EditorGUILayout.HelpBox("The current UniStorm time is displayed with these variables. Setting the Starting Time will start UniStorm at that specific time of day according to the Hour and Minute. Time variables can be used to create events, quests, and effects at specific times.", MessageType.None, true);
 			}
 			
-			editorStartTimeNew = (StartTimeNew)self.realStartTime;
+			editorStartTimeNew = (StartTimeNew)self.startTimeHour;
 			editorStartTimeNew = (StartTimeNew)EditorGUILayout.EnumPopup("Start Time Hour", editorStartTimeNew);
-			self.realStartTime = (int)editorStartTimeNew;
-
-			if (self.realStartTimeMinutes <= 9)
+			self.startTimeHour = (int)editorStartTimeNew;
+			
+			if (self.startTimeMinute <= 9)
 			{
-				EditorGUILayout.LabelField("Your day will start at " + self.realStartTime + ":0" + self.realStartTimeMinutes, EditorStyles.miniButton); //objectFieldThumb
+				EditorGUILayout.LabelField("Your day will start at " + self.startTimeHour + ":0" + self.startTimeMinute, EditorStyles.miniButton); //objectFieldThumb
 			}
-
-			if (self.realStartTimeMinutes >= 10)
+			
+			if (self.startTimeMinute >= 10)
 			{
-				EditorGUILayout.LabelField("Your day will start at " + self.realStartTime + ":" + self.realStartTimeMinutes, EditorStyles.miniButton); //objectFieldThumb
+				EditorGUILayout.LabelField("Your day will start at " + self.startTimeHour + ":" + self.startTimeMinute, EditorStyles.miniButton); //objectFieldThumb
 			}
-
-			self.realStartTimeMinutes = EditorGUILayout.IntSlider ("Start Time Minute", self.realStartTimeMinutes, 0, 59);
-
+			
+			self.startTimeMinute = EditorGUILayout.IntSlider ("Start Time Minute", self.startTimeMinute, 0, 59);
+			
 			
 			EditorGUILayout.Space();
-
+			
 			self.minuteCounter = EditorGUILayout.IntField ("Minutes", self.minuteCounter);
 			
 			self.hourCounter = EditorGUILayout.IntField ("Hours", self.hourCounter);
@@ -369,98 +811,98 @@ public class UniStormMobileEditor_C : Editor
 				editorMonth = (MonthDropDown)EditorGUILayout.EnumPopup("Month", editorMonth);
 				self.monthCounter = (int)editorMonth;
 			}
-
+			
 			if (self.calendarType == 2)
 			{
 				EditorGUILayout.Space();	
 				EditorGUILayout.HelpBox("While Custom Calendar is enabled, UniStorm will display numbers for months.", MessageType.Warning, true);
 				
-				self.monthCounter = EditorGUILayout.FloatField ("Months", self.monthCounter);
+				self.monthCounter = EditorGUILayout.IntField ("Months", self.monthCounter);
 				
 				EditorGUILayout.Space();
 			}
 			
-			self.yearCounter = EditorGUILayout.FloatField ("Years", self.yearCounter);
+			self.yearCounter = EditorGUILayout.IntField ("Years", self.yearCounter);
 			
 			EditorGUILayout.Space();
-
+			
 			EditorGUILayout.Space();
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("Day Legnth Hour determins what time UniStorm will start using the Day Length time. This allows you to make your days longer or short than nights, if desired.", MessageType.None, true);
 			}
-
+			
 			editorDayHour = (DayHourDropDown)self.dayLengthHour;
 			editorDayHour = (DayHourDropDown)EditorGUILayout.EnumPopup("Day Length Hour", editorDayHour);
 			self.dayLengthHour = (int)editorDayHour;
-
+			
 			if (self.dayLengthHour > self.nightLengthHour || self.dayLengthHour == self.nightLengthHour)
 			{
 				EditorGUILayout.HelpBox("Your Starting Day Hour can't be higher than, or equal to, your Starting Night Hour.", MessageType.Warning, true);
 			}
-
+			
 			EditorGUILayout.Space();
-
+			
 			EditorGUILayout.LabelField("Your in-game Day will start at " + self.dayLengthHour + ":00", EditorStyles.miniButton); //objectFieldThumb
-
+			
 			EditorGUILayout.Space();
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("The Day Length is calculated by how many real-time minutes pass until UniStorm switches to night, based on the hour you've set for Starting Night Hour. A value of 60 would give you 1 hour long days. This can be changed to any value that's desired.", MessageType.None, true);
 			}
-
-
+			
+			
 			self.dayLength = EditorGUILayout.FloatField ("Day Length", self.dayLength); 
-
+			
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("Night Length Hour determins what time UniStorm will start using the Night Length time. This allows you to make your nights longer or short than days, if desired.", MessageType.None, true);
 			}
-
+			
 			editorNightHour = (NightHourDropDown)self.nightLengthHour;
 			editorNightHour = (NightHourDropDown)EditorGUILayout.EnumPopup("Night Legnth Hour", editorNightHour);
 			self.nightLengthHour = (int)editorNightHour;
-
+			
 			if (self.nightLengthHour < self.dayLengthHour)
 			{
 				EditorGUILayout.HelpBox("Your Starting Night Hour can't be lower than, or equal to, your Starting Day Hour.", MessageType.Warning, true);
 			}
-
+			
 			EditorGUILayout.Space();
 			
 			EditorGUILayout.LabelField("Your in-game Night will start at " + self.nightLengthHour + ":00", EditorStyles.miniButton); //objectFieldThumb
 			
 			EditorGUILayout.Space();
-
+			
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("The Night Length is calculated by how many real-time minutes pass until UniStorm switches to day, based on the hour you've set for Starting Day Hour. A value of 60 would give you 1 hour long nights. This can be changed to any value that's desired.", MessageType.None, true);
 			}
-
-
+			
+			
 			self.nightLength = EditorGUILayout.FloatField ("Night Length", self.nightLength); 
-
+			
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("Time Stopped will stop UniStorm's time and sun from moving, but will allow the clouds to keep animating.", MessageType.None, true);
 			}
 			
 			self.timeStopped = EditorGUILayout.Toggle ("Time Stopped",self.timeStopped);
-
+			
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
-
+			
 			editorCalendarType = (CalendarDropDown)self.calendarType;
 			editorCalendarType = (CalendarDropDown)EditorGUILayout.EnumPopup("Calendar Type", editorCalendarType);
 			self.calendarType = (int)editorCalendarType;
@@ -489,21 +931,23 @@ public class UniStormMobileEditor_C : Editor
 					EditorGUILayout.HelpBox("While the Calendar Type is set to Custom, UniStorm will choose the values you set within the Editor to calculate Days, Months, and Years. The Month will be changed and listed as a number value.", MessageType.None, true);
 				}
 			}
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
+		
 
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-
+		
 		string showOrHide_SkyOptions = "Show";
 		if(self.skyOptions)
 			showOrHide_SkyOptions = "Hide";
-		if(GUILayout.Button(showOrHide_SkyOptions + " Weather Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_SkyOptions + " Weather Options"))
 		{
 			self.skyOptions = !self.skyOptions;
 		}
-
-		if (self.skyOptions)
+		
+		if (self.skyOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 2)
 		{
 			EditorGUILayout.LabelField("Weather Options", EditorStyles.boldLabel);
 			
@@ -513,32 +957,32 @@ public class UniStormMobileEditor_C : Editor
 			}
 			
 			EditorGUILayout.Space();
-
+			
 			if (self.cloudType == 1)
 			{
-				//editorCloudDensity = (CloudDensityDropDown)self.cloudDensity;
-				//editorCloudDensity = (CloudDensityDropDown)EditorGUILayout.EnumPopup("Cloud Thickness", editorCloudDensity);
-				//self.cloudDensity = (int)editorCloudDensity; 
+				editorCloudDensity = (CloudDensityDropDown)self.cloudDensity;
+				editorCloudDensity = (CloudDensityDropDown)EditorGUILayout.EnumPopup("Cloud Thickness", editorCloudDensity);
+				self.cloudDensity = (int)editorCloudDensity; 
 			}
-
+			
 			EditorGUILayout.Space();
-
+			
 			if (self.cloudDensity == 1)
 			{
-				//EditorGUILayout.HelpBox("Low Cloud Thickness will render less dense clouds. This option is for people who like the look of lighter and more faint looking clouds.", MessageType.Info, true);
+				EditorGUILayout.HelpBox("Low Cloud Thickness will render less dense clouds. This option is for people who like the look of lighter and more faint looking clouds.", MessageType.Info, true);
 			}
 			
 			if (self.cloudDensity == 2)
 			{
-				//EditorGUILayout.HelpBox("High Cloud Thickness will render clouds more dense. This option is for people who like the look of thick noticable clouds.", MessageType.Info, true);
+				EditorGUILayout.HelpBox("High Cloud Thickness will render clouds more dense. This option is for people who like the look of thick noticable clouds.", MessageType.Info, true);
 			}
-
+			
 			
 			EditorGUILayout.Space();
 			
-			//editorCloudType = (CloudTypeDropDown)self.cloudType;
-			//editorCloudType = (CloudTypeDropDown)EditorGUILayout.EnumPopup("Cloud Type", editorCloudType);
-			//self.cloudType = (int)editorCloudType; 
+			editorCloudType = (CloudTypeDropDown)self.cloudType;
+			editorCloudType = (CloudTypeDropDown)EditorGUILayout.EnumPopup("Cloud Type", editorCloudType);
+			self.cloudType = (int)editorCloudType; 
 			
 			EditorGUILayout.Space();
 			
@@ -551,50 +995,50 @@ public class UniStormMobileEditor_C : Editor
 			{
 				EditorGUILayout.HelpBox("While using Non Dynamic clouds, UniStorm will revert back to version 1.6 clouds. Some features may also be disabled both in the UniStorm Editor and visually (Such as clouds being masked along the horizon). These clouds have more of a 'Skyrim' look compared to Dynamic Clouds. These clouds still animate. This option is availble for those who prefer this look over the Dynamic Clouds. ", MessageType.Info, true);
 			}
-
+			
 			self.cloudSpeed = EditorGUILayout.IntSlider ("Cloud Speed", self.cloudSpeed, 0, 50);
-
+			
 			self.heavyCloudSpeed = EditorGUILayout.IntSlider ("Storm Cloud Speed", self.heavyCloudSpeed, 0, 50);
-
+			
 			EditorGUILayout.Space();
 			
 			self.starSpeed = EditorGUILayout.IntField ("Star Scroll Speed", self.starSpeed);
 			
 			self.starRotationSpeed = EditorGUILayout.FloatField ("Star Rotation Speed", self.starRotationSpeed);
-
+			
 			EditorGUILayout.Space();
 			
 			editorWeatherType = (WeatherTypeDropDown)self.weatherForecaster;
 			editorWeatherType = (WeatherTypeDropDown)EditorGUILayout.EnumPopup("Weather Type", editorWeatherType);
 			self.weatherForecaster = (int)editorWeatherType;
-
+			
 			EditorGUILayout.Space();
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("Static Weather will stop the weather from ever changing making it static. However, you can still change it manually.", MessageType.None, true);
 			}
-
+			
 			self.staticWeather = EditorGUILayout.Toggle ("Static Weather",self.staticWeather);
-
+			
 			EditorGUILayout.Space();
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("If Instant Starting Weather is enabled, weather will be instantly faded in on start bypassing the transitioning of weather. This function can also be called to bypass weather transitions for instance, loading a player's game or an event.", MessageType.None, true);
 			}
-
+			
 			self.useInstantStartingWeather = EditorGUILayout.Toggle ("Instant Starting Weather",self.useInstantStartingWeather);
-
+			
 			EditorGUILayout.Space();
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("The Weather Odds control the weather odds for each season. A value of 20% gives a 20% chance that the weather will change where 80% would give you an 80% chance. UniStorm's advanced algorithm handles the rest and generates you dynamic weather according to your weather odds for each season.", MessageType.None, true);
 			}
-
+			
 			EditorGUILayout.LabelField("Weather Odds", EditorStyles.miniLabel);
-
+			
 			editorWeatherChance1 = (WeatherChanceDropDown1)self.weatherChanceSpring;
 			editorWeatherChance1 = (WeatherChanceDropDown1)EditorGUILayout.EnumPopup("Spring %", editorWeatherChance1);
 			self.weatherChanceSpring = (int)editorWeatherChance1;
@@ -610,70 +1054,63 @@ public class UniStormMobileEditor_C : Editor
 			editorWeatherChance4 = (WeatherChanceDropDown4)self.weatherChanceWinter;
 			editorWeatherChance4 = (WeatherChanceDropDown4)EditorGUILayout.EnumPopup("Winter %", editorWeatherChance4);
 			self.weatherChanceWinter = (int)editorWeatherChance4;
-		}
 
-		EditorGUILayout.Space();		
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+		}
+		
+
 		
 		string showOrHide_WindOptions = "Show";
 		if(self.WindOptions)
 			showOrHide_WindOptions = "Hide";
-		if(GUILayout.Button(showOrHide_WindOptions + " Wind Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_WindOptions + " Wind Options"))
 		{
 			self.WindOptions = !self.WindOptions;
 		}
 		
-		if (self.WindOptions)
+		if (self.WindOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 3)
 		{
 			EditorGUILayout.LabelField("Wind Options", EditorStyles.boldLabel);
-
+			
 			if (self.helpOptions == true)
 			{
-				EditorGUILayout.HelpBox("Use Terrain Wind will only affect terrains that can use Unity Terrain painted grass and trees. These use both the Unity terrain system and the Wind Zone system. If your game isn't using these, it doesn't need to be enabled.", MessageType.None, true);
+				EditorGUILayout.HelpBox("Here you can adjust the wind settings for the terrain's grass. UniStorm will use the normal wind settings during none precipitation weather types and will slowly transition into stormy wind during precipitation weather types.", MessageType.None, true);
 			}
+			
+			EditorGUILayout.Space();
+			
+			self.normalGrassWavingAmount = EditorGUILayout.Slider ("Normal Grass Wind Speed", self.normalGrassWavingAmount, 0.1f, 1.0f);
+			self.stormGrassWavingAmount = EditorGUILayout.Slider ("Stormy Grass Wind Speed", self.stormGrassWavingAmount, 0.1f, 1.0f);
+			
+			EditorGUILayout.Space();
+			
+			self.normalGrassWavingSpeed = EditorGUILayout.Slider ("Normal Grass Wind Size", self.normalGrassWavingSpeed, 0.1f, 1.0f);
+			self.stormGrassWavingSpeed = EditorGUILayout.Slider ("Stormy Grass Wind Size", self.stormGrassWavingSpeed, 0.1f, 1.0f);
+			
+			EditorGUILayout.Space();
+			
+			self.normalGrassWavingStrength = EditorGUILayout.Slider ("Normal Grass Wind Bending", self.normalGrassWavingStrength, 0.1f, 1.0f);
+			self.stormGrassWavingStrength = EditorGUILayout.Slider ("Stormy Grass Wind Bending", self.stormGrassWavingStrength, 0.1f, 1.0f);
 
-
-			self.useWindZone = EditorGUILayout.Toggle ("Use Terrain Wind?",self.useWindZone);
-
-			if (self.useWindZone)
-			{
-				if (self.helpOptions == true)
-				{
-					EditorGUILayout.HelpBox("Here you can adjust the wind settings for the terrain's grass. UniStorm will use the normal wind settings during none precipitation weather types and will slowly transition into stormy wind during precipitation weather types.", MessageType.None, true);
-				}
-
-				EditorGUILayout.Space();
-
-				self.normalGrassWavingAmount = EditorGUILayout.Slider ("Normal Grass Wind Speed", self.normalGrassWavingAmount, 0.1f, 1.0f);
-				self.stormGrassWavingAmount = EditorGUILayout.Slider ("Stormy Grass Wind Speed", self.stormGrassWavingAmount, 0.1f, 1.0f);
-
-				EditorGUILayout.Space();
-
-				self.normalGrassWavingSpeed = EditorGUILayout.Slider ("Normal Grass Wind Size", self.normalGrassWavingSpeed, 0.1f, 1.0f);
-				self.stormGrassWavingSpeed = EditorGUILayout.Slider ("Stormy Grass Wind Size", self.stormGrassWavingSpeed, 0.1f, 1.0f);
-
-				EditorGUILayout.Space();
-
-				self.normalGrassWavingStrength = EditorGUILayout.Slider ("Normal Grass Wind Bending", self.normalGrassWavingStrength, 0.1f, 1.0f);
-				self.stormGrassWavingStrength = EditorGUILayout.Slider ("Stormy Grass Wind Bending", self.stormGrassWavingStrength, 0.1f, 1.0f);
-			}
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
+		
+		
 
-
-		EditorGUILayout.Space();		
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-
+		
 		string showOrHide_AtmosphereOptions = "Show";
 		if(self.atmosphereOptions)
 			showOrHide_AtmosphereOptions = "Hide";
-		if(GUILayout.Button(showOrHide_AtmosphereOptions + " Atmosphere Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_AtmosphereOptions + " Atmosphere Options"))
 		{
 			self.atmosphereOptions = !self.atmosphereOptions;
 		}
 		
-		if (self.atmosphereOptions)
+		if (self.atmosphereOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 4)
 		{
 			EditorGUILayout.LabelField("Atmosphere Options", EditorStyles.boldLabel);			
 			
@@ -681,21 +1118,30 @@ public class UniStormMobileEditor_C : Editor
 			{
 				EditorGUILayout.HelpBox("UniStorm now uses a Physically Based Skybox shader. This shader allows you to adjust factors of the atmosphere that affect the color of the sky which changes according to the angle of the Sun.", MessageType.None, true);
 			}
-
+			
 			self.skyColorMorning = EditorGUILayout.ColorField("Sky Tint Color Morning", self.skyColorMorning);
 			self.skyColorDay = EditorGUILayout.ColorField("Sky Tint Color Day", self.skyColorDay);
 			self.skyColorEvening = EditorGUILayout.ColorField("Sky Tint Color Evening", self.skyColorEvening);
-			self.skyColorNight = EditorGUILayout.ColorField("Sky Tint Color Night", self.skyColorNight);
+			//self.skyColorNight = EditorGUILayout.ColorField("Sky Tint Color Night", self.skyColorNight);
+			
+			EditorGUILayout.Space();
+			
+			self.nightTintColor = EditorGUILayout.ColorField("Sky Tint Color Night", self.nightTintColor);
+			
+			if (self.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Sky Tint Color Night allows you to adjust the color of the sky when it's night. Note: This color option also affects the overall tint of the Procedural Skybox. Darker colors tend to work best.", MessageType.None, true);
+			}
 			
 			EditorGUILayout.Space();
 			
 			self.groundColor = EditorGUILayout.ColorField("Ground Color", self.groundColor);
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("Here you can adjust the Skybox Tint and Ground colors. The procedural skybox shader will accurately shade according to the time of day and angle of the sun.", MessageType.None, true);
 			}
-
+			
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
 			
@@ -704,28 +1150,41 @@ public class UniStormMobileEditor_C : Editor
 			EditorGUILayout.Space();
 			
 			self.exposure = EditorGUILayout.Slider ("Exposure", self.exposure, 0.0f, 8.0f);
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("Here you can adjust the Atmosphere Thickness and Exposure. These values allow you to control how thick the atosphere is and how much light is scattered.", MessageType.None, true);
 			}
-		}
-	
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
+			
+			
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			
+			self.starBrightness = EditorGUILayout.ColorField("Star Brightness", self.starBrightness);
+			
+			if (self.helpOptions == true)
+			{
+				EditorGUILayout.HelpBox("Star Brightness allows you to adjust how bright your stars will shine. Use the color from white to balck to adjust this. Note: UniStorm uses the alpha amount so adjusting it won't affect the star's brightness.", MessageType.None, true);
+			}
 
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+		}
+		
+
+		
 		string showOrHide_FogOptions = "Show";
 		if(self.fogOptions)
 			showOrHide_FogOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_FogOptions + " Fog Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_FogOptions + " Fog Options"))
 		{
 			self.fogOptions = !self.fogOptions;
 		}
 		
 		
-		if (self.fogOptions)
+		if (self.fogOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 5)
 		{
 			EditorGUILayout.LabelField("Fog Options", EditorStyles.boldLabel);
 			
@@ -749,32 +1208,34 @@ public class UniStormMobileEditor_C : Editor
 			if (self.fogMode == 1)
 			{
 				self.stormyFogDistanceStart = EditorGUILayout.IntSlider ("Stormy Fog Start Distance", self.stormyFogDistanceStart, -400, 1000);
-				self.stormyFogDistance = EditorGUILayout.IntSlider ("Stormy Fog End Distance", self.stormyFogDistance, 50, 2500);
+				self.stormyFogDistance = EditorGUILayout.IntSlider ("Stormy Fog End Distance", self.stormyFogDistance, 200, 2500);
 				self.fogStartDistance = EditorGUILayout.IntSlider ("Regular Fog Start Distance", self.fogStartDistance, -400, 1000);
-				self.fogEndDistance = EditorGUILayout.IntSlider ("Regular Fog End Distance", self.fogEndDistance, 50, 5000);
+				self.fogEndDistance = EditorGUILayout.IntSlider ("Regular Fog End Distance", self.fogEndDistance, 200, 5000);
 			}
 			
 			if (self.fogMode == 2 || self.fogMode == 3)
 			{
 				self.fogDensity = EditorGUILayout.FloatField ("Fog Density", self.fogDensity);
 			}
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
 		
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
 
+		
 		string showOrHide_LightningOptions = "Show";
 		if(self.lightningOptions)
 			showOrHide_LightningOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_LightningOptions + " Lightning Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_LightningOptions + " Lightning Options"))
 		{
 			self.lightningOptions = !self.lightningOptions;
 		}
 		
 		
-		if (self.lightningOptions)
+		if (self.lightningOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 6)
 		{
 			EditorGUILayout.LabelField("Lightning Options", EditorStyles.boldLabel);
 			EditorGUILayout.Space();
@@ -783,14 +1244,14 @@ public class UniStormMobileEditor_C : Editor
 			{
 				EditorGUILayout.HelpBox("These settings allow you to adjust any lightning and thunder related options. These features will only happen during the Thunder Storm weather type.", MessageType.None, true);
 			}
-
+			
 			self.lightningEnabled = EditorGUILayout.Toggle ("Lightning Light Enabled?",self.lightningEnabled);
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("Light can be intensive on mobile. So you have the option to only use sound if desired.", MessageType.None, true);
 			}
-
+			
 			if (self.lightningEnabled)
 			{
 				EditorGUILayout.Space();
@@ -824,7 +1285,7 @@ public class UniStormMobileEditor_C : Editor
 				
 				self.minIntensity = EditorGUILayout.Slider ("Min Lightning Intensity", (float)self.minIntensity, 0.5f, 1.5f);
 				self.maxIntensity = EditorGUILayout.Slider ("Max Lightning Intensity", self.maxIntensity, 0.5f, 1.5f);
-
+				
 			}
 			
 			EditorGUILayout.Space();
@@ -838,10 +1299,10 @@ public class UniStormMobileEditor_C : Editor
 			self.lightningMaxChance = EditorGUILayout.IntSlider ("Max Wait", (int)self.lightningMaxChance, 10, 40);
 			
 			EditorGUILayout.Space();
-
+			
 			if (self.lightningEnabled)
 			{
-
+				
 				if (self.helpOptions == true)
 				{
 					EditorGUILayout.HelpBox("The flash length controls how quickly the lightning flashes on and off.", MessageType.None, true);
@@ -888,24 +1349,26 @@ public class UniStormMobileEditor_C : Editor
 			
 			bool lightningBolt1 = !EditorUtility.IsPersistent (self);
 			self.lightningBolt1 = (GameObject)EditorGUILayout.ObjectField ("Lightning Bolt", self.lightningBolt1, typeof(GameObject), lightningBolt1);
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
+		
+		
 
-
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
 		
 		string showOrHide_TemperatureOptions = "Show";
 		if(self.temperatureOptions)
 			showOrHide_TemperatureOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_TemperatureOptions + " Temperature Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_TemperatureOptions + " Temperature Options"))
 		{
 			self.temperatureOptions = !self.temperatureOptions;
 		}
 		
 		
-		if (self.temperatureOptions)
+		if (self.temperatureOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 7)
 		{
 			//Temperature Options
 			EditorGUILayout.Space();
@@ -925,17 +1388,17 @@ public class UniStormMobileEditor_C : Editor
 			if (self.temperatureType == 1)
 			{
 				self.temperature = EditorGUILayout.IntField ("Current Temperature", self.temperature);
-
+				
 				EditorGUILayout.HelpBox("While using the Fahrenheit temperature type, UniStorm will snow at a temperature of 32 degrees or below.", MessageType.Info, true);
 			}
 			
 			if (self.temperatureType == 2)
 			{
 				self.temperature = EditorGUILayout.IntField ("Current Temperature", self.temperature);
-
+				
 				EditorGUILayout.HelpBox("While using the Celsuis temperature type, UniStorm will snow at a temperature of 0 degrees or below.", MessageType.Info, true);
 			}
-
+			
 			EditorGUILayout.Space();
 			
 			if (self.helpOptions == true)
@@ -961,24 +1424,26 @@ public class UniStormMobileEditor_C : Editor
 			self.startingWinterTemp = EditorGUILayout.IntField ("Starting Winter Temp", self.startingWinterTemp);
 			self.minWinterTemp = EditorGUILayout.IntField ("Min Winter", self.minWinterTemp);
 			self.maxWinterTemp = EditorGUILayout.IntField ("Max Winter", self.maxWinterTemp);
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
+		
+		
 
-
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
 		
 		string showOrHide_SunOptions = "Show";
 		if(self.sunOptions)
 			showOrHide_SunOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_SunOptions + " Sun Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_SunOptions + " Sun Options"))
 		{
 			self.sunOptions = !self.sunOptions;
 		}
 		
 		
-		if (self.sunOptions)
+		if (self.sunOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 8)
 		{
 			//Sun Intensity
 			EditorGUILayout.Space();
@@ -992,16 +1457,16 @@ public class UniStormMobileEditor_C : Editor
 			EditorGUILayout.Space();		
 			EditorGUILayout.Space();
 			
-			self.maxSunIntensity = EditorGUILayout.Slider ("Max Sun Intensity", self.maxSunIntensity, 0.5f, 4);
+			self.maxSunIntensity = EditorGUILayout.Slider ("Max Sun Intensity", self.maxSunIntensity, 0.5f, 8);
 			
 			EditorGUILayout.Space();
 			
 			self.sunSize = EditorGUILayout.Slider ("Sun Size", self.sunSize, 0, 0.05f);
-
+			
 			EditorGUILayout.Space();
-
+			
 			self.HeavyRainSunIntensity = EditorGUILayout.Slider ("Stormy Sun Intensity", self.HeavyRainSunIntensity, 0f, 4);
-
+			
 			if (self.helpOptions == true)
 			{
 				EditorGUILayout.HelpBox("Stormy Sun Intensity controls how much sun is aloud during precipitation weather types, including Foggy and Cloudy. This allows the sun to still be shinning when it's raining, snowing, cloudy, or foggy. Keeping the sun on, during precipitation weather types, can improve the shading of objects and the terrain.", MessageType.None, true);
@@ -1023,29 +1488,31 @@ public class UniStormMobileEditor_C : Editor
 				
 				self.dayShadowIntensity = EditorGUILayout.Slider ("Shadow Intensity", self.dayShadowIntensity, 0, 1.0f);
 			}
+			
+			EditorGUILayout.Space();
+			
+			self.sunHeight = EditorGUILayout.Slider ("Sun Height", self.sunHeight, 0.5f, 1.2f);
+			self.sunAngle = EditorGUILayout.IntSlider ("Sun Rotation", (int)self.sunAngle, -180, 180);
 
 			EditorGUILayout.Space();
-
-			//self.sunHeight = EditorGUILayout.Slider ("Sun Height", self.sunHeight, 0.5f, 1.2f);
-			//self.sunAngle = EditorGUILayout.IntSlider ("Sun Rotation", (int)self.sunAngle, -180, 180);
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
+		
+		
 
-
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
 		
 		string showOrHide_MoonOptions = "Show";
 		if(self.moonOptions)
 			showOrHide_MoonOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_MoonOptions + " Moon Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_MoonOptions + " Moon Options"))
 		{
 			self.moonOptions = !self.moonOptions;
 		}
 		
 		
-		if (self.moonOptions)
+		if (self.moonOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 9)
 		{
 			EditorGUILayout.Space();
 			EditorGUILayout.LabelField("Moon Options", EditorStyles.boldLabel);
@@ -1054,21 +1521,21 @@ public class UniStormMobileEditor_C : Editor
 			{
 				EditorGUILayout.HelpBox("The Moon Options allow you to choose the starting moon phase. There are a total of 8 moon phases that are updated each day. The moon phase will continue to cycle and starts with the moon phase you choose. You can change the materials of the moon pahases and UniStorm will cycle throught them accordingly.", MessageType.None, true);
 			}
-
+			
 			EditorGUILayout.Space();
 			
 			self.moonLightIntensity = EditorGUILayout.Slider ("Normal Moon Intensity", self.moonLightIntensity, 0, 1.0f);
-
+			
 			EditorGUILayout.Space();
-
+			
 			self.stormyMoonLightIntensity = EditorGUILayout.Slider ("Stormy Moon Intensity", self.stormyMoonLightIntensity, 0, 1.0f);
-
+			
 			EditorGUILayout.Space();
-
+			
 			self.moonColor = EditorGUILayout.ColorField("Moon Color", self.moonColor);
-
+			
 			EditorGUILayout.Space();
-
+			
 			self.shadowsDuringNight = EditorGUILayout.Toggle ("Shadows Enabled?",self.shadowsDuringNight);
 			
 			if (self.shadowsDuringNight)
@@ -1085,9 +1552,6 @@ public class UniStormMobileEditor_C : Editor
 			}
 			
 			EditorGUILayout.Space();
-
-			//Removed
-			/*
 			
 			self.customMoonSize = EditorGUILayout.Toggle ("Customize Moon Size?",self.customMoonSize);
 			
@@ -1095,11 +1559,11 @@ public class UniStormMobileEditor_C : Editor
 			
 			if (self.customMoonSize)
 			{
-				self.moonSize = EditorGUILayout.IntSlider ("Moon Size", self.moonSize, 1, 8);
+				self.moonSize = EditorGUILayout.IntSlider ("Moon Size", self.moonSize, 1, 15);
 				
 				EditorGUILayout.Space();
 				
-				EditorGUILayout.HelpBox("The Moon's size can be adjust on a scale of 1 to 8. This will change the default setting size of 3.5 to whatever value you use on with slider. ", MessageType.Info, true);
+				EditorGUILayout.HelpBox("The Moon's size can be adjust on a scale of 1 to 15. This will change the default setting size of 3.5 to whatever value you use on with slider. ", MessageType.Info, true);
 				
 				EditorGUILayout.Space();
 				EditorGUILayout.Space();
@@ -1117,31 +1581,31 @@ public class UniStormMobileEditor_C : Editor
 				
 				EditorGUILayout.Space();
 			}
-			*/
 			
 			EditorGUILayout.Space();
 			
 			editorMoonPhase = (MoonPhaseDropDown)self.moonPhaseCalculator;
 			editorMoonPhase = (MoonPhaseDropDown)EditorGUILayout.EnumPopup("Moon Phase", editorMoonPhase);
 			self.moonPhaseCalculator = (int)editorMoonPhase;
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
 		
 
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
 		
 		string showOrHide_PrecipitationOptions = "Show";
 		if(self.precipitationOptions)
 			showOrHide_PrecipitationOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_PrecipitationOptions + " Precipitation Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_PrecipitationOptions + " Precipitation Options"))
 		{
 			self.precipitationOptions = !self.precipitationOptions;
 		}
 		
 		
-		if (self.precipitationOptions)
+		if (self.precipitationOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 10)
 		{
 			//Weather Particle Slider Adjustments Rain
 			EditorGUILayout.Space();
@@ -1207,16 +1671,16 @@ public class UniStormMobileEditor_C : Editor
 			
 			EditorGUILayout.Space();
 			
-			self.maxLightRainIntensity = EditorGUILayout.IntSlider ("Light Rain Intensity", (int)self.maxLightRainIntensity, 1, 100);
+			self.maxLightRainIntensity = EditorGUILayout.IntSlider ("Light Rain Intensity", (int)self.maxLightRainIntensity, 1, 500);
 			self.maxLightRainMistCloudsIntensity = EditorGUILayout.IntSlider ("Light Rain Mist Intensity", (int)self.maxLightRainMistCloudsIntensity, 0, 6);
-			self.maxStormRainIntensity = EditorGUILayout.IntSlider ("Heavy Rain Intensity", (int)self.maxStormRainIntensity, 1, 300);
-			self.maxStormMistCloudsIntensity = EditorGUILayout.IntSlider ("Heavy Rain Streaks Intensity", (int)self.maxStormMistCloudsIntensity, 0, 20);
+			self.maxStormRainIntensity = EditorGUILayout.IntSlider ("Heavy Rain Intensity", (int)self.maxStormRainIntensity, 1, 5000);
+			self.maxStormMistCloudsIntensity = EditorGUILayout.IntSlider ("Heavy Rain Streaks Intensity", (int)self.maxStormMistCloudsIntensity, 0, 50);
 			self.maxHeavyRainMistIntensity = EditorGUILayout.IntSlider ("Heavy Rain Mist Intensity", (int)self.maxHeavyRainMistIntensity, 0, 50);
 			
 			//Weather Particle Slider Adjustments Snow
-			self.maxLightSnowIntensity = EditorGUILayout.IntSlider ("Light Snow Intensity", (int)self.maxLightSnowIntensity, 1, 100);
+			self.maxLightSnowIntensity = EditorGUILayout.IntSlider ("Light Snow Intensity", (int)self.maxLightSnowIntensity, 1, 500);
 			self.maxLightSnowDustIntensity = EditorGUILayout.IntSlider ("Light Snow Dust Intensity", (int)self.maxLightSnowDustIntensity, 0, 20);
-			self.maxSnowStormIntensity = EditorGUILayout.IntSlider ("Heavy Snow Intensity", (int)self.maxSnowStormIntensity, 1, 300);
+			self.maxSnowStormIntensity = EditorGUILayout.IntSlider ("Heavy Snow Intensity", (int)self.maxSnowStormIntensity, 1, 3000);
 			self.maxHeavySnowDustIntensity = EditorGUILayout.IntSlider ("Heavy Snow Dust Intensity", (int)self.maxHeavySnowDustIntensity, 0, 50);
 			
 			EditorGUILayout.Space();
@@ -1239,23 +1703,25 @@ public class UniStormMobileEditor_C : Editor
 				bool customSnowWindSound = !EditorUtility.IsPersistent (self);
 				self.customSnowWindSound = (AudioClip)EditorGUILayout.ObjectField ("Snow Wind Sound", self.customSnowWindSound, typeof(AudioClip), customSnowWindSound);
 			}
-		}
 
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+		}
+		
+
 		
 		string showOrHide_GUIOptions = "Show";
 		if(self.GUIOptions)
 			showOrHide_GUIOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_GUIOptions + " GUI Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_GUIOptions + " GUI Options"))
 		{
 			self.GUIOptions = !self.GUIOptions;
 		}
 		
 		
-		if (self.GUIOptions)
+		if (self.GUIOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 11)
 		{
 			//GUI Options
 			EditorGUILayout.Space();
@@ -1268,23 +1734,25 @@ public class UniStormMobileEditor_C : Editor
 			
 			self.timeScrollBarUseable = EditorGUILayout.Toggle ("Time Scroll Bar",self.timeScrollBarUseable);
 			self.weatherCommandPromptUseable = EditorGUILayout.Toggle ("WCPS Enabled",self.weatherCommandPromptUseable);
-		}
 
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+		}
+		
+
 		
 		string showOrHide_SoundManagerOptions = "Show";
 		if(self.soundManagerOptions)
 			showOrHide_SoundManagerOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_SoundManagerOptions + " Sound Manager Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_SoundManagerOptions + " Sound Manager Options"))
 		{
 			self.soundManagerOptions = !self.soundManagerOptions;
 		}
 		
 		
-		if (self.soundManagerOptions)
+		if (self.soundManagerOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 12)
 		{
 			//Sound Manager Options
 			EditorGUILayout.Space();
@@ -1313,7 +1781,7 @@ public class UniStormMobileEditor_C : Editor
 			if (self.useMorningSounds)
 			{
 				
-				EditorGUILayout.BeginVertical ();
+				//EditorGUILayout.BeginVertical ();
 				self.morningSize = EditorGUILayout.IntSlider("Morning Sound Size", self.morningSize, 1, 20);
 				
 				EditorGUILayout.Space();
@@ -1345,13 +1813,13 @@ public class UniStormMobileEditor_C : Editor
 					self.ambientSoundsMorning[imorning] = (AudioClip)EditorGUILayout.ObjectField("Morning Sound " + imorning + ":" , self.ambientSoundsMorning[imorning], typeof(AudioClip), true );
 					GUILayout.Space(10);
 				}
-				EditorGUILayout.EndVertical ();
+				//EditorGUILayout.EndVertical ();
 			}
 			
 			if (self.useDaySounds)
 			{
 				//Day
-				EditorGUILayout.BeginVertical ();
+				//EditorGUILayout.BeginVertical ();
 				self.daySize = EditorGUILayout.IntSlider("Day Sound Size", self.daySize, 1, 20);
 				
 				EditorGUILayout.Space();
@@ -1383,13 +1851,13 @@ public class UniStormMobileEditor_C : Editor
 					self.ambientSoundsDay[iday] = (AudioClip)EditorGUILayout.ObjectField("Day Sound " + iday + ":" , self.ambientSoundsDay[iday], typeof(AudioClip), true );
 					GUILayout.Space(10);
 				}
-				EditorGUILayout.EndVertical ();		
+				//EditorGUILayout.EndVertical ();		
 			}
 			
 			if (self.useEveningSounds)
 			{
 				//Evening
-				EditorGUILayout.BeginVertical ();
+				//EditorGUILayout.BeginVertical ();
 				self.eveningSize = EditorGUILayout.IntSlider("Evening Sound Size", self.eveningSize, 1, 20);
 				
 				EditorGUILayout.Space();
@@ -1421,13 +1889,13 @@ public class UniStormMobileEditor_C : Editor
 					self.ambientSoundsEvening[ievening] = (AudioClip)EditorGUILayout.ObjectField("Evening Sound " + ievening + ":" , self.ambientSoundsEvening[ievening], typeof(AudioClip), true );
 					GUILayout.Space(10);
 				}
-				EditorGUILayout.EndVertical ();
+				//EditorGUILayout.EndVertical ();
 			}
 			
 			if (self.useNightSounds)
 			{
 				//Night
-				EditorGUILayout.BeginVertical ();
+				//EditorGUILayout.BeginVertical ();
 				self.nightSize = EditorGUILayout.IntSlider("Night Sound Size", self.nightSize, 1, 20);
 				
 				EditorGUILayout.Space();
@@ -1459,25 +1927,27 @@ public class UniStormMobileEditor_C : Editor
 					self.ambientSoundsNight[inight] = (AudioClip)EditorGUILayout.ObjectField("Night Sound " + inight + ":" , self.ambientSoundsNight[inight], typeof(AudioClip), true );
 					GUILayout.Space(10);
 				}
-				EditorGUILayout.EndVertical ();		
+				//EditorGUILayout.EndVertical ();		
 			}
+
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
 		
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
 
+		
 		string showOrHide_ColorOptions = "Show";
 		if(self.colorOptions)
 			showOrHide_ColorOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_ColorOptions + " Color Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_ColorOptions + " Color Options"))
 		{
 			self.colorOptions = !self.colorOptions;
 		}
 		
 		
-		if (self.colorOptions)
+		if (self.colorOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 13)
 		{
 			EditorGUILayout.LabelField("Color Options", EditorStyles.boldLabel);
 			
@@ -1486,14 +1956,20 @@ public class UniStormMobileEditor_C : Editor
 				EditorGUILayout.HelpBox("Here you control every color component UniStorm uses. There is one for Morning, Day, Evening, and Night. UniStorm will seamlessly transition to each time of day using the colors you have set for the time of day.", MessageType.None, true);
 			}
 			
+			self.stormCloudColor1 = EditorGUILayout.ColorField("Storm Cloud Layer 1 Color", self.stormCloudColor1);
+			self.stormCloudColor2 = EditorGUILayout.ColorField("Storm Cloud Layer 2 Color", self.stormCloudColor2);
+			
+			EditorGUILayout.Space();
+			
 			self.cloudColorMorning = EditorGUILayout.ColorField("Clouds Morning", self.cloudColorMorning);
 			self.cloudColorDay = EditorGUILayout.ColorField("Clouds Day", self.cloudColorDay);
 			self.cloudColorEvening = EditorGUILayout.ColorField("Clouds Evening", self.cloudColorEvening);
 			self.cloudColorNight = EditorGUILayout.ColorField("Clouds Night", self.cloudColorNight);
-
+			
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
 			
+			self.TwilightAmbientLight = EditorGUILayout.ColorField("Ambient Twilight", self.TwilightAmbientLight);
 			self.MorningAmbientLight = EditorGUILayout.ColorField("Ambient Morning", self.MorningAmbientLight);
 			self.MiddayAmbientLight = EditorGUILayout.ColorField("Ambient Day", self.MiddayAmbientLight);
 			self.DuskAmbientLight = EditorGUILayout.ColorField("Ambient Evening", self.DuskAmbientLight);
@@ -1530,7 +2006,7 @@ public class UniStormMobileEditor_C : Editor
 			self.MorningAtmosphericLight = EditorGUILayout.ColorField("Atmospheric Morning", self.MorningAtmosphericLight);
 			self.MiddayAtmosphericLight = EditorGUILayout.ColorField("Atmospheric Day", self.MiddayAtmosphericLight);
 			self.DuskAtmosphericLight = EditorGUILayout.ColorField("Atmospheric Evening", self.DuskAtmosphericLight);
-
+			
 			//Global Fog Colors
 			EditorGUILayout.Space();
 			EditorGUILayout.Space();
@@ -1539,33 +2015,32 @@ public class UniStormMobileEditor_C : Editor
 			self.stormyFogColorNight_GF = EditorGUILayout.ColorField("Stormy Global Fog Night", self.stormyFogColorNight_GF);
 			
 			//Star Brightness
-			EditorGUILayout.Space();
-			EditorGUILayout.Space();
-			EditorGUILayout.LabelField("Fade Colors", EditorStyles.boldLabel);
-			self.starBrightness = EditorGUILayout.ColorField("Star Brightness", self.starBrightness);
-			self.moonFadeColor = EditorGUILayout.ColorField("Moon Fade Color", self.moonFadeColor);
-			self.moonColorFade = EditorGUILayout.ColorField("Dark Side Moon", self.moonColorFade);
+			//EditorGUILayout.Space();
+			//EditorGUILayout.Space();
+			//EditorGUILayout.LabelField("Fade Colors", EditorStyles.boldLabel);
+			//self.moonFadeColor = EditorGUILayout.ColorField("Moon Fade Color", self.moonFadeColor);
+			//self.moonColorFade = EditorGUILayout.ColorField("Dark Side Moon", self.moonColorFade);
 			
 			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
 		}
+		
+		
+		
 
-
-
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
 		
 		string showOrHide_ObjectOptions = "Show";
 		if(self.objectOptions)
 			showOrHide_ObjectOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_ObjectOptions + " Object Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_ObjectOptions + " Object Options"))
 		{
 			self.objectOptions = !self.objectOptions;
 		}
 		
 		
-		if (self.objectOptions)
+		if (self.objectOptions && TabNumberProp.intValue == 15 || TabNumberProp.intValue == 14)
 		{
 			EditorGUILayout.LabelField("Object Fields", EditorStyles.boldLabel);
 			
@@ -1653,13 +2128,13 @@ public class UniStormMobileEditor_C : Editor
 			
 			bool cloud1a  = !EditorUtility.IsPersistent (self);
 			self.lightClouds1a = (GameObject)EditorGUILayout.ObjectField ("Dynamic Light Clouds 2", self.lightClouds1a, typeof(GameObject), cloud1a);	
-
+			
 			bool partlyCloudy1  = !EditorUtility.IsPersistent (self);
 			self.partlyCloudyClouds1 = (GameObject)EditorGUILayout.ObjectField ("Dynamic Partly Cloudy Clouds 1", self.partlyCloudyClouds1, typeof(GameObject), partlyCloudy1);
-
+			
 			bool partlyCloudy2  = !EditorUtility.IsPersistent (self);
 			self.partlyCloudyClouds2 = (GameObject)EditorGUILayout.ObjectField ("Dynamic Partly Cloudy Clouds 2", self.partlyCloudyClouds2, typeof(GameObject), partlyCloudy2);
-
+			
 			bool mostlyCloudy1  = !EditorUtility.IsPersistent (self);
 			self.mostlyCloudyClouds1 = (GameObject)EditorGUILayout.ObjectField ("Dynamic Mostly Cloudy Clouds 1", self.mostlyCloudyClouds1, typeof(GameObject), mostlyCloudy1);
 			
@@ -1740,42 +2215,41 @@ public class UniStormMobileEditor_C : Editor
 			
 			bool moonPhaseMat8  = !EditorUtility.IsPersistent (self);
 			self.moonPhase8 = (Material)EditorGUILayout.ObjectField ("Moon Phase Material 8", self.moonPhase8, typeof(Material), moonPhaseMat8);
-		}
 
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+			EditorGUILayout.Space();
+		}
+		
+
 		
 		string showOrHide_HelpOptions = "Show";
 		if(self.helpOptions)
 			showOrHide_HelpOptions = "Hide";
 		
-		if(GUILayout.Button(showOrHide_HelpOptions + " Help Options"))
+		if(TabNumberProp.intValue == 15 && GUILayout.Button(showOrHide_HelpOptions + " Help Options"))
 		{
 			self.helpOptions = !self.helpOptions;
 		}
 		
 		
-		if (self.helpOptions)
-		{
 
-		}
 		
 		GUILayout.BeginHorizontal();
 		
 		
 		GUILayout.EndHorizontal();
-
+		
 		//Added 1.8.2
 		//UniStorm will no longer revert to prefab settings
-		if (GUI.changed) 
+		if (GUI.changed && !EditorApplication.isPlaying) 
 		{ 
-			EditorUtility.SetDirty(self); 
+			EditorApplication.MarkSceneDirty();
 		}
-
+		
 		serializedObject.ApplyModifiedProperties ();
-
-
+		
+		
 	}
 	
 }

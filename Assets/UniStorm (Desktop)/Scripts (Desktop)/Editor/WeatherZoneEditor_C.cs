@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using UnityEditor;
 
 [ExecuteInEditMode()] 
-[DrawGizmo (GizmoType.Selected)]
+//[DrawGizmo (GizmoType.Selected)]
 
 [CustomEditor(typeof(WeatherZoneExample_C))] 
 public class WeatherZoneEditor_C : Editor {
 
 	public string weatherType = "";
+	public Vector3 size = new Vector3(10,10,10);
+	public Color zoneColor = new Color(1, 0, 0, 0.5F);
 
 	  enum WeatherTypeDropDown
 		{
@@ -31,7 +33,8 @@ public class WeatherZoneEditor_C : Editor {
 		WeatherTypeDropDown editorWeatherType = WeatherTypeDropDown.PartlyCloud1;
 	
 		
- 		public override void OnInspectorGUI () {
+ 		public override void OnInspectorGUI () 
+	{
 		
 		WeatherZoneExample_C self = (WeatherZoneExample_C)target;
     
@@ -40,95 +43,24 @@ public class WeatherZoneEditor_C : Editor {
 		EditorGUILayout.LabelField("By: Black Horizon Studios", EditorStyles.label);
 		EditorGUILayout.Space();
 		EditorGUILayout.Space();
-		EditorGUILayout.Space();
-		EditorGUILayout.Space();
+
 		
 		EditorGUILayout.LabelField("Zone Weather Options", EditorStyles.boldLabel);
 		editorWeatherType = (WeatherTypeDropDown)self.zoneWeather;
 		editorWeatherType = (WeatherTypeDropDown)EditorGUILayout.EnumPopup("Zone Weather Type", editorWeatherType);
     	self.zoneWeather = (int)editorWeatherType;
+
+		EditorGUILayout.Space();
+		EditorGUILayout.Space();
+
+		self.transform.localScale = EditorGUILayout.Vector3Field("Weather Zone Size", self.transform.localScale);
     	
 		if (GUI.changed) 
 		{ 
 			EditorUtility.SetDirty(self); 
 		}
     
-    }
-    
-    /*
-    void OnSceneGUI () {
-    
-    	if (editorWeatherType == WeatherTypeDropDown.Foggy)
-		{
-			weatherType = "Foggy";
-		}
-	
-		if (editorWeatherType == WeatherTypeDropDown.LightRainOrLightSnowWinterOnly)
-		{
-			weatherType = "Light Rain/Light Snow";
-		}
-	
-		if (editorWeatherType == WeatherTypeDropDown.ThunderStormOrSnowStormWinterOnly)
-		{
-			weatherType = "Thunder Storms/Heavy Snow";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.PartlyCloud1)
-		{
-			weatherType = "Partly Cloud 1";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.PartlyCloud2)
-		{
-			weatherType = "Partly Cloud 2";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.PartlyCloud3)
-		{
-			weatherType = "Partly Cloud 3";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.Clear1)
-		{
-			weatherType = "Clear 1";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.Clear2)
-		{
-			weatherType = "Clear 2";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.ButterfliesSummerOnly)
-		{
-			weatherType = "Butterflies (Summer Only)";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.FallingLeavesFallOnly)
-		{
-			weatherType = "Falling Leaves (Fall Only)";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.HeavyRainNoThunder)
-		{
-			weatherType = "Heavy Rain No Thunder";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.Cloudy)
-		{
-			weatherType = "Cloudy";
-		}
-		
-		if (editorWeatherType == WeatherTypeDropDown.MostlyCloudy)
-		{
-			weatherType = "Mostly Cloudy";
-		}
-		
+    }    
+ 
 
-	    	Handles.color = Color.blue;
-	 		Handles.Label(self.transform.position + Vector3.up*100, "Weather Type: " + weatherType);
-	 		Handles.color = Color.blue;
-	 		
-	 		
-	    }
-	    */
 }

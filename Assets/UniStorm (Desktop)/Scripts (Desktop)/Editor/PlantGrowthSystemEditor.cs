@@ -52,11 +52,13 @@ public class PlantGrowthSystemEditor : Editor
 		Never = 11
 	}
 
+	/*
 	enum UpdateTime
 	{
 		Hourly = 0,
 		Daily = 1
 	}
+	*/
 
 	enum SeasonInhibitor
 	{
@@ -77,7 +79,7 @@ public class PlantGrowthSystemEditor : Editor
 	UseSunlight editorUseSunlight = UseSunlight._30;
 	UseTemperature editorUseTemperature = UseTemperature._30;
 
-	UpdateTime editorUpdateTime = UpdateTime.Hourly;
+	//UpdateTime editorUpdateTime = UpdateTime.Hourly;
 
 	SeasonInhibitor editorSeasonInhibitor = SeasonInhibitor.Winter;
 	TemperatureInhibitor editorTemperatureInhibitor = TemperatureInhibitor.Yes;

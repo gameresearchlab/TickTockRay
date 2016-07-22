@@ -12,7 +12,7 @@ using System.Collections;
 public class DynamicSnow_C : MonoBehaviour {
 
 	private GameObject uniStormSystem;
-	private UniStormWeatherSystem_C uniStormSystemScript;
+	public UniStormWeatherSystem_C uniStormSystemScript;
 	public float snowAmount;
 
 	void Start () 
@@ -32,6 +32,20 @@ public class DynamicSnow_C : MonoBehaviour {
 				snowAmount += Time.deltaTime * 0.008f;
 				Shader.SetGlobalFloat("_LayerStrength", snowAmount);
 
+				if (snowAmount >= 0.6f)
+				{
+					snowAmount = 0.6f;
+				}
+			}
+		}
+
+		if (uniStormSystemScript.weatherForecaster == 12 && uniStormSystemScript.temperature <= 32 && uniStormSystemScript.temperatureType == 1 || uniStormSystemScript.weatherForecaster == 12 && uniStormSystemScript.temperature <= 0 && uniStormSystemScript.temperatureType == 2)
+		{
+			if (uniStormSystemScript.minSnowIntensity >= 50)
+			{
+				snowAmount += Time.deltaTime * 0.008f;
+				Shader.SetGlobalFloat("_LayerStrength", snowAmount);
+				
 				if (snowAmount >= 0.6f)
 				{
 					snowAmount = 0.6f;

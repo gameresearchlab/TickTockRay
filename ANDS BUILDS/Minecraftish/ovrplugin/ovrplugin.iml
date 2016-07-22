@@ -101,8 +101,8 @@
     <orderEntry type="jdk" jdkName="Android API 23 Platform" jdkType="Android SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" exported="" name="classes" level="project" />
-    <orderEntry type="library" exported="" name="vrplatlib" level="project" />
     <orderEntry type="library" exported="" name="OculusUtilities" level="project" />
+    <orderEntry type="library" exported="" name="vrplatlib" level="project" />
     <orderEntry type="library" exported="" name="SystemUtils" level="project" />
   </component>
 </module>

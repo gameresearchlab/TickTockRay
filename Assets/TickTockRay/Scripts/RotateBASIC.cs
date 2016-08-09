@@ -21,7 +21,7 @@ public class RotateBASIC : MonoBehaviour {
 		}
 			
 
-		Quaternion rotation = WatchRotation.rotation;
+        Quaternion rotation = WatchRotationJNI.rotation;
 
 		bool update_correction = false;
 
@@ -33,7 +33,7 @@ public class RotateBASIC : MonoBehaviour {
 
 		if(update_correction)
 		{
-			correction = WatchRotation.rotation;
+            correction = WatchRotationJNI.rotation;
 		}
 
 

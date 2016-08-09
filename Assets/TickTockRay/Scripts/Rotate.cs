@@ -25,7 +25,7 @@ public class Rotate : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-		Quaternion rotation = WatchRotation.rotation;  //Quaternion.Euler (-WatchRotation.rotation.eulerAngles.y,
+		Quaternion rotation = WatchRotationJNI.rotation;  //Quaternion.Euler (-WatchRotation.rotation.eulerAngles.y,
 			                     // WatchRotation.rotation.eulerAngles.x, -WatchRotation.rotation.eulerAngles.z);
 
 		Quaternion cam_rotation = GameObject.Find("Camera").transform.rotation;

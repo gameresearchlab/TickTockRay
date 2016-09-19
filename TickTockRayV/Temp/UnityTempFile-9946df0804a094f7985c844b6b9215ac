@@ -1,0 +1,138 @@
+-debug
+-target:library
+-nowarn:0169
+-out:'Temp/Assembly-CSharp.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEngine.dll'
+-r:'Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll'
+-r:'Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/UnityEngine.UI.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Frameworks/Managed/UnityEditor.dll'
+-define:UNITY_5_3_OR_NEWER
+-define:UNITY_5_3_5
+-define:UNITY_5_3
+-define:UNITY_5
+-define:UNITY_ANALYTICS
+-define:ENABLE_NEW_BUGREPORTER
+-define:ENABLE_AUDIO
+-define:ENABLE_CACHING
+-define:ENABLE_CLOTH
+-define:ENABLE_FRAME_DEBUGGER
+-define:ENABLE_GENERICS
+-define:ENABLE_HOME_SCREEN
+-define:ENABLE_IMAGEEFFECTS
+-define:ENABLE_LIGHT_PROBES_LEGACY
+-define:ENABLE_MICROPHONE
+-define:ENABLE_MULTIPLE_DISPLAYS
+-define:ENABLE_PHYSICS
+-define:ENABLE_PLUGIN_INSPECTOR
+-define:ENABLE_SHADOWS
+-define:ENABLE_SINGLE_INSTANCE_BUILD_SETTING
+-define:ENABLE_SPRITERENDERER_FLIPPING
+-define:ENABLE_SPRITES
+-define:ENABLE_SPRITE_POLYGON
+-define:ENABLE_TERRAIN
+-define:ENABLE_RAKNET
+-define:ENABLE_UNET
+-define:ENABLE_UNITYEVENTS
+-define:ENABLE_VR
+-define:ENABLE_WEBCAM
+-define:ENABLE_WWW
+-define:ENABLE_CLOUD_SERVICES
+-define:ENABLE_CLOUD_SERVICES_ADS
+-define:ENABLE_CLOUD_HUB
+-define:ENABLE_CLOUD_PROJECT_ID
+-define:ENABLE_CLOUD_SERVICES_PURCHASING
+-define:ENABLE_CLOUD_SERVICES_ANALYTICS
+-define:ENABLE_CLOUD_SERVICES_UNET
+-define:ENABLE_CLOUD_SERVICES_BUILD
+-define:ENABLE_CLOUD_LICENSE
+-define:ENABLE_EDITOR_METRICS
+-define:ENABLE_EDITOR_METRICS_CACHING
+-define:INCLUDE_DYNAMIC_GI
+-define:INCLUDE_GI
+-define:INCLUDE_IL2CPP
+-define:INCLUDE_DIRECTX12
+-define:PLATFORM_SUPPORTS_MONO
+-define:ENABLE_LOCALIZATION
+-define:ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION
+-define:ENABLE_EDITOR_TESTS_RUNNER
+-define:UNITY_ANDROID
+-define:UNITY_ANDROID_API
+-define:ENABLE_SUBSTANCE
+-define:ENABLE_TEXTUREID_MAP
+-define:ENABLE_EGL
+-define:ENABLE_NETWORK
+-define:ENABLE_RUNTIME_GI
+-define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+-define:ENABLE_LOG_MIXED_STACKTRACE
+-define:ENABLE_UNITYWEBREQUEST
+-define:PLATFORM_SUPPORTS_ADS_ID
+-define:ENABLE_UNITYADS_RUNTIME
+-define:UNITY_UNITYADS_API
+-define:ENABLE_MONO
+-define:ENABLE_PROFILER
+-define:DEBUG
+-define:TRACE
+-define:UNITY_ASSERTIONS
+-define:UNITY_EDITOR
+-define:UNITY_EDITOR_64
+-define:UNITY_EDITOR_OSX
+-define:CROSS_PLATFORM_INPUT
+-define:MOBILE_INPUT
+'Assets/HotbarSelector.cs'
+'Assets/Prefabs/TorchFile/torch/scene/script/TorchSlider.cs'
+'Assets/Prefabs/TorchFile/torch/scene/script/Torchslider2.cs'
+'Assets/Prefabs/TorchFile/torch/scripts/Torchelight.cs'
+'Assets/Scripts/BlockCreateAndDestory.cs'
+'Assets/Scripts/Chunk.cs'
+'Assets/Scripts/Menu.cs'
+'Assets/Scripts/Noise.cs'
+'Assets/Scripts/PlayerIO.cs'
+'Assets/Scripts/PlayerWalkScript.cs'
+'Assets/Scripts/PlayerWalkScriptLeft.cs'
+'Assets/Scripts/RespawnAtFall.cs'
+'Assets/Scripts/Splash.cs'
+'Assets/Scripts/TerrainGenerator.cs'
+'Assets/Scripts/World.cs'
+'Assets/TickTockRayUnity/Scripts/KeepUpright.cs'
+'Assets/TickTockRayUnity/Scripts/Reticle.cs'
+'Assets/TickTockRayUnity/Scripts/Rotate.cs'
+'Assets/TickTockRayUnity/Scripts/RotateBASIC.cs'
+'Assets/TickTockRayUnity/Scripts/RotateInterface.cs'
+'Assets/TickTockRayUnity/Scripts/WatchRotation.cs'
+'Assets/TickTockRayUnity/Scripts/WatchRotationJNI.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/Character/MouseLook.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Disable Effect Under Water/DisableEffectUnderWater.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Dynamic Snow/DynamicSnow_C.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Dynamic Snow/DynamicSnow_Height_C.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/EventSystem/UniStormEventSystem.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Other/RandomWeather.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Plant Growth/HarvestCheck.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Plant Growth/PlantGrowthSystem.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Player Vitals/PlayerVitalsExample.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Save and Load UniStorm Data/SavePlayerData_C.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Spawn Player OnStart/GetUniStormComponents_C.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Spawn Player OnStart/SpawnPlayer.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Spawn Player OnStart/SunShaftPosition.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Timed Event/UniStormTimeEventExample.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/UniStorm Clock/UniStorm_Clock_C.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/UniStorm Demo UI/UniStormDemoUI.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Weather Forecaster/UniStormWeatherForecast.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Weather Zone/Climate_Zone_C.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Weather Zone/WeatherZoneExample_C.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Helpers/DrawSolidCube.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Helpers/UniStormGUIMenu.cs'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Systems/UniStormWeatherSystem_C.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/Character/MouseLookMobile.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Dynamic Snow/DynamicSnow_C_Mobile.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Player Vitals/PlayerVitalsExample_C_Mobile.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Save and Load UniStorm Data/SavePlayerData_C_Mobile.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Spawn Player OnStart/GetUniStormComponents_C_Mobile.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Spawn Player OnStart/SpawnPlayer_Mobile.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Timed Event/UniStormTimeEventExample_Mobile.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Weather Zone/WeatherZoneExample_C_Mobile.cs'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Systems/UniStormMobileWeatherSystem_C.cs'
+-r:'/Applications/Unity/Unity.app/Contents/Frameworks/Mono/lib/mono/unity/System.Runtime.Serialization.dll'
+-r:'/Applications/Unity/Unity.app/Contents/Frameworks/Mono/lib/mono/unity/System.Xml.Linq.dll'

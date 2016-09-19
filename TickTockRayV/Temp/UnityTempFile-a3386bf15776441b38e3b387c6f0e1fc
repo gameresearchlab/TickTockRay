@@ -1,0 +1,112 @@
+-debug
+-target:library
+-i:UnityEngine
+-i:System.Collections
+-base:UnityEngine.MonoBehaviour
+-nowarn:BCW0016
+-nowarn:BCW0003
+-method:Main
+-out:Temp/Assembly-UnityScript.dll
+-x-type-inference-rule-attribute:UnityEngineInternal.TypeInferenceRuleAttribute
+-pragmas:strict,downcast
+-define:UNITY_5_3_OR_NEWER
+-define:UNITY_5_3_5
+-define:UNITY_5_3
+-define:UNITY_5
+-define:UNITY_ANALYTICS
+-define:ENABLE_NEW_BUGREPORTER
+-define:ENABLE_AUDIO
+-define:ENABLE_CACHING
+-define:ENABLE_CLOTH
+-define:ENABLE_FRAME_DEBUGGER
+-define:ENABLE_GENERICS
+-define:ENABLE_HOME_SCREEN
+-define:ENABLE_IMAGEEFFECTS
+-define:ENABLE_LIGHT_PROBES_LEGACY
+-define:ENABLE_MICROPHONE
+-define:ENABLE_MULTIPLE_DISPLAYS
+-define:ENABLE_PHYSICS
+-define:ENABLE_PLUGIN_INSPECTOR
+-define:ENABLE_SHADOWS
+-define:ENABLE_SINGLE_INSTANCE_BUILD_SETTING
+-define:ENABLE_SPRITERENDERER_FLIPPING
+-define:ENABLE_SPRITES
+-define:ENABLE_SPRITE_POLYGON
+-define:ENABLE_TERRAIN
+-define:ENABLE_RAKNET
+-define:ENABLE_UNET
+-define:ENABLE_UNITYEVENTS
+-define:ENABLE_VR
+-define:ENABLE_WEBCAM
+-define:ENABLE_WWW
+-define:ENABLE_CLOUD_SERVICES
+-define:ENABLE_CLOUD_SERVICES_ADS
+-define:ENABLE_CLOUD_HUB
+-define:ENABLE_CLOUD_PROJECT_ID
+-define:ENABLE_CLOUD_SERVICES_PURCHASING
+-define:ENABLE_CLOUD_SERVICES_ANALYTICS
+-define:ENABLE_CLOUD_SERVICES_UNET
+-define:ENABLE_CLOUD_SERVICES_BUILD
+-define:ENABLE_CLOUD_LICENSE
+-define:ENABLE_EDITOR_METRICS
+-define:ENABLE_EDITOR_METRICS_CACHING
+-define:INCLUDE_DYNAMIC_GI
+-define:INCLUDE_GI
+-define:INCLUDE_IL2CPP
+-define:INCLUDE_DIRECTX12
+-define:PLATFORM_SUPPORTS_MONO
+-define:ENABLE_LOCALIZATION
+-define:ENABLE_ANDROID_ATLAS_ETC1_COMPRESSION
+-define:ENABLE_EDITOR_TESTS_RUNNER
+-define:UNITY_ANDROID
+-define:UNITY_ANDROID_API
+-define:ENABLE_SUBSTANCE
+-define:ENABLE_TEXTUREID_MAP
+-define:ENABLE_EGL
+-define:ENABLE_NETWORK
+-define:ENABLE_RUNTIME_GI
+-define:ENABLE_CRUNCH_TEXTURE_COMPRESSION
+-define:ENABLE_LOG_MIXED_STACKTRACE
+-define:ENABLE_UNITYWEBREQUEST
+-define:PLATFORM_SUPPORTS_ADS_ID
+-define:ENABLE_UNITYADS_RUNTIME
+-define:UNITY_UNITYADS_API
+-define:ENABLE_MONO
+-define:DEVELOPMENT_BUILD
+-define:ENABLE_PROFILER
+-define:DEBUG
+-define:TRACE
+-define:UNITY_ASSERTIONS
+-define:CROSS_PLATFORM_INPUT
+-define:MOBILE_INPUT
+-r:'/Applications/Unity/PlaybackEngines/AndroidPlayer/Variations/mono/Managed/UnityEngine.dll'
+-r:'Library/ScriptAssemblies/Assembly-CSharp-firstpass.dll'
+-r:'Library/ScriptAssemblies/Assembly-UnityScript-firstpass.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/GUISystem/Standalone/UnityEngine.UI.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/Standalone/UnityEngine.Networking.dll'
+-r:'/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/UnityAnalytics/UnityEngine.Analytics.dll'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/Character/CharacterMotor.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/Character/FPSInputController.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Dynamic Snow/DynamicSnow_JS.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Player Vitals/PlayerVitalsExample_JS.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Save and Load UniStorm Data/SavePlayerData_JS.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Spawn Player OnStart/GetUniStormComponents_JS.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Timed Event/UniStormTimeEventExample.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/UniStorm Clock/UniStorm_Clock_JS.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Examples/Weather Zone/WeatherZoneExample_JS.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Helpers/RandomLightningPosition.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Helpers/RenderBehind.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Helpers/RenderBehindMoon 2.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Helpers/RenderBehindMoon.js'
+'Assets/UniStorm (Desktop)/Scripts (Desktop)/UniStorm Systems/UniStormWeatherSystem_JS.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/System Icons/EditorIcon.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/System Icons/VisibleGizmo.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Helpers/LightningBolt.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Helpers/RandomLightningPosition(Mobile).js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Dynamic Snow/DynamicSnow_JS_Mobile.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Player Vitals/PlayerVitalsExample_JS_Mobile.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Save and Load UniStorm Data/SavePlayerData_JS_Mobile.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Spawn Player OnStart/GetUniStormComponents_JS_Mobile.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Timed Event/UniStormTimeEventExample_Mobile.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Mobile Examples/Weather Zone/WeatherZoneExample_JS_Mobile.js'
+'Assets/UniStorm (Mobile)/Scripts (Mobile)/UniStorm Systems/UniStormMobileWeatherSystem_JS.js'

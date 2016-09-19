@@ -1,0 +1,16 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/TickTockRayUnity/Scripts/RotateInterface.cs">
+    <Files>
+      <File FileName="Assets/TickTockRayUnity/Scripts/RotateInterface.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/TerrainGenerator.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/BlockCreateAndDestory.cs" Line="1" Column="1" />
+      <File FileName="Assets/HotbarSelector.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Splash.cs" Line="1" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>

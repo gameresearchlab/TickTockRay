@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
 Shader "UniStorm/Dynamic Light Clouds" {
     Properties {
       _LoY ("Opaque Y", Float) = 0
@@ -52,7 +54,7 @@ Shader "UniStorm/Dynamic Light Clouds" {
       	  float4 hpos = mul (UNITY_MATRIX_MVP, v.vertex);
       	  
 		  UNITY_INITIALIZE_OUTPUT(Input,data);	  
-          float4 worldV = mul (_Object2World, v.vertex);
+          float4 worldV = mul (unity_ObjectToWorld, v.vertex);
           data.alpha = 1 - saturate((worldV.y - _LoY) / (_HiY - _LoY));  
           
           UNITY_TRANSFER_FOG(data,hpos * 6);

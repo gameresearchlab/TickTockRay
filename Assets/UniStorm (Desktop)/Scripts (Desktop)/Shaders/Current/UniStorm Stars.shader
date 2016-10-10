@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
 Shader "UniStorm/Stars" {
 Properties {
 	_TintColor ("Tint Color", Color) = (0.5,0.5,0.5,0.5)
@@ -67,7 +69,7 @@ Category {
 				//o.texcoord = TRANSFORM_TEX(v.texcoord,_StarTex2);
 				//UNITY_TRANSFER_FOG(o,o.vertex);
 				
-				float4 worldV = mul (_Object2World, v.vertex);
+				float4 worldV = mul (unity_ObjectToWorld, v.vertex);
 		        o.color.a = 1 - saturate((worldV.y - _LoY) / (_HiY - _LoY)); 
 				
 				return o;
@@ -139,7 +141,7 @@ Category {
 				//o.texcoord = TRANSFORM_TEX(v.texcoord,_StarTex2);
 				//UNITY_TRANSFER_FOG(o,o.vertex);
 				
-				float4 worldV = mul (_Object2World, v.vertex);
+				float4 worldV = mul (unity_ObjectToWorld, v.vertex);
 		        o.color.a = 1 - saturate((worldV.y - _LoY) / (_HiY - _LoY)); 
 				
 				return o;

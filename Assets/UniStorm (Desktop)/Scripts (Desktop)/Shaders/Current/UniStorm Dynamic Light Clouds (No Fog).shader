@@ -1,3 +1,5 @@
+// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
+
 Shader "UniStorm/Dynamic Light Clouds (No Fog)" {
     Properties {
       _LoY ("Opaque Y", Float) = 0
@@ -44,7 +46,7 @@ Shader "UniStorm/Dynamic Light Clouds (No Fog)" {
       	  
 		  UNITY_INITIALIZE_OUTPUT(Input,data);
 		  
-          float4 worldV = mul (_Object2World, v.vertex);
+          float4 worldV = mul (unity_ObjectToWorld, v.vertex);
 
           data.alpha = 1 - saturate((worldV.y - _LoY) / (_HiY - _LoY));
       }

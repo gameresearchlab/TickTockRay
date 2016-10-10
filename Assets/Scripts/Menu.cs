@@ -9,7 +9,7 @@ public class Menu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-		isHidden = true;
+		isHidden = false;
 	}
 	
 	// Update is called once per frame

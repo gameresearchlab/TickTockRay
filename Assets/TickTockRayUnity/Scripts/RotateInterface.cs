@@ -34,7 +34,7 @@ public class RotateInterface : MonoBehaviour {
 	void Update () {
 
 
-		//TextMesh debug = GameObject.Find("DebugText").GetComponent<TextMesh>();
+		TextMesh debug = GameObject.Find("DebugText").GetComponent<TextMesh>();
 		//TextMesh debug2 = GameObject.Find("DebugText2").GetComponent<TextMesh>();
 
 		float zO = GameObject.Find("Watch").transform.localRotation.eulerAngles.z;
@@ -77,8 +77,6 @@ public class RotateInterface : MonoBehaviour {
       
 
 		//debug2.text = string.Format("RIV:\n{0}", z);
-
-
 
 		if(state == RIGHT_CLICK || state == LEFT_CLICK)
 		{
@@ -128,7 +126,8 @@ public class RotateInterface : MonoBehaviour {
 			state = IDLE;
 		}
 
-	}
+    }
+
 
 
 	public static int getState(){

@@ -27,7 +27,7 @@ public class RotateBASIC : MonoBehaviour {
 
 		bool update_correction = false;
 
-		if(Input.GetButtonDown("Fire1"))
+        if(Input.GetButtonDown("Fire1"))
 		{
 			update_correction = true;
 		}
@@ -36,18 +36,19 @@ public class RotateBASIC : MonoBehaviour {
 		if(update_correction)
 		{
             correction = WatchRotationJNI.rotation;
-            camFront =  Quaternion.LookRotation(GameObject.Find("Main Camera").transform.forward);
+            Quaternion look = Quaternion.LookRotation(GameObject.Find("Main Camera").transform.forward);
+            camFront.Set(camFront.x, look.y, look.z, look.w);
 		}
 
 
-        transform.localRotation = rotation * Quaternion.Inverse(correction) * camFront * Quaternion.AngleAxis(180, Vector3.forward);
+        transform.localRotation = rotation * Quaternion.Inverse(correction) * camFront;
 
 
 
 		transform.localRotation = new Quaternion(
             transform.localRotation.x,
-			transform.localRotation.y,
-			transform.localRotation.z,
+			-transform.localRotation.y,
+			-transform.localRotation.z,
 			-transform.localRotation.w);
 
 

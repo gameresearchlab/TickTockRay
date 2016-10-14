@@ -1,0 +1,13 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/TickTockRayUnity/Scripts/RotateBASIC.cs">
+    <Files>
+      <File FileName="Assets/TickTockRayUnity/Scripts/RotateBASIC.cs" Line="17" Column="36" />
+      <File FileName="Assets/TickTockRayUnity/Scripts/RotateInterface.cs" Line="128" Column="1" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
